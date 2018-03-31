@@ -1,13 +1,13 @@
-let { Button } = ReactBootstrap;
+let { Button, Grid } = ReactBootstrap;
 
 var App = React.createClass({
     render() {
         return (
-            <div>
+            <Grid>
                 <Button bsStyle="primary" bsSize="large">
                     Load
                 </Button>
-            </div>
+            </Grid>
         );
     }
 });

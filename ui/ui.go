@@ -22,7 +22,7 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 		MaxHeaderBytes: 1 << 16}
 
 	http.Handle("/", indexHandler(m))
-	http.Handle("/login", loginHandler(m))
+	http.Handle("/login", checkinHandler(m))
 	http.Handle("/load", loadHandler(m))
 	http.Handle("/profile", profileHandler(m))
 	http.Handle("/people", peopleHandler(m))
@@ -66,9 +66,13 @@ func indexHandler(m *model.Model) http.Handler {
 	})
 }
 
-func loginHandler(m *model.Model) http.Handler {
+func checkinHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, renderHTML("/js/login.jsx"))
+
+		//Some method, that put firstName and LastName into database
+		//r.Form.Get("firstName");
+
+		fmt.Fprintf(w, renderHTML("/js/checkin.jsx"))
 	})
 }
 

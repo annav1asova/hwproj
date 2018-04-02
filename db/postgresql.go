@@ -2,8 +2,7 @@ package db
 
 import (
 	"database/sql"
-
-	"github.com/grisha/gowebapp/model"
+	"hwproj/model"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )

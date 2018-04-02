@@ -13,3 +13,8 @@ func New(db db) *Model {
 func (m *Model) People() ([]*Person, error) {
 	return m.SelectPeople()
 }
+
+
+func (m *Model) InsertPerson(p Person) (error) {
+	return m.Insert(p)
+}

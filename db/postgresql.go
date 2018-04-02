@@ -5,6 +5,7 @@ import (
 	"hwproj/model"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	//"github.com/grisha/gowebapp/db"
 )
 
 type Config struct {
@@ -82,4 +83,12 @@ func (p *pgDb) SelectPeople() ([]*model.Person, error) {
 		return nil, err
 	}
 	return people, nil
+}
+
+func (p *pgDb) Insert(person model.Person) (error) {
+	if err := p.dbConn.QueryRow("INSERT INTO people(first,last) VALUES($1,$2);",
+		 person.First, person.Last).Scan(); err != nil {
+			return err;
+	}
+	return nil;
 }

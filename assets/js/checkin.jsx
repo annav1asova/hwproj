@@ -30,13 +30,16 @@ class Auth extends React.Component {
             () => { this.validateField(name, value) });
     }
     handleSubmit(event) {
-        axios.post('/login', {
-            firstName: this.state.firstname,
-            lastName: this.state.lastname
+        var bodyFormData = new FormData();
+        bodyFormData.set('firstName', this.state.firstname);
+        bodyFormData.set('lastName', this.state.lastname);
+        axios({
+            method: 'post',
+            url: '/login',
+            data: bodyFormData
+        }).then(function (response) {
+            console.log(response);
         })
-            .then(function (response) {
-                console.log(response);
-            })
             .catch(function (error) {
                 console.log(error);
             });
@@ -91,7 +94,7 @@ class Auth extends React.Component {
                     validationState={this.validState("firstname")}
                 >
                     <ControlLabel>
-                       First name:
+                        First name:
                     </ControlLabel>
                     <FormControl
                         name="firstname"

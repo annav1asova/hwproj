@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"hwproj/model"
+	"io/ioutil"
 )
 
 type Config struct {
@@ -66,12 +67,19 @@ func indexHandler(m *model.Model) http.Handler {
 	})
 }
 
+type People_Request struct {
+	FirstName    string `json:"firstName"`
+	LastName     string `json:"lastName"`
+}
+
 func checkinHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		//Some method, that put firstName and LastName into database
-		//r.Form.Get("firstName");
-
+		if r.Method == "POST"{
+			var pers People_Request
+			body, _ := ioutil.ReadAll(r.Body)
+			_ = json.Unmarshal(body, &pers)
+			m.InsertPerson(model.NewPerson(pers.FirstName, pers.LastName))
+		}
 		fmt.Fprintf(w, renderHTML("/js/checkin.jsx"))
 	})
 }

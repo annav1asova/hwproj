@@ -6,6 +6,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"fmt"
+	"log"
 )
 
 type Config struct {
@@ -95,15 +96,16 @@ func (p *pgDb) prepareSqlStatements() (err error) {
 }
 
 func (p *pgDb) SelectPeople() ([]*model.Person, error) {
-	people := make([]*model.Person, 0)
-	if err := p.sqlSelectPeople.Select(&people); err != nil {
+	users := make([]*model.Person, 0)
+	if err := p.sqlSelectPeople.Select(&users); err != nil {
+		log.Printf("in selectpeople",err)
 		return nil, err
 	}
-	return people, nil
+	return users, nil
 }
 
 func (p *pgDb) Insert(person model.Person) (error) {
-	if _, err := p.sqlInsertPerson.Exec(person.First, person.Last, person.Email, person.HashedPass); err != nil {
+	if _, err := p.sqlInsertPerson.Exec(person.Firstname, person.Surname, person.Email, person.Password); err != nil {
 		return err
 	}
 	return nil

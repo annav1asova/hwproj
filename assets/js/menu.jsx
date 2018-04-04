@@ -22,7 +22,7 @@ class Menu extends React.Component {
                         <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
                             <MenuItem eventKey={3.1} href="/profile">Edit profile</MenuItem>
                             <MenuItem divider />
-                            <MenuItem eventKey={3.2} href="/login">Login/Logout</MenuItem>
+                            <MenuItem eventKey={3.2} href="/checkin">Login/Logout</MenuItem>
                         </NavDropdown>
                     </Nav>
                 </Navbar>

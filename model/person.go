@@ -2,7 +2,7 @@ package model
 
 import (
 	_"log"
-	_"golang.org/x/crypto/bcrypt"
+	//_"golang.org/x/crypto/bcrypt"
 )
 
 

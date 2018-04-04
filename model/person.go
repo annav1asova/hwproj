@@ -7,8 +7,8 @@ import (
 
 
 type Person struct {
-	Id          int64
-	First, Last, Email, HashedPass string
+	Userid          int64
+	Firstname, Surname, Email, Password string
 }
 
 func NewPerson(first, last, email, password string) Person {

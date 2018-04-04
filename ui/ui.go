@@ -9,6 +9,7 @@ import (
 
 	"hwproj/model"
 	"io/ioutil"
+	"log"
 )
 
 type Config struct {
@@ -70,6 +71,8 @@ func indexHandler(m *model.Model) http.Handler {
 type People_Request struct {
 	FirstName    string `json:"firstName"`
 	LastName     string `json:"lastName"`
+	Email    string `json:"email"`
+	Pass     string `json:"pass"`
 }
 
 func checkinHandler(m *model.Model) http.Handler {
@@ -77,8 +80,8 @@ func checkinHandler(m *model.Model) http.Handler {
 		if r.Method == "POST"{
 			var pers People_Request
 			body, _ := ioutil.ReadAll(r.Body)
-			_ = json.Unmarshal(body, &pers)
-			m.InsertPerson(model.NewPerson(pers.FirstName, pers.LastName))
+			json.Unmarshal(body, &pers)
+			m.InsertUser(model.NewPerson(pers.FirstName, pers.LastName, pers.Email, pers.Pass))
 		}
 		fmt.Fprintf(w, renderHTML("/js/checkin.jsx"))
 	})
@@ -100,12 +103,14 @@ func peopleHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		people, err := m.People()
 		if err != nil {
+			log.Printf("error in peopleHandler", err)
 			http.Error(w, "This is an error", http.StatusBadRequest)
 			return
 		}
 
 		js, err := json.Marshal(people)
 		if err != nil {
+			log.Printf("error in peopleHandler after marshal", err)
 			http.Error(w, "This is an error", http.StatusBadRequest)
 			return
 		}

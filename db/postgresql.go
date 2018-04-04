@@ -5,7 +5,7 @@ import (
 	"hwproj/model"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-	//"github.com/grisha/gowebapp/db"
+	"fmt"
 )
 
 type Config struct {
@@ -34,17 +34,27 @@ type pgDb struct {
 	dbConn *sqlx.DB
 
 	sqlSelectPeople *sqlx.Stmt
-	sqlInsertPerson *sqlx.NamedStmt
+	sqlInsertPerson *sql.Stmt
 	sqlSelectPerson *sql.Stmt
+	sqlExistsPerson *sql.Stmt
 }
 
 func (p *pgDb) createTablesIfNotExist() error {
 	create_sql := `
 
-       CREATE TABLE IF NOT EXISTS people (
-       id SERIAL NOT NULL PRIMARY KEY,
-       first TEXT NOT NULL,
-       last TEXT NOT NULL);
+--        CREATE TABLE IF NOT EXISTS people (
+--        id SERIAL NOT NULL PRIMARY KEY,
+--        first TEXT NOT NULL,
+--        last TEXT NOT NULL);
+--        CREATE TABLE IF NOT EXISTS users (
+       --DROP TABLE users;
+       CREATE TABLE IF NOT EXISTS users (
+        userid SERIAL UNIQUE,
+        firstname TEXT NOT NULL CHECK (firstname SIMILAR TO '[(А-яа-яё\-)]{2,}'),
+        surname TEXT NOT NULL CHECK (surname SIMILAR TO '[(А-яа-яё\-)]{2,}'),
+        email TEXT NOT NULL CHECK (email LIKE '%@%'),
+        password TEXT NOT NULL,
+        type TEXT CHECK (type in ('student', 'teacher', 'admin')));
 
     `
 	if rows, err := p.dbConn.Query(create_sql); err != nil {
@@ -58,18 +68,25 @@ func (p *pgDb) createTablesIfNotExist() error {
 func (p *pgDb) prepareSqlStatements() (err error) {
 
 	if p.sqlSelectPeople, err = p.dbConn.Preparex(
-		"SELECT id, first, last FROM people",
+		"SELECT userid, firstname, surname, email, password FROM users",
 	); err != nil {
 		return err
 	}
-	if p.sqlInsertPerson, err = p.dbConn.PrepareNamed(
-		"INSERT INTO people (first, last) VALUES (:first, :last) " +
-			"RETURNING id, first, last",
+
+	if p.sqlInsertPerson, err = p.dbConn.Prepare(
+		"INSERT INTO users(firstname, surname, email, password, type) VALUES($1,$2,$3,$4, 'student');",
 	); err != nil {
 		return err
 	}
+
 	if p.sqlSelectPerson, err = p.dbConn.Prepare(
-		"SELECT id, first, last FROM people WHERE id = $1",
+		"SELECT userid, firstname, surname FROM users WHERE userid = $1",
+	); err != nil {
+		return err
+	}
+
+	if p.sqlExistsPerson, err = p.dbConn.Prepare(
+		"SELECT userid FROM users WHERE email = $1 AND password = $2",
 	); err != nil {
 		return err
 	}
@@ -86,9 +103,22 @@ func (p *pgDb) SelectPeople() ([]*model.Person, error) {
 }
 
 func (p *pgDb) Insert(person model.Person) (error) {
-	if err := p.dbConn.QueryRow("INSERT INTO people(first,last) VALUES($1,$2);",
-		 person.First, person.Last).Scan(); err != nil {
-			return err;
+	if _, err := p.sqlInsertPerson.Exec(person.First, person.Last, person.Email, person.HashedPass); err != nil {
+		return err
 	}
-	return nil;
+	return nil
+}
+
+func (p *pgDb) Exists(data model.EntryData) (int, error) {
+	row := p.sqlExistsPerson.QueryRow(data.Email, data.HashedPass)
+	var id int
+	switch err := row.Scan(&id); err {
+	case sql.ErrNoRows:
+		fmt.Println("There is no such users!")
+	case nil:
+		fmt.Println(id)
+	default:
+		panic(err)
+	}
+	return id, nil
 }

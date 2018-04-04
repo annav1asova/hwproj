@@ -15,6 +15,10 @@ func (m *Model) People() ([]*Person, error) {
 }
 
 
-func (m *Model) InsertPerson(p Person) (error) {
+func (m *Model) InsertUser(p Person) (error) {
 	return m.Insert(p)
+}
+
+func (m *Model) PersonIndex(ed EntryData) (int, error) {
+	return m.Exists(ed)
 }

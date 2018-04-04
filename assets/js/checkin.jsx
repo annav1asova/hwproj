@@ -30,13 +30,9 @@ class Auth extends React.Component {
             () => { this.validateField(name, value) });
     }
     handleSubmit(event) {
-        var bodyFormData = new FormData();
-        bodyFormData.set('firstName', this.state.firstname);
-        bodyFormData.set('lastName', this.state.lastname);
-        axios({
-            method: 'post',
-            url: '/login',
-            data: bodyFormData
+        axios.post('/login', {
+            'firstName' : this.state.firstname,
+            'lastName' : this.state.lastname
         }).then(function (response) {
             console.log(response);
         })

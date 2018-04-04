@@ -7,6 +7,7 @@ import (
 	_ "github.com/lib/pq"
 	"fmt"
 	"log"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Config struct {
@@ -53,7 +54,7 @@ func (p *pgDb) createTablesIfNotExist() error {
         userid SERIAL UNIQUE,
         firstname TEXT NOT NULL CHECK (firstname SIMILAR TO '[(А-яа-яё\-)]{2,}'),
         surname TEXT NOT NULL CHECK (surname SIMILAR TO '[(А-яа-яё\-)]{2,}'),
-        email TEXT NOT NULL CHECK (email LIKE '%@%'),
+        email TEXT NOT NULL CHECK (email LIKE '%@%') UNIQUE,
         password TEXT NOT NULL,
         type TEXT CHECK (type in ('student', 'teacher', 'admin')));
 
@@ -87,7 +88,7 @@ func (p *pgDb) prepareSqlStatements() (err error) {
 	}
 
 	if p.sqlExistsPerson, err = p.dbConn.Prepare(
-		"SELECT userid FROM users WHERE email = $1 AND password = $2",
+		"SELECT userid, password FROM users WHERE email = $1",
 	); err != nil {
 		return err
 	}
@@ -112,13 +113,19 @@ func (p *pgDb) Insert(person model.Person) (error) {
 }
 
 func (p *pgDb) Exists(data model.EntryData) (int, error) {
-	row := p.sqlExistsPerson.QueryRow(data.Email, data.HashedPass)
+	row := p.sqlExistsPerson.QueryRow(data.Email)
 	var id int
-	switch err := row.Scan(&id); err {
+	var hashFromDB string
+	switch err := row.Scan(&id, &hashFromDB); err {
 	case sql.ErrNoRows:
-		fmt.Println("There is no such users!")
+		fmt.Println("There is no users with this email!")
+		return -1, err
 	case nil:
-		fmt.Println(id)
+		if errInPass := bcrypt.CompareHashAndPassword([]byte(hashFromDB), []byte(data.Pass)); errInPass != nil {
+			fmt.Println("Wrong password!")
+			return -1, errInPass
+		}
+		fmt.Println(id, "Password was correct")
 	default:
 		panic(err)
 	}

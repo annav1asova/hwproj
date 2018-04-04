@@ -1,8 +1,6 @@
 package model
 
 import (
-	_"log"
-	_"golang.org/x/crypto/bcrypt"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 )

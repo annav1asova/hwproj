@@ -24,7 +24,9 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 		MaxHeaderBytes: 1 << 16}
 
 	http.Handle("/", indexHandler(m))
-	http.Handle("/login", checkinHandler(m))
+	http.Handle("/checkin", checkinHandler(m))
+	http.Handle("/checkin/login", loginHandler(m))
+	http.Handle("/checkin/register", registerHandler(m))
 	http.Handle("/load", loadHandler(m))
 	http.Handle("/profile", profileHandler(m))
 	http.Handle("/people", peopleHandler(m))
@@ -33,9 +35,8 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 	go server.Serve(listener)
 }
 
-func renderHTML(str string) string {
-	return `
-	<!DOCTYPE HTML>
+func renderHTML(str []string) string {
+	result := `<!DOCTYPE HTML>
 	<html>
 	  <head>
 		<meta charset="utf-8">
@@ -55,16 +56,17 @@ func renderHTML(str string) string {
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.css"/>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css"/>
 	
-		<script src="/js/menu.jsx" type="text/babel"></script>
-		<script src="`+ str +`" type="text/babel"></script>
-	  </body>
-	</html>
-	`;
+		<script src="/js/menu.jsx" type="text/babel"></script>`;
+	for i := 0; i < len(str); i++ {
+		result += `<script src="`+ str[i] +`" type="text/babel"></script>`;
+	}
+	result += `</body></html>`;
+	return result;
 }
 
 func indexHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, renderHTML("/js/app.jsx"))
+		fmt.Fprintf(w, renderHTML([]string{"/js/app.jsx"}))
 	})
 }
 
@@ -75,7 +77,16 @@ type People_Request struct {
 	Pass     string `json:"pass"`
 }
 
-func checkinHandler(m *model.Model) http.Handler {
+func loginHandler(m *model.Model) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "GET"{
+			//нужно парсить эту строчку, но я пока не знаю, как
+			log.Print(r.URL)
+		}
+	})
+}
+
+func registerHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST"{
 			var pers People_Request
@@ -83,19 +94,24 @@ func checkinHandler(m *model.Model) http.Handler {
 			json.Unmarshal(body, &pers)
 			m.InsertUser(model.NewPerson(pers.FirstName, pers.LastName, pers.Email, pers.Pass))
 		}
-		fmt.Fprintf(w, renderHTML("/js/checkin.jsx"))
+	})
+}
+
+func checkinHandler(m *model.Model) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, renderHTML([]string{"/js/checkin/login.jsx", "/js/checkin/register.jsx","/js/checkin/checkin.jsx"}))
 	})
 }
 
 func loadHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, renderHTML("/js/load.jsx"))
+		fmt.Fprintf(w, renderHTML([]string{"/js/load.jsx"}))
 	})
 }
 
 func profileHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, renderHTML("/js/profile.jsx"))
+		fmt.Fprintf(w, renderHTML([]string{"/js/profile.jsx"}))
 	})
 }
 

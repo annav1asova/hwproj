@@ -26,3 +26,4 @@ _testmain.go
 *.prof
 *.iml
 *.xml
+*.xml___jb_tmp___

@@ -24,12 +24,13 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 		MaxHeaderBytes: 1 << 16}
 
 	http.Handle("/", indexHandler(m))
-	http.Handle("/checkin", checkinHandler(m))
-	http.Handle("/checkin/login", loginHandler(m))
-	http.Handle("/checkin/register", registerHandler(m))
+	http.Handle("/sign", checkinHandler(m))
+	http.Handle("/sign/sign_in", loginHandler(m))
+	http.Handle("/sign/sign_up", registerHandler(m))
 	http.Handle("/load", loadHandler(m))
 	http.Handle("/profile", profileHandler(m))
 	http.Handle("/people", peopleHandler(m))
+	http.Handle("/courses", coursesHandler(m))
 	http.Handle("/js/", http.FileServer(cfg.Assets))
 
 	go server.Serve(listener)
@@ -99,7 +100,7 @@ func registerHandler(m *model.Model) http.Handler {
 
 func checkinHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, renderHTML([]string{"/js/checkin/login.jsx", "/js/checkin/register.jsx","/js/checkin/checkin.jsx"}))
+		fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx", "/js/sign/sign_up.jsx","/js/sign/sign.jsx"}))
 	})
 }
 
@@ -112,6 +113,12 @@ func loadHandler(m *model.Model) http.Handler {
 func profileHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, renderHTML([]string{"/js/profile.jsx"}))
+	})
+}
+
+func coursesHandler(m *model.Model) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, renderHTML([]string{"/js/courses.jsx"}))
 	})
 }
 

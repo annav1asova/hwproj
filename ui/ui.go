@@ -32,9 +32,9 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 		MaxHeaderBytes: 1 << 16}
 
 	http.Handle("/", indexHandler(m))
-	http.Handle("/sign", checkinHandler(m))
-	http.Handle("/sign/sign_in", loginHandler(m))
-	http.Handle("/sign/sign_up", registerHandler(m))
+	http.Handle("/sign_in", loginHandler(m))
+	http.Handle("/sign_up", registerHandler(m))
+	http.Handle("/sign_out", logoutHandler(m))
 	http.Handle("/load", loadHandler(m))
 	http.Handle("/profile", profileHandler(m))
 	http.Handle("/people", peopleHandler(m))
@@ -88,9 +88,6 @@ type People_Request struct {
 
 func loginHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		sess := globalSessions.SessionStart(w, r)
-		r.ParseForm()
-		fmt.Println(r.Form["email"])
 		//fmt.Println(r.Method)
 		//
 		//if r.Method == "POST" {
@@ -103,20 +100,30 @@ func loginHandler(m *model.Model) http.Handler {
 		//http.Redirect(w, r, "/", 302)
 		if r.Method == "GET" {
 			r.ParseForm()
-			fmt.Println(r.Form["email"][0])
-			sess.Set("email", r.Form["email"])
-		//	_, err := m.PersonIndex(model.EntryData{r.Form["email"][0], r.Form["pass"][0]})
-		//	if err != nil {
-		//		log.Print(err)
-		//	}
-		//	template.HTMLEscape(w, []byte(r.Form.Get("username")))
-		//
+			if (len(r.Form["email"]) != 0) {
+				sess := globalSessions.SessionStart(w, r)
+				sess.Set("email", r.Form["email"])
+				w.Write([]byte("eee, Nataha!"))
+				//	_, err := m.PersonIndex(model.EntryData{r.Form["email"][0], r.Form["pass"][0]})
+				//	if err != nil {
+				//		log.Print(err)
+				//	}
+				//	template.HTMLEscape(w, []byte(r.Form.Get("username")))
+			}
 		}
 
 		//http.Redirect(w, r, "/", 300)
+		fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
 
 	})
 
+}
+
+func logoutHandler(m *model.Model) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		//logout??
+		//redirect to something
+	})
 }
 
 func registerHandler(m *model.Model) http.Handler {
@@ -127,12 +134,7 @@ func registerHandler(m *model.Model) http.Handler {
 			json.Unmarshal(body, &pers)
 			m.InsertUser(model.NewPerson(pers.FirstName, pers.LastName, pers.Email, pers.Pass))
 		}
-	})
-}
-
-func checkinHandler(m *model.Model) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx", "/js/sign/sign_up.jsx","/js/sign/sign.jsx"}))
+		fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_up.jsx"}))
 	})
 }
 

@@ -2,6 +2,8 @@ let { Button,
     FormGroup,
     ControlLabel,
     FormControl,
+    Grid,
+    Row, Col,
     HelpBlock} = ReactBootstrap;
 
 class Register extends React.Component {
@@ -34,7 +36,7 @@ class Register extends React.Component {
     }
 
     handleSubmit(event) {
-        axios.post('/sign/sign_up', {
+        axios.post('/sign_up', {
             'firstName': this.state.firstname,
             'lastName': this.state.lastname,
             'email' : this.state.email,
@@ -150,3 +152,18 @@ class Register extends React.Component {
         );
     }
 }
+
+class LoginControl extends React.Component {
+    render() {
+        return (
+            <Grid>
+                <Row className="show-grid">
+                    <Col xs={6} xsOffset={3}>
+                        <Register/>
+                    </Col>
+                </Row>
+            </Grid>
+        );
+    }
+}
+ReactDOM.render(<LoginControl />, document.getElementById('root'));

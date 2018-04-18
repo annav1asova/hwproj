@@ -2,6 +2,8 @@ let { Button,
     FormGroup,
     ControlLabel,
     FormControl,
+    Grid,
+    Row, Col,
     HelpBlock} = ReactBootstrap;
 
 class Auth extends React.Component {
@@ -23,22 +25,21 @@ class Auth extends React.Component {
     }
 
     handleSubmit(event) {
-        axios.get('/sign/sign_in', {
+        axios.get('/sign_in', {
             params: {
                 'email': this.state.email,
                 'pass': this.state.password
-            }
+            },
+            withCredentials: true
         }).then(function (response) {
-            console.log(response.data);
-            console.log(response.status);
-            console.log(response.statusText);
-            console.log(response.headers);
-            console.log(response.config);
+            console.log(response);
         })
             .catch(function (error) {
                 console.log(error);
             });
         event.preventDefault();
+        document.cookie = "name=oeschger";
+        alert( document.cookie );
     }
 
     render() {
@@ -71,3 +72,18 @@ class Auth extends React.Component {
         );
     }
 }
+
+class LoginControl extends React.Component {
+    render() {
+        return (
+            <Grid>
+                <Row className="show-grid">
+                    <Col xs={6} xsOffset={3}>
+                        <Auth/>
+                    </Col>
+                </Row>
+            </Grid>
+        );
+    }
+}
+ReactDOM.render(<LoginControl />, document.getElementById('root'));

@@ -10,7 +10,15 @@ import (
 	"hwproj/model"
 	"io/ioutil"
 	"log"
+	"hwproj/session"
+	_"html/template"
 )
+
+var globalSessions *session.Manager
+func init() {
+	globalSessions, _ = session.NewManager("memory", "gosessionid", 3600)
+	go globalSessions.GC()
+}
 
 type Config struct {
 	Assets http.FileSystem
@@ -80,11 +88,35 @@ type People_Request struct {
 
 func loginHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "GET"{
-			//нужно парсить эту строчку, но я пока не знаю, как
-			log.Print(r.URL)
+		sess := globalSessions.SessionStart(w, r)
+		r.ParseForm()
+		fmt.Println(r.Form["email"])
+		//fmt.Println(r.Method)
+		//
+		//if r.Method == "POST" {
+		//	sess.Set("email", r.Form["email"])
+		//	fmt.Println("success")
+		//}
+		//t, _ := template.ParseFiles(renderHTML([]string{"/js/load.jsx"}))
+		//w.Header().Set("Content-Type", "text/html")
+		//t.Execute(w, sess.Get("email"))
+		//http.Redirect(w, r, "/", 302)
+		if r.Method == "GET" {
+			r.ParseForm()
+			fmt.Println(r.Form["email"][0])
+			sess.Set("email", r.Form["email"])
+		//	_, err := m.PersonIndex(model.EntryData{r.Form["email"][0], r.Form["pass"][0]})
+		//	if err != nil {
+		//		log.Print(err)
+		//	}
+		//	template.HTMLEscape(w, []byte(r.Form.Get("username")))
+		//
 		}
+
+		//http.Redirect(w, r, "/", 300)
+
 	})
+
 }
 
 func registerHandler(m *model.Model) http.Handler {

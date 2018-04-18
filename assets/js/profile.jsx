@@ -175,7 +175,7 @@ class Editing extends React.Component {
                     </ControlLabel>
                     <FormControl
                         name="confpassword"
-                        type="text"
+                        type="password"
                         value={this.state.confpassword}
                         placeholder="Enter confirmation of the password"
                         onChange={this.handleInputChange}/>
@@ -186,7 +186,7 @@ class Editing extends React.Component {
                     </ControlLabel>
                     <FormControl
                         name="curpassword"
-                        type="text"
+                        type="password"
                         value={this.state.curpassword}
                         placeholder="Enter current password"
                         onChange={this.handleInputChange}/>

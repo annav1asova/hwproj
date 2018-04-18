@@ -44,12 +44,6 @@ type pgDb struct {
 func (p *pgDb) createTablesIfNotExist() error {
 	create_sql := `
 
---        CREATE TABLE IF NOT EXISTS people (
---        id SERIAL NOT NULL PRIMARY KEY,
---        first TEXT NOT NULL,
---        last TEXT NOT NULL);
---        CREATE TABLE IF NOT EXISTS users (
-       --DROP TABLE users;
        CREATE TABLE IF NOT EXISTS users (
         userid SERIAL UNIQUE,
         firstname TEXT NOT NULL CHECK (firstname SIMILAR TO '[(А-яа-яё\-)]{2,}'),

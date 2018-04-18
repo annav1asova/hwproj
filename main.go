@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	_"hwproj/memory"
 	"hwproj/daemon"
 )
 

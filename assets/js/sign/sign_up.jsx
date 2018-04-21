@@ -40,7 +40,8 @@ class Register extends React.Component {
             'firstName': this.state.firstname,
             'lastName': this.state.lastname,
             'email' : this.state.email,
-            'pass' : this.state.password
+            'pass' : this.state.password,
+            withCredentials: true
         }).then(function (response) {
             console.log(response);
         })

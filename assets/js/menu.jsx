@@ -4,7 +4,8 @@ let { Button,
     Nav,
     NavItem,
     NavDropdown,
-    MenuItem,} = ReactBootstrap;
+    MenuItem,
+NavbarHeader} = ReactBootstrap;
 
 function getCookie(name) {
     var matches = document.cookie.match(new RegExp(
@@ -39,7 +40,7 @@ class Menu extends React.Component {
         return (
             <div>
                 <Navbar inverse>
-                    <NavbarBrand>HwProj</NavbarBrand>
+                    <NavbarHeader><NavbarBrand><a href="/">HwProj</a></NavbarBrand></NavbarHeader>
                     {getCookie("gosessionid") !== undefined ? withAuth : withoutAuth}
                 </Navbar>
             </div>

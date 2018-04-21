@@ -11,7 +11,8 @@ class Editing extends React.Component {
             params: {
                 //something about current user
                 'id': 1
-            }
+            },
+            withCredentials: true
         }).then(function (response) {
             data = response.data;
         })
@@ -202,7 +203,7 @@ var App = React.createClass({
         return (
             <Grid>
                 <Row className="show-grid">
-                    <Col xs={6} xsOfsset={3}>
+                    <Col xs={6} xsOffset={3}>
                         <h3>Edit your profile:</h3>
                         <Editing/>
                     </Col>

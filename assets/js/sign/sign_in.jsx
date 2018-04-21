@@ -38,8 +38,6 @@ class Auth extends React.Component {
                 console.log(error);
             });
         event.preventDefault();
-        document.cookie = "name=oeschger";
-        alert( document.cookie );
     }
 
     render() {

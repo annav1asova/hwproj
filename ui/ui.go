@@ -88,53 +88,64 @@ type People_Request struct {
 
 func loginHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		//fmt.Println(r.Method)
-		//
-		//if r.Method == "POST" {
-		//	sess.Set("email", r.Form["email"])
-		//	fmt.Println("success")
-		//}
-		//t, _ := template.ParseFiles(renderHTML([]string{"/js/load.jsx"}))
-		//w.Header().Set("Content-Type", "text/html")
-		//t.Execute(w, sess.Get("email"))
-		//http.Redirect(w, r, "/", 302)
+		fmt.Println(r.Method)
 		if r.Method == "GET" {
-			r.ParseForm()
-			if (len(r.Form["email"]) != 0) {
+			if _, err := r.Cookie("gosessionid"); err == nil {
+				http.Redirect(w, r, "/", 302)
+			} else {
+				fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
+			}
+		} else {
+			var params struct {
+				Email    string `json:"email"`
+				Password string `json:"pass"`
+			}
+			body, _ := ioutil.ReadAll(r.Body)
+			json.Unmarshal(body, &params)
+			var index, err =  m.PersonIndex(model.EntryData{params.Email, params.Password})
+			if err == nil {
 				sess := globalSessions.SessionStart(w, r)
-				sess.Set("email", r.Form["email"])
-				w.Write([]byte("eee, Nataha!"))
-				//	_, err := m.PersonIndex(model.EntryData{r.Form["email"][0], r.Form["pass"][0]})
-				//	if err != nil {
-				//		log.Print(err)
-				//	}
-				//	template.HTMLEscape(w, []byte(r.Form.Get("username")))
+				sess.Set("email", params.Email)
+				w.Write([]byte("ты попал на хвпродж"))
+			} else if index == -1 {
+				w.Write([]byte(err.Error()))
+			} else if index == -2 {
+				w.Write([]byte(err.Error()))
+			} else {
+				w.Write([]byte("Something went wrong :("))
 			}
 		}
-
-		//http.Redirect(w, r, "/", 300)
-		fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
-
 	})
 
 }
 
 func logoutHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		//logout??
-		//redirect to something
+		globalSessions.SessionDestroy(w, r)
+		http.Redirect(w, r, "/", 303)
 	})
 }
 
 func registerHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println(r.Method)
 		if r.Method == "POST"{
 			var pers People_Request
 			body, _ := ioutil.ReadAll(r.Body)
 			json.Unmarshal(body, &pers)
-			m.InsertUser(model.NewPerson(pers.FirstName, pers.LastName, pers.Email, pers.Pass))
+			err := m.InsertUser(model.NewPerson(pers.FirstName, pers.LastName, pers.Email, pers.Pass))
+			if err == nil {
+				w.Write([]byte("Вы зарегистрированы"))
+			} else {
+				w.Write([]byte(err.Error()))
+			}
+		} else {
+			if _, err := r.Cookie("gosessionid"); err == nil {
+				http.Redirect(w, r, "/", 302)
+			} else {
+				fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_up.jsx"}))
+			}
 		}
-		fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_up.jsx"}))
 	})
 }
 

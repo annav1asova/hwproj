@@ -43,6 +43,7 @@ class Register extends React.Component {
             'pass' : this.state.password,
             withCredentials: true
         }).then(function (response) {
+            window.location = "/sign_in";
             console.log(response);
         })
             .catch(function (error) {

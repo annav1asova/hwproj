@@ -25,19 +25,20 @@ class Auth extends React.Component {
     }
 
     handleSubmit(event) {
-        axios.get('/sign_in', {
-            params: {
-                'email': this.state.email,
-                'pass': this.state.password
-            },
-            withCredentials: true
-        }).then(function (response) {
+        axios.defaults.withCredentials = true
+        axios.post('/sign_in', {
+                 'email': this.state.email,
+                 'pass': this.state.password}
+            //withCredentials = true,
+        ).then(function (response) {
+            window.location = "/";
             console.log(response);
         })
             .catch(function (error) {
                 console.log(error);
             });
         event.preventDefault();
+        action="http://example.com/vote"
     }
 
     render() {

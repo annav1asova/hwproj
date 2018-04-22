@@ -164,17 +164,20 @@ func loadHandler(m *model.Model) http.Handler {
 func profileHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if isLoggedIn(r) {
-			a := globalSessions.GetUid(r)
-			user, err := m.PersonInfo(a.(int))
-			if err != nil {
-				w.Write([]byte(err.Error()))
+			if r.Method == "POST" {
+				a := globalSessions.GetUid(r)
+				user, err := m.PersonInfo(a.(int))
+				if err != nil {
+					w.Write([]byte(err.Error()))
+				} else {
+					fmt.Println(user)
+					jsonUser, _ := json.Marshal(user)
+					fmt.Println(string(jsonUser))
+					w.Write(jsonUser)
+				}
 			} else {
-				fmt.Println(user)
-				jsonUser, _ := json.Marshal(user)
-				fmt.Println(string(jsonUser))
-				w.Write(jsonUser)
+				fmt.Fprintf(w, renderHTML([]string{"/js/profile.jsx"}))
 			}
-			fmt.Fprintf(w, renderHTML([]string{"/js/profile.jsx"}))
 		} else {
 			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
 		}

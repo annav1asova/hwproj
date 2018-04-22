@@ -7,13 +7,10 @@ class Editing extends React.Component {
     constructor(props) {
         super(props);
         var data;
-        axios.get('/profile', {
-            params: {
-                //something about current user
-                'id': 1
-            },
+        axios.post('/profile', {
             withCredentials: true
         }).then(function (response) {
+            console.log(response.data);
             data = response.data;
         })
             .catch(function (error) {

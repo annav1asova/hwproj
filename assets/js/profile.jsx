@@ -20,12 +20,12 @@ class Editing extends React.Component {
                 console.log(error);
             });
         //example
-        data = {firstname: "Anna", lastname: "Vlasova", email: "vlasova.anna@gmail.com",};
+        // data = {firstname: "Anna", lastname: "Vlasova", email: "vlasova.anna@gmail.com",};
 
         this.state = {
-            firstname: data.firstname,
-            lastname: data.lastname,
-            email: data.email,
+            firstname: data.FirstName,
+            lastname: data.SurName,
+            email: data.Email,
             password: "",
             confpassword: "",
             curpassword: "",

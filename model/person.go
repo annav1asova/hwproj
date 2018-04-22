@@ -23,3 +23,7 @@ func NewPerson(first, last, email, password string) Person {
 type EntryData struct {
 	Email, Pass string
 }
+
+type UserInfo struct {
+	FirstName, Surname, Email string
+}

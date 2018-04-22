@@ -77,7 +77,7 @@ func (p *pgDb) prepareSqlStatements() (err error) {
 	}
 
 	if p.sqlSelectPerson, err = p.dbConn.Prepare(
-		"SELECT userid, firstname, surname FROM users WHERE userid = $1",
+		"SELECT firstname, surname, email FROM users WHERE userid = $1",
 	); err != nil {
 		return err
 	}
@@ -99,11 +99,15 @@ func (p *pgDb) SelectPeople() ([]*model.Person, error) {
 	return users, nil
 }
 
-func (p *pgDb) Insert(person model.Person) (error) {
+func (p *pgDb) Insert(person model.Person) (int, error) {
 	if _, err := p.sqlInsertPerson.Exec(person.Firstname, person.Surname, person.Email, person.Password); err != nil {
-		return err
+		return -1, err
 	}
-	return nil
+	row := p.sqlExistsPerson.QueryRow(person.Email)
+	var lastInsertedId int
+	var some string
+	row.Scan(&lastInsertedId, &some)
+	return lastInsertedId, nil
 }
 
 func (p *pgDb) Exists(data model.EntryData) (int, error) {
@@ -124,4 +128,16 @@ func (p *pgDb) Exists(data model.EntryData) (int, error) {
 		panic(err)
 	}
 	return id, nil
+}
+
+func (p *pgDb) SelectPerson(id int) (model.UserInfo, error) {
+	row := p.sqlSelectPerson.QueryRow(id)
+	var user model.UserInfo
+	switch err := row.Scan(&user.FirstName, &user.Surname, &user.Email); err {
+	case sql.ErrNoRows:
+		fmt.Println("There is no users with this uid!")
+	case nil:
+		return user, nil
+	}
+	return model.UserInfo{"","",""}, nil
 }

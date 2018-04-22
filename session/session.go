@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+	"log"
 )
 
 var provides = make(map[string]Provider)
@@ -70,6 +71,7 @@ func (manager *Manager) SessionStart(w http.ResponseWriter, r *http.Request) (se
 		cookie := http.Cookie{Name: manager.cookieName, Value: url.QueryEscape(sid), Path: "/",
 		MaxAge: int(manager.maxlifetime)}
 		http.SetCookie(w, &cookie)
+		log.Println(cookie.Value)
 	} else {
 		sid, _ := url.QueryUnescape(cookie.Value)
 		session, _ = manager.provider.SessionRead(sid)
@@ -89,6 +91,16 @@ func (manager *Manager) SessionDestroy(w http.ResponseWriter, r *http.Request){
 		cookie := http.Cookie{Name: manager.cookieName, Path: "/", HttpOnly: true, Expires: expiration, MaxAge: -1}
 		http.SetCookie(w, &cookie)
 	}
+}
+
+func (manager *Manager) GetUid(r *http.Request) (interface{}){
+	cookie, _ := r.Cookie("gosessionid")
+	val := cookie.Value
+	//log.Println(val)
+	s := cookie.Value[:len(val) - 3] + "="
+	session, _ := manager.provider.SessionRead(s)
+	fmt.Println(session.Get("uid"))
+	return session.Get("uid")
 }
 
 func (manager *Manager) GC() {

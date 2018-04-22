@@ -30,11 +30,6 @@ func Run(cfg *Config) error {
 
 	m := model.New(db)
 
-	m.InsertUser(model.NewPerson("настоящееимя", "ифамилия", "someemail@gmail.com","secure_password"))
-	m.PersonIndex(model.EntryData{"someemail@gmail.com", "secure_password"})
-	m.PersonIndex(model.EntryData{"someotheremail@gmail.com", "secure_password"})
-	m.PersonIndex(model.EntryData{"someemail@gmail.com", "not_really_secure_password"})
-
 	l, err := net.Listen("tcp", cfg.ListenSpec)
 	if err != nil {
 		log.Printf("Error creating listener: %v\n", err)

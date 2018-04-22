@@ -90,7 +90,7 @@ func loginHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(r.Method)
 		if r.Method == "GET" {
-			if _, err := r.Cookie("gosessionid"); err == nil {
+			if isLoggedIn(r) {
 				http.Redirect(w, r, "/", 302)
 			} else {
 				fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
@@ -105,7 +105,7 @@ func loginHandler(m *model.Model) http.Handler {
 			var index, err =  m.PersonIndex(model.EntryData{params.Email, params.Password})
 			if err == nil {
 				sess := globalSessions.SessionStart(w, r)
-				sess.Set("email", params.Email)
+				sess.Set("uid", index)
 				w.Write([]byte("ты попал на хвпродж"))
 			} else if index == -1 {
 				w.Write([]byte(err.Error()))
@@ -133,14 +133,16 @@ func registerHandler(m *model.Model) http.Handler {
 			var pers People_Request
 			body, _ := ioutil.ReadAll(r.Body)
 			json.Unmarshal(body, &pers)
-			err := m.InsertUser(model.NewPerson(pers.FirstName, pers.LastName, pers.Email, pers.Pass))
+			index, err := m.InsertUser(model.NewPerson(pers.FirstName, pers.LastName, pers.Email, pers.Pass))
 			if err == nil {
+				sess := globalSessions.SessionStart(w, r)
+				sess.Set("uid", index)
 				w.Write([]byte("Вы зарегистрированы"))
 			} else {
 				w.Write([]byte(err.Error()))
 			}
 		} else {
-			if _, err := r.Cookie("gosessionid"); err == nil {
+			if isLoggedIn(r) {
 				http.Redirect(w, r, "/", 302)
 			} else {
 				fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_up.jsx"}))
@@ -151,19 +153,41 @@ func registerHandler(m *model.Model) http.Handler {
 
 func loadHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, renderHTML([]string{"/js/load.jsx"}))
+		if isLoggedIn(r) {
+			fmt.Fprintf(w, renderHTML([]string{"/js/load.jsx"}))
+		} else {
+			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
+		}
 	})
 }
 
 func profileHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, renderHTML([]string{"/js/profile.jsx"}))
+		if isLoggedIn(r) {
+			a := globalSessions.GetUid(r)
+			user, err := m.PersonInfo(a.(int))
+			if err != nil {
+				w.Write([]byte(err.Error()))
+			} else {
+				fmt.Println(user)
+				jsonUser, _ := json.Marshal(user)
+				fmt.Println(string(jsonUser))
+				w.Write(jsonUser)
+			}
+			fmt.Fprintf(w, renderHTML([]string{"/js/profile.jsx"}))
+		} else {
+			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
+		}
 	})
 }
 
 func coursesHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, renderHTML([]string{"/js/courses.jsx"}))
+		if isLoggedIn(r) {
+			fmt.Fprintf(w, renderHTML([]string{"/js/courses.jsx"}))
+		} else {
+			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
+		}
 	})
 }
 
@@ -185,4 +209,10 @@ func peopleHandler(m *model.Model) http.Handler {
 
 		fmt.Fprintf(w, string(js))
 	})
+}
+
+
+func isLoggedIn(r *http.Request) bool {
+	_, err:= r.Cookie("gosessionid")
+	return err == nil
 }

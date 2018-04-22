@@ -6,23 +6,10 @@ let { Button,Grid,Row,Col,
 class Editing extends React.Component {
     constructor(props) {
         super(props);
-        var data;
-        axios.post('/profile', {
-            withCredentials: true
-        }).then(function (response) {
-            console.log(response.data);
-            data = response.data;
-        })
-            .catch(function (error) {
-                console.log(error);
-            });
-        //example
-        // data = {firstname: "Anna", lastname: "Vlasova", email: "vlasova.anna@gmail.com",};
-
         this.state = {
-            firstname: data.FirstName,
-            lastname: data.SurName,
-            email: data.Email,
+            firstname: "",
+            lastname: "",
+            email: "",
             password: "",
             confpassword: "",
             curpassword: "",
@@ -33,9 +20,18 @@ class Editing extends React.Component {
             confpassValid: true,
             formValid: true
         };
-
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    async componentDidMount() {
+        let response = await axios.post('/profile', {
+            withCredentials: true
+        });
+        this.setState({
+            firstname: response.data.FirstName,
+            lastname: response.data.Surname,
+            email: response.data.Email,})
     }
 
     handleInputChange(event) {

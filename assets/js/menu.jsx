@@ -40,7 +40,7 @@ class Menu extends React.Component {
         return (
             <div>
                 <Navbar inverse>
-                    <NavbarHeader><NavbarBrand><a href="/">HwProj</a></NavbarBrand></NavbarHeader>
+                    <NavbarBrand><a href="#">HwProj</a></NavbarBrand>
                     {getCookie("gosessionid") !== undefined ? withAuth : withoutAuth}
                 </Navbar>
             </div>

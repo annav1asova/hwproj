@@ -6,8 +6,9 @@ import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"fmt"
-	"log"
+	_"log"
 	"golang.org/x/crypto/bcrypt"
+	"errors"
 )
 
 type Config struct {
@@ -93,7 +94,6 @@ func (p *pgDb) prepareSqlStatements() (err error) {
 func (p *pgDb) SelectPeople() ([]*model.Person, error) {
 	users := make([]*model.Person, 0)
 	if err := p.sqlSelectPeople.Select(&users); err != nil {
-		log.Printf("in selectpeople",err)
 		return nil, err
 	}
 	return users, nil
@@ -113,11 +113,11 @@ func (p *pgDb) Exists(data model.EntryData) (int, error) {
 	switch err := row.Scan(&id, &hashFromDB); err {
 	case sql.ErrNoRows:
 		fmt.Println("There is no users with this email!")
-		return -1, err
+		return -1, errors.New("There is no users with this email!")
 	case nil:
 		if errInPass := bcrypt.CompareHashAndPassword([]byte(hashFromDB), []byte(data.Pass)); errInPass != nil {
 			fmt.Println("Wrong password!")
-			return -1, errInPass
+			return -2, errors.New("Wrong password!")
 		}
 		fmt.Println(id, "Password was correct")
 	default:

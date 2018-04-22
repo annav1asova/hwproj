@@ -37,6 +37,7 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 	http.Handle("/sign_out", logoutHandler(m))
 	http.Handle("/load", loadHandler(m))
 	http.Handle("/profile", profileHandler(m))
+	http.Handle("/editedprofile", editedprofileHandler(m))
 	http.Handle("/people", peopleHandler(m))
 	http.Handle("/courses", coursesHandler(m))
 	http.Handle("/js/", http.FileServer(cfg.Assets))
@@ -161,20 +162,37 @@ func loadHandler(m *model.Model) http.Handler {
 	})
 }
 
+func editedprofileHandler(m *model.Model) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if isLoggedIn(r) {
+			if r.Method == "POST" {
+				//нужно обработать присланные данные, изменить в базе данных и перенаправить обратно
+				// на страничку с изменением инфы, но уже с новыми данными
+			}
+			fmt.Fprintf(w, renderHTML([]string{"/js/profile.jsx"}))
+		} else {
+			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
+		}
+	})
+}
+
 func profileHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if isLoggedIn(r) {
-			a := globalSessions.GetUid(r)
-			user, err := m.PersonInfo(a.(int))
-			if err != nil {
-				w.Write([]byte(err.Error()))
+			if r.Method == "POST" {
+				a := globalSessions.GetUid(r)
+				user, err := m.PersonInfo(a.(int))
+				if err != nil {
+					w.Write([]byte(err.Error()))
+				} else {
+					fmt.Println(user)
+					jsonUser, _ := json.Marshal(user)
+					fmt.Println(string(jsonUser))
+					w.Write(jsonUser)
+				}
 			} else {
-				fmt.Println(user)
-				jsonUser, _ := json.Marshal(user)
-				fmt.Println(string(jsonUser))
-				w.Write(jsonUser)
+				fmt.Fprintf(w, renderHTML([]string{"/js/profile.jsx"}))
 			}
-			fmt.Fprintf(w, renderHTML([]string{"/js/profile.jsx"}))
 		} else {
 			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
 		}

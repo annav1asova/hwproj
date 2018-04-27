@@ -26,27 +26,31 @@ class Menu extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
+            data: [{id: 0, name: '', teacher: ''}],
             isLogged: false
         };
     }
+
     async componentDidMount() {
+       /*let response = await axios.post('/menu', {
+            withCredentials: true
+        }) */
+        //this.setState({data: response.data});
+        //example
+        this.setState({data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
+       }
+    /*async componentDidMount() {
         let response = await axios.post('/menu', {
             withCredentials: true
         }).catch(function (error) {
             console.log(error);
         });
-        this.setState({data: response.data});
+        this.setState({data: response.data.courses, isLogged: response.data.isLogged});
         //example
-        this.setState({data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
-
-        let response2 = await axios.post('/cookie', {
-            withCredentials: true
-        }).catch(function (error) {
-            console.log(error);
-        });
-        this.setState({isLogged: response2.data});
-    }
+        this.setState({
+            isLogged: true,
+            data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
+    } */
 
     render() {
         const courses = this.state.data.map((course, index) => {
@@ -79,7 +83,7 @@ class Menu extends React.Component {
             <div>
                 <Navbar inverse>
                     <NavbarBrand><a href="#">HwProj</a></NavbarBrand>
-                    {this.state.isLogged ? withAuth : withoutAuth}
+                    {/*this.state.isLogged*/getCookie("gosessionid") !== undefined ? withAuth : withoutAuth}
                 </Navbar>
             </div>
         );

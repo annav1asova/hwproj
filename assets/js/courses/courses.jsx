@@ -26,19 +26,17 @@ class Courses extends React.Component{
         super(props);
         this.state = {
             query: props.query,
-            data: []
+            data: [{id: 0, name: '', teacher: ''}]
         };
     }
     async componentDidMount() {
-        let response = await axios.get('/courses', {
+        /*let response = await axios.get('/courses', {
             params: {
                 'courses': this.state.query
             },
             withCredentials: true
-        }).catch(function (error) {
-            console.log(error);
-        });
-        this.setState({data: response.data});
+        }); */
+        //this.setState({data: response.data});
         //example
         this.setState({data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
     }
@@ -80,7 +78,7 @@ ReactDOM.render(
         <div>
             <Switch>
                 <Route exact path="/courses" component={CoursesControl} />
-                <Route path="/courses/:idcourse(\d+)/:idterm(\d+)?" component={window.BigCourse} />
+                <Route path="/courses/:idcourse/:idterm" component={BigCourse} />
             </Switch>
         </div>
     </Router>,

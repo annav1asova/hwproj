@@ -45,34 +45,35 @@ class ChooseTask extends React.Component {
 class ChooseMethod extends React.Component {
     constructor(props) {
         super(props);
+        this.handleRadioChange.bind(this);
         this.state = {option: this.props.method};
     }
 
     handleRadioChange(event) {
-        this.setState({option: (event.target.value === 'option1')});
+        this.setState({option: (event.target.value === "option1")});
         this.props.updateData(this.state.option);
     }
 
     render() {
         return <div>
-            <div class="radio">
+            <div>
                 <label>
                     <input
                         name="lang"
                         type="radio"
                         value="option1"
                         checked={this.state.option}
-                        onChange={this.handleRadioChange.bind(this)}/>Pull request on Github
+                        onChange={this.handleRadioChange}/>Pull request on Github
                 </label>
             </div>
-            <div class="radio">
+            <div>
                 <label>
                     <input
                         name="lang"
                         type="radio"
                         value="option2"
                         checked={!this.state.option}
-                        onChange={this.handleRadioChange.bind(this)}/>File
+                        onChange={this.handleRadioChange}/>File
                 </label>
             </div>
         </div>;

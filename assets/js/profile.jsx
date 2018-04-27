@@ -45,7 +45,7 @@ class Editing extends React.Component {
     }
 
     handleSubmit(event) {
-        axios.post('/profile', {
+        axios.post('/editprofile', {
             'firstName': this.state.firstname,
             'lastName': this.state.lastname,
             'email' : this.state.email,

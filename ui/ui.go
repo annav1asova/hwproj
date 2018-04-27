@@ -56,12 +56,13 @@ func renderHTML(str []string) string {
 		<div id='menu'></div>
 		<div id='root'></div>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/15.3.2/react-dom.js"></script>
+		<script src="https://unpkg.com/react-router-dom/umd/react-router-dom.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.32.1/react-bootstrap.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js"></script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.css"/>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css"/>
@@ -202,7 +203,7 @@ func profileHandler(m *model.Model) http.Handler {
 func coursesHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if isLoggedIn(r) {
-			fmt.Fprintf(w, renderHTML([]string{"/js/courses.jsx"}))
+			fmt.Fprintf(w, renderHTML([]string{"/js/courses/courses.jsx", "/js/courses/course.jsx"}))
 		} else {
 			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
 		}

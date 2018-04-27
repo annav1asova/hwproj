@@ -14,23 +14,65 @@ function getCookie(name) {
     return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
-class Menu extends React.Component {
+class MenuCourse extends React.Component{
     render() {
+        return (
+            <MenuItem href={'courses/' + this.props.id}>{this.props.name}</MenuItem>
+        );
+    }
+}
+
+class Menu extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [{id: 0, name: '', teacher: ''}],
+            isLogged: false
+        };
+    }
+
+    async componentDidMount() {
+       /*let response = await axios.post('/menu', {
+            withCredentials: true
+        }) */
+        //this.setState({data: response.data});
+        //example
+        this.setState({data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
+       }
+    /*async componentDidMount() {
+        let response = await axios.post('/menu', {
+            withCredentials: true
+        }).catch(function (error) {
+            console.log(error);
+        });
+        this.setState({data: response.data.courses, isLogged: response.data.isLogged});
+        //example
+        this.setState({
+            isLogged: true,
+            data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
+    } */
+
+    render() {
+        const courses = this.state.data.map((course, index) => {
+            return (<MenuCourse name={course.name} id={course.id}/>);
+        });
         const withAuth = <Nav pullRight>
-                            <NavItem eventKey={1} href="/load">
+                            <NavItem href="/load">
                                 Load solution
                             </NavItem>
-                            <NavItem eventKey={1} href="/courses">
-                                Courses
-                            </NavItem>
-                            <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-                                <MenuItem eventKey={3.1} href="/profile">Edit profile</MenuItem>
+                            <NavDropdown title="Courses" id="basic-nav-dropdown">
+                                {courses}
                                 <MenuItem divider />
-                                <MenuItem eventKey={3.2} href="/sign_out">Logout</MenuItem>
+                                <MenuItem href="/courses">All courses</MenuItem>
+                            </NavDropdown>
+                            <NavDropdown title="Profile" id="basic-nav-dropdown">
+                                <MenuItem href="/profile">Edit profile</MenuItem>
+                                <MenuItem divider />
+                                <MenuItem href="/sign_out">Logout</MenuItem>
                             </NavDropdown>
                         </Nav>;
         const withoutAuth = <Nav pullRight>
-                            <NavItem eventKey={1} href="/sign_in">
+                            <NavItem href="/sign_in">
                                 Login
                             </NavItem>
                             <NavItem eventKey={1} href="/sign_up">
@@ -41,10 +83,13 @@ class Menu extends React.Component {
             <div>
                 <Navbar inverse>
                     <NavbarBrand><a href="#">HwProj</a></NavbarBrand>
-                    {getCookie("gosessionid") !== undefined ? withAuth : withoutAuth}
+                    {/*this.state.isLogged*/getCookie("gosessionid") !== undefined ? withAuth : withoutAuth}
                 </Navbar>
             </div>
         );
     }
 }
-ReactDOM.render(<Menu />, document.getElementById('menu'));
+
+var CurMenu = <Menu />
+
+ReactDOM.render(CurMenu, document.getElementById('menu'));

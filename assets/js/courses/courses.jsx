@@ -1,6 +1,9 @@
 let { Button,Grid,
     Row, Col, Tabs, Tab,
     ListGroupItem, ListGroup} = ReactBootstrap;
+const Router = ReactRouterDOM.BrowserRouter;
+const Route = ReactRouterDOM.Route;
+const Switch = ReactRouterDOM.Switch;
 
 class Course extends React.Component{
     constructor(props) {
@@ -13,7 +16,7 @@ class Course extends React.Component{
     }
     render() {
         return (
-            <ListGroupItem header={this.state.name}>{this.state.teacher}</ListGroupItem>
+            <ListGroupItem key={this.props.index} header={this.state.name}>{this.state.teacher}</ListGroupItem>
         );
     }
 }
@@ -22,24 +25,23 @@ class Courses extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            query: props.query
+            query: props.query,
+            data: [{id: 0, name: '', teacher: ''}]
         };
     }
-    render() {
-        var data;
-        axios.get('/courses', {
+    async componentDidMount() {
+        /*let response = await axios.get('/courses', {
             params: {
                 'courses': this.state.query
-            }
-        }).then(function (response) {
-            data = response.data;
-        })
-            .catch(function (error) {
-                console.log(error);
-            });
+            },
+            withCredentials: true
+        }); */
+        //this.setState({data: response.data});
         //example
-        data = [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}];
-        const users = data.map((course, index) => {
+        this.setState({data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
+    }
+    render() {
+        const users = this.state.data.map((course, index) => {
             return (<Course name={course.name} teacher={course.teacher} index={index}/>);
         });
         return (
@@ -56,7 +58,7 @@ class CoursesControl extends React.Component {
             <Grid>
                 <Row className="show-grid">
                     <Col>
-                        <Tabs defaultActiveKey={1}>
+                        <Tabs id='1' defaultActiveKey={1}>
                             <Tab eventKey={1} title="Current courses">
                                 <Courses query={"current"}/>
                             </Tab>
@@ -71,4 +73,14 @@ class CoursesControl extends React.Component {
     }
 }
 
-ReactDOM.render(<CoursesControl />, document.getElementById('root'));
+ReactDOM.render(
+    <Router>
+        <div>
+            <Switch>
+                <Route exact path="/courses" component={CoursesControl} />
+                <Route path="/courses/:idcourse/:idterm" component={BigCourse} />
+            </Switch>
+        </div>
+    </Router>,
+    document.getElementById('root')
+);

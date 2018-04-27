@@ -32,6 +32,8 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 		MaxHeaderBytes: 1 << 16}
 
 	http.Handle("/", indexHandler(m))
+	http.Handle("/menu", menuHandler(m))
+	http.Handle("/cookie", cookieHandler(m))
 	http.Handle("/sign_in", loginHandler(m))
 	http.Handle("/sign_up", registerHandler(m))
 	http.Handle("/sign_out", logoutHandler(m))
@@ -41,6 +43,9 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 	http.Handle("/people", peopleHandler(m))
 	http.Handle("/courses", coursesHandler(m))
 	http.Handle("/js/", http.FileServer(cfg.Assets))
+
+	//for test
+	http.Handle("/courses/1/1", coursesHandler(m))
 
 	go server.Serve(listener)
 }
@@ -55,9 +60,11 @@ func renderHTML(str []string) string {
 	  <body>
 		<div id='menu'></div>
 		<div id='root'></div>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/15.3.2/react-dom.js"></script>
+		<script src="https://unpkg.com/react-router-dom/umd/react-router-dom.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.32.1/react-bootstrap.min.js"></script>
@@ -77,6 +84,30 @@ func renderHTML(str []string) string {
 func indexHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, renderHTML([]string{"/js/app.jsx"}))
+	})
+}
+
+func menuHandler(m *model.Model) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if isLoggedIn(r) {
+			if r.Method == "POST" {
+				//something
+			} else {
+				fmt.Fprintf(w, renderHTML([]string{"/js/profile.jsx"}))
+			}
+		} else {
+			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
+		}
+	})
+}
+
+func cookieHandler(m *model.Model) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.Method == "POST" {
+				//return something about cookie (false or true)
+			}
+			// redirect to something
+			// maybe we need an error page
 	})
 }
 
@@ -202,7 +233,7 @@ func profileHandler(m *model.Model) http.Handler {
 func coursesHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if isLoggedIn(r) {
-			fmt.Fprintf(w, renderHTML([]string{"/js/courses.jsx"}))
+			fmt.Fprintf(w, renderHTML([]string{"/js/courses/course.jsx", "/js/courses/courses.jsx"}))
 		} else {
 			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
 		}

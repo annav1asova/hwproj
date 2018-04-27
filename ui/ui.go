@@ -33,6 +33,7 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 
 	http.Handle("/", indexHandler(m))
 	http.Handle("/menu", menuHandler(m))
+	http.Handle("/cookie", cookieHandler(m))
 	http.Handle("/sign_in", loginHandler(m))
 	http.Handle("/sign_up", registerHandler(m))
 	http.Handle("/sign_out", logoutHandler(m))
@@ -93,6 +94,16 @@ func menuHandler(m *model.Model) http.Handler {
 		} else {
 			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
 		}
+	})
+}
+
+func cookieHandler(m *model.Model) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.Method == "POST" {
+				//return something about cookie (false or true)
+			}
+			// redirect to something
+			// maybe we need an error page
 	})
 }
 

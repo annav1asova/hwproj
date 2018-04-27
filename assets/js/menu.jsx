@@ -26,7 +26,8 @@ class Menu extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: []
+            data: [],
+            isLogged: false
         };
     }
     async componentDidMount() {
@@ -35,10 +36,16 @@ class Menu extends React.Component {
         }).catch(function (error) {
             console.log(error);
         });
-        this.setState({
-            data: response.data});
+        this.setState({data: response.data});
         //example
         this.setState({data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
+
+        let response2 = await axios.post('/cookie', {
+            withCredentials: true
+        }).catch(function (error) {
+            console.log(error);
+        });
+        this.setState({isLogged: response2.data});
     }
 
     render() {
@@ -72,7 +79,7 @@ class Menu extends React.Component {
             <div>
                 <Navbar inverse>
                     <NavbarBrand><a href="#">HwProj</a></NavbarBrand>
-                    {getCookie("gosessionid") !== undefined ? withAuth : withoutAuth}
+                    {this.state.isLogged ? withAuth : withoutAuth}
                 </Navbar>
             </div>
         );

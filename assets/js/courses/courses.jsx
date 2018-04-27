@@ -25,24 +25,25 @@ class Courses extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            query: props.query
+            query: props.query,
+            data: []
         };
     }
-    render() {
-        var data;
-        axios.get('/courses', {
+    async componentDidMount() {
+        let response = await axios.get('/courses', {
             params: {
                 'courses': this.state.query
-            }
-        }).then(function (response) {
-            data = response.data;
-        })
-            .catch(function (error) {
-                console.log(error);
-            });
+            },
+            withCredentials: true
+        }).catch(function (error) {
+            console.log(error);
+        });
+        this.setState({data: response.data});
         //example
-        data = [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}];
-        const users = data.map((course, index) => {
+        this.setState({data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
+    }
+    render() {
+        const users = this.state.data.map((course, index) => {
             return (<Course name={course.name} teacher={course.teacher} index={index}/>);
         });
         return (

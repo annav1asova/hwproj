@@ -84,7 +84,8 @@ func renderHTML(str []string) string {
 
 func indexHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if isLoggedIn(r) {
+		_, err := isLoggedIn(r, m)
+		if err == nil {
 			if r.Method == "POST" {
 				//something
 			} else {
@@ -100,7 +101,8 @@ func indexHandler(m *model.Model) http.Handler {
 
 func addhwHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if isLoggedIn(r) {
+		_, err := isLoggedIn(r, m)
+		if err == nil {
 			if r.Method == "POST" {
 				//GET DATA, PUT IT INTO BD
 			} else {

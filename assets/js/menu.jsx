@@ -32,10 +32,10 @@ class Menu extends React.Component {
     }
 
     async componentDidMount() {
-       /*let response = await axios.post('/menu', {
+       let response = await axios.post('/cookie', {
             withCredentials: true
-        }) */
-        //this.setState({data: response.data});
+        })
+        this.setState({isLogged: (response.data === 1)});
         //example
         this.setState({data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
        }

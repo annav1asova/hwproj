@@ -40,7 +40,7 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 	http.Handle("/sign_out", logoutHandler(m))
 	http.Handle("/load", loadHandler(m))
 	http.Handle("/profile", profileHandler(m))
-	http.Handle("/editedprofile", editedprofileHandler(m))
+	http.Handle("/editprofile", editedProfileHandler(m))
 	http.Handle("/people", peopleHandler(m))
 	http.Handle("/courses", coursesHandler(m))
 	http.Handle("/js/", http.FileServer(cfg.Assets))
@@ -115,7 +115,8 @@ func addhwHandler(m *model.Model) http.Handler {
 
 func menuHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if isLoggedIn(r) {
+		_, err := isLoggedIn(r, m)
+		if err == nil {
 			if r.Method == "POST" {
 				//something
 			} else {
@@ -130,7 +131,12 @@ func menuHandler(m *model.Model) http.Handler {
 func cookieHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == "POST" {
-				//return something about cookie (false or true)
+				_, err := isLoggedIn(r, m)
+				if err != nil {
+					w.Write([]byte("0"))
+				} else {
+					w.Write([]byte("1"))
+				}
 			}
 			// redirect to something
 			// maybe we need an error page
@@ -148,7 +154,8 @@ func loginHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(r.Method)
 		if r.Method == "GET" {
-			if isLoggedIn(r) {
+			_, err := isLoggedIn(r, m)
+			if err == nil {
 				http.Redirect(w, r, "/", 302)
 			} else {
 				fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
@@ -191,7 +198,7 @@ func registerHandler(m *model.Model) http.Handler {
 			var pers People_Request
 			body, _ := ioutil.ReadAll(r.Body)
 			json.Unmarshal(body, &pers)
-			index, err := m.InsertUser(model.NewPerson(pers.FirstName, pers.LastName, pers.Email, pers.Pass))
+			index, err := m.InsertUser(model.NewPerson(0, pers.FirstName, pers.LastName, pers.Email, pers.Pass))
 			if err == nil {
 				sess := globalSessions.SessionStart(w, r)
 				sess.Set("uid", index)
@@ -200,7 +207,8 @@ func registerHandler(m *model.Model) http.Handler {
 				w.Write([]byte(err.Error()))
 			}
 		} else {
-			if isLoggedIn(r) {
+			_, err := isLoggedIn(r, m)
+			if err == nil {
 				http.Redirect(w, r, "/", 302)
 			} else {
 				fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_up.jsx"}))
@@ -211,7 +219,8 @@ func registerHandler(m *model.Model) http.Handler {
 
 func loadHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if isLoggedIn(r) {
+		_, err := isLoggedIn(r, m)
+		if err == nil {
 			fmt.Fprintf(w, renderHTML([]string{"/js/load.jsx"}))
 		} else {
 			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
@@ -219,14 +228,32 @@ func loadHandler(m *model.Model) http.Handler {
 	})
 }
 
-func editedprofileHandler(m *model.Model) http.Handler {
+func editedProfileHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if isLoggedIn(r) {
+		_, err := isLoggedIn(r, m)
+		if err == nil {
 			if r.Method == "POST" {
-				//нужно обработать присланные данные, изменить в базе данных и перенаправить обратно
-				// на страничку с изменением инфы, но уже с новыми данными
+				var info struct {
+					FirstName   	string `json:"firstname"`
+					LastName 		string `json:"lastname"`
+					Email    string `json:"email"`
+					NewPass string `json:"pass"`
+					CurPass string `json:"curpass"`
+				}
+				body, _ := ioutil.ReadAll(r.Body)
+				json.Unmarshal(body, &info)
+				index, err :=  m.PersonIndex(model.EntryData{info.Email, info.CurPass})
+				if err == nil {
+					m.UpdatePerson(model.NewPerson(index,info.FirstName,info.LastName,
+												info.Email, info.NewPass))
+					w.Write([]byte("OK"))
+				} else {
+					w.Write([]byte(err.Error()))
+				}
+
+			} else {
+				fmt.Fprintf(w, renderHTML([]string{"/js/profile.jsx"}))
 			}
-			fmt.Fprintf(w, renderHTML([]string{"/js/profile.jsx"}))
 		} else {
 			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
 		}
@@ -235,10 +262,9 @@ func editedprofileHandler(m *model.Model) http.Handler {
 
 func profileHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if isLoggedIn(r) {
+		user, err := isLoggedIn(r, m)
+		if err == nil {
 			if r.Method == "POST" {
-				a := globalSessions.GetUid(r)
-				user, err := m.PersonInfo(a.(int))
 				if err != nil {
 					w.Write([]byte(err.Error()))
 				} else {
@@ -258,7 +284,8 @@ func profileHandler(m *model.Model) http.Handler {
 
 func coursesHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if isLoggedIn(r) {
+		_, err := isLoggedIn(r, m)
+		if err == nil {
 			fmt.Fprintf(w, renderHTML([]string{"/js/courses/course.jsx", "/js/courses/courses.jsx"}))
 		} else {
 			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
@@ -287,7 +314,11 @@ func peopleHandler(m *model.Model) http.Handler {
 }
 
 
-func isLoggedIn(r *http.Request) bool {
-	_, err:= r.Cookie("gosessionid")
-	return err == nil
+func isLoggedIn(r *http.Request, m *model.Model) (model.UserInfo, error) {
+	sessions, err := globalSessions.GetUid(r)
+	if err != nil {
+		return model.UserInfo{}, err
+	}
+	user, err := m.PersonInfo(sessions.(int))
+	return user, err
 }

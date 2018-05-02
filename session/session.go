@@ -93,14 +93,20 @@ func (manager *Manager) SessionDestroy(w http.ResponseWriter, r *http.Request){
 	}
 }
 
-func (manager *Manager) GetUid(r *http.Request) (interface{}){
-	cookie, _ := r.Cookie("gosessionid")
+func (manager *Manager) GetUid(r *http.Request) (interface{}, error){
+	cookie, err := r.Cookie("gosessionid")
+	if err != nil {
+		return nil, err
+	}
 	val := cookie.Value
-	//log.Println(val)
 	s := cookie.Value[:len(val) - 3] + "="
-	session, _ := manager.provider.SessionRead(s)
+	session, err := manager.provider.SessionRead(s)
+	log.Println(err)
+	if err != nil {
+		return nil, err
+	}
 	fmt.Println(session.Get("uid"))
-	return session.Get("uid")
+	return session.Get("uid"), nil
 }
 
 func (manager *Manager) GC() {

@@ -10,6 +10,7 @@ import (
 	"hwproj/db"
 	"hwproj/model"
 	"hwproj/ui"
+	//"time"
 )
 
 type Config struct {
@@ -29,6 +30,16 @@ func Run(cfg *Config) error {
 	}
 
 	m := model.New(db)
+
+	//m.InsertUser(model.NewPerson(0, "anna", "vlasova", "anna@g.com", "pass"))
+
+	//m.InsertHometask(model.Hometask{0, "Задание 2", time.Now(), true})
+	//m.InsertProblem1(model.Problem{0, 1, "Вася и Петя кидают камушки блаблабла", 10})
+	m.InsertProblem1(model.Problem{0, 1, "Алена Люлина купила 60 арбузов", 10})
+
+	a, err := m.SelectProblemsFromHometask1(1)
+	print(a)
+
 
 	l, err := net.Listen("tcp", cfg.ListenSpec)
 	if err != nil {

@@ -52,6 +52,7 @@ class Editing extends React.Component {
             'pass' : this.state.password,
             'curpass' : this.state.curpassword
         }).then(function (response) {
+            window.location = '/profile'
             console.log(response);
         })
             .catch(function (error) {

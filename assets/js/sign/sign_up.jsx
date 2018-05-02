@@ -144,7 +144,7 @@ class Register extends React.Component {
                     </ControlLabel>
                     <FormControl
                         name="password"
-                        type="text"
+                        type="password"
                         value={this.state.password}
                         placeholder="Enter password"
                         onChange={this.handleInputChange}/>

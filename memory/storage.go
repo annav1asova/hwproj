@@ -5,6 +5,7 @@ import (
 	"hwproj/session"
 	"sync"
     "time"
+	"errors"
 )
 
 var pder = &Provider{list: list.New()}
@@ -64,6 +65,14 @@ func (pder *Provider) SessionRead(sid string) (session.Session, error) {
 		return sess, err
 	}
 	return nil, nil
+}
+
+func (pder *Provider) SessionExist(sid string) (session.Session, error) {
+	if element, ok := pder.sessions[sid]; ok {
+		return element.Value.(*SessionStore), nil
+	} else {
+		return nil, errors.New("session does't exist")
+	}
 }
 
 func (pder *Provider) SessionDestroy(sid string) error {

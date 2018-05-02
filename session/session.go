@@ -32,6 +32,7 @@ func NewManager(provideName, cookieName string, maxlifetime int64) (*Manager, er
 type Provider interface {
 	SessionInit(sid string) (Session, error)
 	SessionRead(sid string) (Session, error)
+	SessionExist(sid string) (Session, error)
 	SessionDestroy(sid string) error
 	SessionGC(maxLifeTime int64)
 }
@@ -100,7 +101,7 @@ func (manager *Manager) GetUid(r *http.Request) (interface{}, error){
 	}
 	val := cookie.Value
 	s := cookie.Value[:len(val) - 3] + "="
-	session, err := manager.provider.SessionRead(s)
+	session, err := manager.provider.SessionExist(s)
 	log.Println(err)
 	if err != nil {
 		return nil, err

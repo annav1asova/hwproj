@@ -2,23 +2,39 @@ let { Button,
     FormGroup,
     ControlLabel,
     FormControl,
-    Grid,} = ReactBootstrap;
+    Grid, Form,
+    Col,
+    Glyphicon,
+    Panel, Row} = ReactBootstrap;
 
 class Task extends React.Component {
     render() {
         return (
-            <form>
-                <FormGroup>
-                    <ControlLabel>Task:</ControlLabel>
-                    <FormControl
-                        name="task"
-                        type="text"
-                        value={this.props.data}
-                        placeholder="Enter name"
-                        onChange={this.props.onChangeTask}/>
-                </FormGroup>
-                <Button onClick={this.props.onDeleteTask}/>
-            </form>
+            <Panel>
+                <Panel.Heading>
+                    <div className="pull-right">
+                        <Button onClick={this.props.onDeleteTask}><Glyphicon glyph="remove"/></Button>
+                    </div>
+                    <h4>Task №{this.props.id}</h4>
+                </Panel.Heading>
+                <Panel.Body>
+                <Form>
+                    <FormGroup>
+                        <Col sm={2}>
+                            <ControlLabel>Task</ControlLabel>
+                        </Col>
+                        <Col sm={10}>
+                            <FormControl
+                                name="task"
+                                componentClass="textarea"
+                                value={this.props.data}
+                                placeholder="Enter name"
+                                onChange={this.props.onChangeTask}/>
+                        </Col>
+                    </FormGroup>
+                </Form>
+                </Panel.Body>
+            </Panel>
         )
     }
 }
@@ -26,27 +42,44 @@ class Task extends React.Component {
 class Link extends React.Component {
     render() {
         return (
-            <form>
-                <FormGroup>
-                    <ControlLabel>Name:</ControlLabel>
-                    <FormControl
-                        name="name"
-                        type="text"
-                        value={this.props.data.name}
-                        placeholder="Enter name"
-                        onChange={this.props.onChangeName}/>
-                </FormGroup>
-                <FormGroup>
-                    <ControlLabel>Link:</ControlLabel>
-                    <FormControl
-                        name="link"
-                        type="text"
-                        value={this.props.data.link}
-                        placeholder="Enter link"
-                        onChange={this.props.onChangeLink}/>
-                </FormGroup>
-                <Button onClick={this.props.onDeleteLink}/>
-            </form>
+            <Panel>
+                <Panel.Heading>
+                    <div className="pull-right">
+                        <Button onClick={this.props.onDeleteLink}><Glyphicon glyph="remove"/></Button>
+                    </div>
+                    <h4>Link №{this.props.id}</h4>
+                </Panel.Heading>
+                <Panel.Body>
+                    <Form horizontal>
+                        <FormGroup>
+                            <Col sm={2}>
+                                <ControlLabel>Name</ControlLabel>
+                            </Col>
+                            <Col sm={10}>
+                                <FormControl
+                                    name="name"
+                                    type="text"
+                                    value={this.props.data.name}
+                                    placeholder="Enter name"
+                                    onChange={this.props.onChangeName}/>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup>
+                            <Col sm={2}>
+                                <ControlLabel>Link</ControlLabel>
+                            </Col>
+                            <Col sm={10}>
+                                <FormControl
+                                    name="link"
+                                    type="text"
+                                    value={this.props.data.link}
+                                    placeholder="Enter link"
+                                    onChange={this.props.onChangeLink}/>
+                            </Col>
+                        </FormGroup>
+                    </Form>
+                </Panel.Body>
+            </Panel>
         )
     }
 }
@@ -56,7 +89,8 @@ class HW extends React.Component{
         super(props);
         this.state = {
             links: [{name:'',link:''}],
-            tasks: ['']
+            tasks: [''],
+            type: "hw"
         };
         this.addLink = this.addLink.bind(this);
         this.addTask = this.addTask.bind(this);
@@ -65,6 +99,8 @@ class HW extends React.Component{
         this.onChangeTask = this.onChangeTask.bind(this);
         this.onDeleteLink = this.onDeleteLink.bind(this);
         this.onDeleteTask = this.onDeleteTask.bind(this);
+        this.handleChangeSelect = this.handleChangeSelect.bind(this);
+        this.sendData = this.sendData.bind(this);
     }
     addLink() {
         this.setState({links: this.state.links.concat({name:'', link:''})});
@@ -97,12 +133,27 @@ class HW extends React.Component{
         newtasks.splice(i, 1);
         this.setState({tasks: newtasks});
     }
+    sendData() {
+        axios.post('/addhw', {
+            'tasks': this.state.tasks,
+            'links': this.state.links,
+            'type' : this.state.type,
+            withCredentials: true
+        }).then(function (response) {
+            console.log(response);
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
+    handleChangeSelect(e) {
+        this.setState({type: e.target.value});
+    }
     render() {
         var cur = this;
         const links = this.state.links.map(function(item, index) {
             return (
                 <div key={index}>
-                    <Link data={item} onChangeName={(e) => {cur.onChangeName(index, e)}}
+                    <Link data={item} id={index + 1} onChangeName={(e) => {cur.onChangeName(index, e)}}
                                      onChangeLink={(e) => {cur.onChangeLink(index, e)}}
                                      onDeleteLink={(e) => {cur.onDeleteLink(index, e)}}/>
                 </div>
@@ -111,21 +162,41 @@ class HW extends React.Component{
         const tasks = this.state.tasks.map(function(item, index) {
             return (
                 <div key={index}>
-                    <Task data={item} onChangeTask={(e) => {cur.onChangeTask(index, e)}}
+                    <Task data={item} id={index + 1} onChangeTask={(e) => {cur.onChangeTask(index, e)}}
                                     onDeleteTask={(e) => {cur.onDeleteTask(index, e)}}/>
                 </div>
             )
         });
         return (
             <Grid>
-                <div>
-                    {links}
-                </div>
-                <Button onClick={this.addLink}>Add link</Button>
-                <div>
-                    {tasks}
-                </div>
-                <Button onClick={this.addTask}>Add task</Button>
+                <Row>
+                    <Col xs={2} xsOffset={5}>
+                        <div className="text-center">
+                            <FormGroup>
+                                <ControlLabel>Select type</ControlLabel>
+                                <FormControl componentClass="select" onChange={this.handleChangeSelect} defaultValue={this.state.type}>
+                                    <option value="hw">Homework</option>
+                                    <option value="test">Test</option>
+                                </FormControl>
+                            </FormGroup>
+                        </div>
+                    </Col>
+                </Row>
+                <Row>
+                    <div>
+                        {links}
+                    </div>
+                    <Button onClick={this.addLink}>Add link</Button>
+                </Row>
+                <Row>
+                    <div>
+                        {tasks}
+                    </div>
+                    <Button onClick={this.addTask}>Add task</Button>
+                </Row>
+                <Row>
+                    <div className="text-center"><Button onClick={this.sendData}>Submit</Button></div>
+                </Row>
             </Grid>
         );
     }

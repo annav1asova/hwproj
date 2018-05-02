@@ -31,13 +31,20 @@ class Menu extends React.Component {
         };
     }
 
+    setStateAsync(state) {
+        return new Promise((resolve) => {
+            this.setState(state, resolve)
+        });
+    }
+
     async componentDidMount() {
        let response = await axios.post('/cookie', {
             withCredentials: true
         })
-        this.setState({isLogged: (response.data === 1)});
+        console.log(response);
+        await this.setStateAsync({isLogged: (response.data === 1)});
         //example
-        this.setState({data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
+        await this.setStateAsync({data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
        }
     /*async componentDidMount() {
         let response = await axios.post('/menu', {
@@ -83,7 +90,7 @@ class Menu extends React.Component {
             <div>
                 <Navbar inverse>
                     <NavbarBrand><a href="/">HwProj</a></NavbarBrand>
-                    {/*this.state.isLogged*/getCookie("gosessionid") !== undefined ? withAuth : withoutAuth}
+                    {this.state.isLogged? withAuth : withoutAuth}
                 </Navbar>
             </div>
         );

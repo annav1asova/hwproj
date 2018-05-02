@@ -102,7 +102,7 @@ func addhwHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if isLoggedIn(r) {
 			if r.Method == "POST" {
-				//something
+				//GET DATA, PUT IT INTO BD
 			} else {
 				//если препод - то
 				fmt.Fprintf(w, renderHTML([]string{"/js/addhw.jsx"}))

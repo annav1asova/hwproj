@@ -32,6 +32,7 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 		MaxHeaderBytes: 1 << 16}
 
 	http.Handle("/", indexHandler(m))
+	http.Handle("/addhw", addhwHandler(m))
 	http.Handle("/menu", menuHandler(m))
 	http.Handle("/cookie", cookieHandler(m))
 	http.Handle("/sign_in", loginHandler(m))
@@ -83,7 +84,32 @@ func renderHTML(str []string) string {
 
 func indexHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, renderHTML([]string{"/js/app.jsx"}))
+		if isLoggedIn(r) {
+			if r.Method == "POST" {
+				//something
+			} else {
+				//если студент - то
+				fmt.Fprintf(w, renderHTML([]string{"/js/news/studentnews.jsx"}))
+				//иначе teachernews
+			}
+		} else {
+			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
+		}
+	})
+}
+
+func addhwHandler(m *model.Model) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if isLoggedIn(r) {
+			if r.Method == "POST" {
+				//something
+			} else {
+				//если препод - то
+				fmt.Fprintf(w, renderHTML([]string{"/js/addhw.jsx"}))
+			}
+		} else {
+			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
+		}
 	})
 }
 

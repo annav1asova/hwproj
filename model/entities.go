@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 	"os"
+	_"encoding/xml"
 )
 
 
@@ -44,6 +45,13 @@ type Problem struct {
 	Maxscore	int
 }
 
+type Link struct {
+	Linkid 		int
+	Hometaskid 	int
+	Url	 		string
+	Linkname	string
+}
+
 type Cell struct {
 	Boardcellid int
 	Userid 		int
@@ -58,4 +66,25 @@ type Submission struct {
 	File os.File
 	Timesended time.Time
 	Comment string
+}
+
+type Course struct {
+	Courseid 	int
+	Name 		string
+	Groupname 	string
+	Teacherid 	int
+}
+
+type Term struct {
+	Termid 		int
+	Courseid 	int
+	Termname 	string
+	Num 		int
+}
+
+type Enrollment struct {
+	Enrollmentid int
+	Termid int
+	Userid int
+	State string
 }

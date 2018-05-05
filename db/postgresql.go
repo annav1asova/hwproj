@@ -56,6 +56,25 @@ type pgDb struct {
 	sqlDeleteSubmission *sql.Stmt
 	sqlGetPullRequestOrFile *sqlx.Stmt
 	sqlGetSubmissionsFromCell *sqlx.Stmt
+
+	sqlSelectLinks *sqlx.Stmt
+	sqlInsertLink *sql.Stmt
+	sqlDeleteLink *sql.Stmt
+	sqlSelectLinksFromHometask *sqlx.Stmt
+
+	sqlSelectCourses *sqlx.Stmt
+	sqlInsertCourse *sql.Stmt
+	sqlDeleteCourse *sql.Stmt
+
+	sqlSelectTerms *sqlx.Stmt
+	sqlInsertTerm *sql.Stmt
+	sqlDeleteTerm *sql.Stmt
+	sqlSelectTermsFromCourse *sqlx.Stmt
+
+	sqlSelectEnrollment *sqlx.Stmt
+	sqlInsertEnrollment *sql.Stmt
+	sqlUpdateEnrollment *sql.Stmt
+	sqlSelectEnrollmentsToTerm *sqlx.Stmt
 }
 
 func (p *pgDb) createTablesIfNotExist() error {
@@ -72,6 +91,18 @@ func (p *pgDb) createTablesIfNotExist() error {
 		return err
 	}
 	if err := p.createTableSubmissions(); err != nil {
+		return err
+	}
+	if err := p.createTableLinks(); err != nil {
+		return err
+	}
+	if err := p.createTableCourses(); err != nil {
+		return err
+	}
+	if err := p.createTableTerms(); err != nil {
+		return err
+	}
+	if err := p.createTableEnrollment(); err != nil {
 		return err
 	}
 	return nil
@@ -91,6 +122,18 @@ func (p *pgDb) createSqlStatements() error {
 		return err
 	}
 	if err := p.prepareSubmissionSqlStatements(); err != nil {
+		return err
+	}
+	if err := p.prepareLinksSqlStatements(); err != nil {
+		return err
+	}
+	if err := p.prepareCoursesSqlStatements(); err != nil {
+		return err
+	}
+	if err := p.prepareTermsSqlStatements(); err != nil {
+		return err
+	}
+	if err := p.prepareEnrollmentSqlStatements(); err != nil {
 		return err
 	}
 	return nil

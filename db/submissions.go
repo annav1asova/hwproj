@@ -13,10 +13,10 @@ func (p *pgDb) createTableSubmissions() error {
 	  	CREATE TABLE IF NOT EXISTS submissions (
 			submissionid SERIAL UNIQUE,
 			boardcellid INTEGER REFERENCES board(boardcellid),
-			pullrequest VARCHAR(500), 
+			pullrequest TEXT, 
 			file BYTEA,
 			timesended TIMESTAMP,
-			comment VARCHAR(500),
+			comment TEXT,
 			CHECK (pullrequest IS NOT NULL or file IS NOT NULL)
 		);
 

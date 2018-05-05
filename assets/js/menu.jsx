@@ -1,14 +1,12 @@
-let { Button,
-    Navbar,
+let {Navbar,
     NavbarBrand,
     Nav,
     NavItem,
     NavDropdown,
-    MenuItem,
-NavbarHeader} = ReactBootstrap;
+    MenuItem} = ReactBootstrap;
 
 function getCookie(name) {
-    var matches = document.cookie.match(new RegExp(
+    let matches = document.cookie.match(new RegExp(
         "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
     ));
     return matches ? decodeURIComponent(matches[1]) : undefined;
@@ -27,7 +25,8 @@ class Menu extends React.Component {
         super(props);
         this.state = {
             data: [{id: 0, name: '', teacher: ''}],
-            isLogged: false
+            isLogged: false,
+            isTeacher: false
         };
     }
 
@@ -37,27 +36,23 @@ class Menu extends React.Component {
         });
     }
 
-    async componentDidMount() {
-       let response = await axios.post('/cookie', {
+    async componentWillMount() {
+        let response = await axios.post('/islogged', {
             withCredentials: true
-        })
-        console.log(response);
+        });
         await this.setStateAsync({isLogged: (response.data === 1)});
+        response = await axios.post('/isteacher', {
+            withCredentials: true
+        });
+        await this.setStateAsync({isTeacher: (response.data === 1)});
+        /*response = await axios.post('/menu', {
+            withCredentials: true
+        });
+        this.setState({data: response.data}); */
         //example
         await this.setStateAsync({data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
-       }
-    /*async componentDidMount() {
-        let response = await axios.post('/menu', {
-            withCredentials: true
-        }).catch(function (error) {
-            console.log(error);
-        });
-        this.setState({data: response.data.courses, isLogged: response.data.isLogged});
-        //example
-        this.setState({
-            isLogged: true,
-            data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
-    } */
+        this.render();
+    }
 
     render() {
         const courses = this.state.data.map((course, index) => {
@@ -97,6 +92,6 @@ class Menu extends React.Component {
     }
 }
 
-var CurMenu = <Menu />
+let CurMenu = <Menu />
 
 ReactDOM.render(CurMenu, document.getElementById('menu'));

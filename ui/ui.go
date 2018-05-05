@@ -34,8 +34,7 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 	http.Handle("/", indexHandler(m))
 	http.Handle("/addhw", addhwHandler(m))
 	http.Handle("/menu", menuHandler(m))
-	http.Handle("/islogged", isLoggedHandler(m))
-	http.Handle("/isteacher", isTeacherHandler(m))
+	http.Handle("/cookie", cookieHandler(m))
 	http.Handle("/sign_in", loginHandler(m))
 	http.Handle("/sign_up", registerHandler(m))
 	http.Handle("/sign_out", logoutHandler(m))
@@ -131,23 +130,7 @@ func menuHandler(m *model.Model) http.Handler {
 	})
 }
 
-func isTeacherHandler(m *model.Model) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "POST" {
-			//CHANGE TO CHECK TEACHER
-			_, err := isLoggedIn(r, m)
-			if err != nil {
-				w.Write([]byte("0"))
-			} else {
-				w.Write([]byte("1"))
-			}
-		}
-		// redirect to something
-		// maybe we need an error page
-	})
-}
-
-func isLoggedHandler(m *model.Model) http.Handler {
+func cookieHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == "POST" {
 				_, err := isLoggedIn(r, m)

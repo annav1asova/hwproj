@@ -36,16 +36,16 @@ class Menu extends React.Component {
         });
     }
 
-    async componentWillMount() {
+    async componentDidMount() {
         let response = await axios.post('/islogged', {
             withCredentials: true
         });
         await this.setStateAsync({isLogged: (response.data === 1)});
-        response = await axios.post('/isteacher', {
+        let response2 = await axios.post('/isteacher', {
             withCredentials: true
         });
-        await this.setStateAsync({isTeacher: (response.data === 1)});
-        /*response = await axios.post('/menu', {
+        await this.setStateAsync({isTeacher: (response2.data === 1)});
+        /*letresponse3 = await axios.post('/menu', {
             withCredentials: true
         });
         this.setState({data: response.data}); */
@@ -100,13 +100,13 @@ class Menu extends React.Component {
             <div>
                 <Navbar inverse>
                     <NavbarBrand><a href="/">HwProj</a></NavbarBrand>
-                    {this.state.isLogged? (this.state.isTeacher ? withAuthTeacher : withAuth) : withoutAuth}
+                    {this.state.isLogged ? withAuth : withoutAuth}
                 </Navbar>
             </div>
         );
     }
 }
 
-let CurMenu = <Menu />
+var CurMenu = <Menu />
 
 ReactDOM.render(CurMenu, document.getElementById('menu'));

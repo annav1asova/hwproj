@@ -134,12 +134,13 @@ func menuHandler(m *model.Model) http.Handler {
 func isTeacherHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {
-			//CHANGE TO CHECK TEACHER
-			_, err := isLoggedIn(r, m)
+			user, err := isLoggedIn(r, m)
 			if err != nil {
 				w.Write([]byte("0"))
-			} else {
+			} else if isTeacher(user) {
 				w.Write([]byte("1"))
+			} else {
+				w.Write([]byte("0"))
 			}
 		}
 		// redirect to something
@@ -340,4 +341,8 @@ func isLoggedIn(r *http.Request, m *model.Model) (model.UserInfo, error) {
 	}
 	user, err := m.PersonInfo(sessions.(int))
 	return user, err
+}
+
+func isTeacher(info model.UserInfo) (bool) {
+	return info.Type != "student"
 }

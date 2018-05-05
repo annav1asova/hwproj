@@ -46,7 +46,16 @@ type pgDb struct {
 	sqlDeleteProblem *sql.Stmt
 	sqlSelectProblemsFromHometask *sqlx.Stmt
 
-	sqlSelectCell *sqlx.Stmt
+	sqlSelectCells *sqlx.Stmt
+	sqlInsertCell *sql.Stmt
+	sqlDeleteCell *sql.Stmt
+	sqlGetScore *sqlx.Stmt
+
+	sqlSelectSubmissions *sqlx.Stmt
+	sqlInsertSubmission *sql.Stmt
+	sqlDeleteSubmission *sql.Stmt
+	sqlGetPullRequestOrFile *sqlx.Stmt
+	sqlGetSubmissionsFromCell *sqlx.Stmt
 }
 
 func (p *pgDb) createTablesIfNotExist() error {
@@ -57,6 +66,12 @@ func (p *pgDb) createTablesIfNotExist() error {
 		return err
 	}
 	if err := p.createTableProblems(); err != nil {
+		return err
+	}
+	if err := p.createTableBoard(); err != nil {
+		return err
+	}
+	if err := p.createTableSubmissions(); err != nil {
 		return err
 	}
 	return nil
@@ -70,6 +85,12 @@ func (p *pgDb) createSqlStatements() error {
 		return err
 	}
 	if err := p.prepareProblemsSqlStatements(); err != nil {
+		return err
+	}
+	if err := p.prepareBoardSqlStatements(); err != nil {
+		return err
+	}
+	if err := p.prepareSubmissionSqlStatements(); err != nil {
 		return err
 	}
 	return nil

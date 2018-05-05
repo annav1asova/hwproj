@@ -4,6 +4,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"time"
+	"os"
 )
 
 
@@ -26,7 +27,7 @@ type EntryData struct {
 }
 
 type UserInfo struct {
-	FirstName, Surname, Email string
+	FirstName, Surname, Email, Type string
 }
 
 type Hometask struct {
@@ -41,4 +42,20 @@ type Problem struct {
 	Hometaskid 	int
 	Statement 	string
 	Maxscore	int
+}
+
+type Cell struct {
+	Boardcellid int
+	Userid 		int
+	Problemid 	int
+	Score 		int
+}
+
+type Submission struct {
+	Submissionid int
+	Boardcellid int
+	Pullrequest string
+	File os.File
+	Timesended time.Time
+	Comment string
 }

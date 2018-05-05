@@ -28,31 +28,26 @@ class Menu extends React.Component {
             isLogged: null,
             isTeacher: null
         };
-        this.componentDidMount();
     }
 
-    setStateAsync(state) {
-        return new Promise((resolve) => {
-            this.setState(state, resolve)
-        });
-    }
-
-    async componentDidMount() {
-        let response = await axios.post('/islogged', {
+    componentDidMount() {
+        let cur = this;
+        axios.post('/islogged', {
             withCredentials: true
+        }).then(function (response) {
+            cur.setState({isLogged: (response.data === 1)});
         });
-        await this.setStateAsync({isLogged: (response.data === 1)});
-        let response2 = await axios.post('/isteacher', {
+        axios.post('/isteacher', {
             withCredentials: true
+        }).then(function (response) {
+            cur.setState({isTeacher: (response.data === 1)});
         });
-        await this.setStateAsync({isTeacher: (response2.data === 1)});
-        /*letresponse3 = await axios.post('/menu', {
+        /*let response3 = await axios.post('/menu', {
             withCredentials: true
         });
         this.setState({data: response.data}); */
         //example
-        await this.setStateAsync({data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
-        this.forceUpdate();
+        this.setState({data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
     }
 
     render() {
@@ -105,7 +100,7 @@ class Menu extends React.Component {
             <div>
                 <Navbar inverse>
                     <NavbarBrand><a href="/">HwProj</a></NavbarBrand>
-                    {this.state.isLogged ? withAuth : withoutAuth}
+                    {this.state.isLogged ? (this.state.isTeacher ? withAuthTeacher : withAuth) : withoutAuth}
                 </Navbar>
             </div>
         );

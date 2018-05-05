@@ -56,12 +56,27 @@ class Menu extends React.Component {
 
     render() {
         const courses = this.state.data.map((course, index) => {
-            return (<MenuCourse name={course.name} id={course.id}/>);
+            return (
+                <div key={index}>
+                    <MenuCourse name={course.name} id={course.id}/>
+                </div>
+            );
         });
+        const withAuthTeacher = <Nav pullRight>
+                            <NavDropdown title="Courses" id="basic-nav-dropdown">
+                                {courses}
+                                <MenuItem divider />
+                                <MenuItem href="/">Add course</MenuItem>
+                                <MenuItem href="/courses">All courses</MenuItem>
+                            </NavDropdown>
+                            <NavDropdown title="Profile" id="basic-nav-dropdown">
+                                <MenuItem href="/profile">Edit profile</MenuItem>
+                                <MenuItem href="/">Invite another teacher</MenuItem>
+                                <MenuItem divider />
+                                <MenuItem href="/sign_out">Logout</MenuItem>
+                            </NavDropdown>
+                        </Nav>;
         const withAuth = <Nav pullRight>
-                            <NavItem href="/load">
-                                Load solution
-                            </NavItem>
                             <NavDropdown title="Courses" id="basic-nav-dropdown">
                                 {courses}
                                 <MenuItem divider />
@@ -85,7 +100,7 @@ class Menu extends React.Component {
             <div>
                 <Navbar inverse>
                     <NavbarBrand><a href="/">HwProj</a></NavbarBrand>
-                    {this.state.isLogged? withAuth : withoutAuth}
+                    {this.state.isLogged? (this.state.isTeacher ? withAuthTeacher : withAuth) : withoutAuth}
                 </Navbar>
             </div>
         );

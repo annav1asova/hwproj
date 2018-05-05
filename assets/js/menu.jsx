@@ -15,7 +15,7 @@ function getCookie(name) {
 class MenuCourse extends React.Component{
     render() {
         return (
-            <MenuItem href={'courses/' + this.props.id}>{this.props.name}</MenuItem>
+            <MenuItem key={this.props.id}  href={'courses/' + this.props.id}>{this.props.name}</MenuItem>
         );
     }
 }
@@ -25,9 +25,10 @@ class Menu extends React.Component {
         super(props);
         this.state = {
             data: [{id: 0, name: '', teacher: ''}],
-            isLogged: false,
-            isTeacher: false
+            isLogged: null,
+            isTeacher: null
         };
+        this.componentDidMount();
     }
 
     setStateAsync(state) {
@@ -51,16 +52,20 @@ class Menu extends React.Component {
         this.setState({data: response.data}); */
         //example
         await this.setStateAsync({data: [{id: 1, name: 'Hello World', teacher: 'Welcome to learning React!'}]});
-        this.render();
+        this.forceUpdate();
     }
 
     render() {
-        const courses = this.state.data.map((course, index) => {
+        if (this.state.isLogged === null)
             return (
-                <div key={index}>
-                    <MenuCourse name={course.name} id={course.id}/>
+                <div>
+                    <Navbar inverse>
+                        <NavbarBrand><a href="/">HwProj</a></NavbarBrand>
+                    </Navbar>
                 </div>
             );
+        const courses = this.state.data.map((course, index) => {
+            return (<MenuCourse name={course.name} id={course.id}/>);
         });
         const withAuthTeacher = <Nav pullRight>
                             <NavDropdown title="Courses" id="basic-nav-dropdown">

@@ -72,8 +72,10 @@ func renderHTML(str []string) string {
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.32.1/react-bootstrap.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js"></script>
+		<script src="https://unpkg.com/react-day-picker/lib/daypicker.min.js"></script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.css"/>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css"/>
+		<link rel="stylesheet" href="https://unpkg.com/react-day-picker/lib/style.css">
 	
 		<script src="/js/menu.jsx" type="text/babel"></script>`;
 	for i := 0; i < len(str); i++ {

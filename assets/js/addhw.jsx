@@ -90,7 +90,8 @@ class HW extends React.Component{
         this.state = {
             links: [{name:'',link:''}],
             tasks: [''],
-            type: "hw"
+            type: "hw",
+            selectedDay: undefined
         };
         this.addLink = this.addLink.bind(this);
         this.addTask = this.addTask.bind(this);
@@ -101,6 +102,7 @@ class HW extends React.Component{
         this.onDeleteTask = this.onDeleteTask.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.sendData = this.sendData.bind(this);
+        this.handleDayChange = this.handleDayChange.bind(this);
     }
     addLink() {
         this.setState({links: this.state.links.concat({name:'', link:''})});
@@ -138,6 +140,7 @@ class HW extends React.Component{
             'tasks': this.state.tasks,
             'links': this.state.links,
             'type' : this.state.type,
+            'date' : this.state.selectedDay,
             withCredentials: true
         }).then(function (response) {
             console.log(response);
@@ -147,6 +150,9 @@ class HW extends React.Component{
     }
     handleChangeSelect(e) {
         this.setState({type: e.target.value});
+    }
+    handleDayChange(day) {
+        this.setState({ selectedDay: day });
     }
     render() {
         var cur = this;
@@ -179,6 +185,11 @@ class HW extends React.Component{
                                     <option value="test">Test</option>
                                 </FormControl>
                             </FormGroup>
+                        </div>
+                        <div className="text-center">
+                            {this.state.selectedDay && <p>Day: {this.state.selectedDay.toLocaleDateString()}</p>}
+                            {!this.state.selectedDay && <p>Choose a day</p>}
+                            <DayPicker.Input onDayChange={this.handleDayChange} />
                         </div>
                     </Col>
                 </Row>

@@ -36,7 +36,7 @@ class Menu extends React.Component {
             isTeacher: null,
             showaddcourse: false,
             coursename: "",
-            group: 0,
+            group: "",
             showadduser: false,
             email: ""
         };
@@ -172,7 +172,7 @@ class Menu extends React.Component {
                                 <Col sm={8}>
                                     <FormControl
                                         name="link"
-                                        type="number"
+                                        type="text"
                                         value={this.state.group}
                                         placeholder="Enter group"
                                         onChange={(e) => {cur.setState({group: e.target.value});}}/>

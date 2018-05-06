@@ -5,22 +5,6 @@ const Router = ReactRouterDOM.BrowserRouter;
 const Route = ReactRouterDOM.Route;
 const Switch = ReactRouterDOM.Switch;
 
-class Course extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            name: props.name,
-            teacher: props.teacher,
-            index: props.index
-        };
-    }
-    render() {
-        return (
-            <ListGroupItem key={this.props.index} header={this.state.name}>{this.state.teacher}</ListGroupItem>
-        );
-    }
-}
-
 class Courses extends React.Component{
     constructor(props) {
         super(props);
@@ -42,7 +26,7 @@ class Courses extends React.Component{
     }
     render() {
         const users = this.state.data.map((course, index) => {
-            return (<Course name={course.name} teacher={course.teacher} index={index}/>);
+            return (<ListGroupItem key={index} header={course.name}>{course.teacher}</ListGroupItem>);
         });
         return (
             <ListGroup>

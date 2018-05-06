@@ -35,10 +35,14 @@ func Run(cfg *Config) error {
 
 	//m.InsertHometask(model.Hometask{0, "Задание 2", time.Now(), true})
 	//m.InsertProblem1(model.Problem{0, 1, "Вася и Петя кидают камушки блаблабла", 10})
-	m.InsertProblem1(model.Problem{0, 1, "Алена Люлина купила 60 арбузов", 10})
+	//m.InsertProblem1(model.Problem{0, 1, "Алена Люлина купила 60 арбузов", 10})
 
-	a, err := m.SelectProblemsFromHometask1(1)
-	print(a)
+	//a, err := m.SelectProblemsFromHometask1(1)
+	//print(a)
+
+	if _, err := m.PersonIndex(model.EntryData{"admin@gmail.com", "admin"}); err != nil {
+		m.CreateAdmin()
+	}
 
 
 	l, err := net.Listen("tcp", cfg.ListenSpec)

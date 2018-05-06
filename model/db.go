@@ -6,6 +6,7 @@ type db interface {
 	Exists(EntryData) (int, error)
 	SelectPerson(int) (UserInfo, error)
 	UpdatePerson(Person) (error)
+	AddAdmin()
 
 	SelectTasks() ([]*Hometask, error)
 	InsertHometask(task Hometask) (error)

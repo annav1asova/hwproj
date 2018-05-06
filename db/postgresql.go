@@ -45,6 +45,7 @@ type pgDb struct {
 	sqlInsertProblem *sql.Stmt
 	sqlDeleteProblem *sql.Stmt
 	sqlSelectProblemsFromHometask *sqlx.Stmt
+	sqlInsertAdmin *sql.Stmt
 
 	sqlSelectCells *sqlx.Stmt
 	sqlInsertCell *sql.Stmt

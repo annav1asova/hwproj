@@ -43,7 +43,7 @@ func (p *pgDb) prepareUsersSqlStatements() (err error) {
 	}
 
 	if p.sqlSelectPerson, err = p.dbConn.Prepare(
-		"SELECT firstname, surname, email FROM users WHERE userid = $1",
+		"SELECT firstname, surname, email, type FROM users WHERE userid = $1",
 	); err != nil {
 		return err
 	}
@@ -105,13 +105,13 @@ func (p *pgDb) Exists(data model.EntryData) (int, error) {
 func (p *pgDb) SelectPerson(id int) (model.UserInfo, error) {
 	row := p.sqlSelectPerson.QueryRow(id)
 	var user model.UserInfo
-	switch err := row.Scan(&user.FirstName, &user.Surname, &user.Email); err {
+	switch err := row.Scan(&user.FirstName, &user.Surname, &user.Email, &user.Type); err {
 	case sql.ErrNoRows:
 		fmt.Println("There is no users with this uid!")
 	case nil:
 		return user, nil
 	}
-	return model.UserInfo{"","",""}, nil
+	return model.UserInfo{}, nil
 }
 
 func (p *pgDb) UpdatePerson(person model.Person) (error) {

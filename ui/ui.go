@@ -97,7 +97,7 @@ func indexHandler(m *model.Model) http.Handler {
 				//иначе teachernews
 			}
 		} else {
-			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
+			http.Redirect(w, r, "/sign_in", 302)
 		}
 	})
 }
@@ -113,7 +113,7 @@ func addhwHandler(m *model.Model) http.Handler {
 				fmt.Fprintf(w, renderHTML([]string{"/js/addhw.jsx"}))
 			}
 		} else {
-			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
+			http.Redirect(w, r, "/sign_in", 302)
 		}
 	})
 }
@@ -128,7 +128,7 @@ func menuHandler(m *model.Model) http.Handler {
 				fmt.Fprintf(w, renderHTML([]string{"/js/profile.jsx"}))
 			}
 		} else {
-			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
+			http.Redirect(w, r, "/sign_in", 302)
 		}
 	})
 }
@@ -152,12 +152,13 @@ func isFollowedHandler(m *model.Model) http.Handler {
 func isTeacherHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {
-			//CHANGE TO CHECK TEACHER
-			_, err := isLoggedIn(r, m)
+			user, err := isLoggedIn(r, m)
 			if err != nil {
 				w.Write([]byte("0"))
-			} else {
+			} else if isTeacher(user) {
 				w.Write([]byte("1"))
+			} else {
+				w.Write([]byte("0"))
 			}
 		}
 		// redirect to something
@@ -260,7 +261,7 @@ func loadHandler(m *model.Model) http.Handler {
 		if err == nil {
 			fmt.Fprintf(w, renderHTML([]string{"/js/load.jsx"}))
 		} else {
-			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
+			http.Redirect(w, r, "/sign_in", 302)
 		}
 	})
 }
@@ -292,7 +293,7 @@ func editedProfileHandler(m *model.Model) http.Handler {
 				fmt.Fprintf(w, renderHTML([]string{"/js/profile.jsx"}))
 			}
 		} else {
-			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
+			http.Redirect(w, r, "/sign_in", 302)
 		}
 	})
 }
@@ -314,7 +315,7 @@ func profileHandler(m *model.Model) http.Handler {
 				fmt.Fprintf(w, renderHTML([]string{"/js/profile.jsx"}))
 			}
 		} else {
-			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
+			http.Redirect(w, r, "/sign_in", 302)
 		}
 	})
 }
@@ -325,7 +326,7 @@ func coursesHandler(m *model.Model) http.Handler {
 		if err == nil {
 			fmt.Fprintf(w, renderHTML([]string{"/js/courses/course.jsx", "/js/courses/courses.jsx"}))
 		} else {
-			fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
+			http.Redirect(w, r, "/sign_in", 302)
 		}
 	})
 }
@@ -358,4 +359,8 @@ func isLoggedIn(r *http.Request, m *model.Model) (model.UserInfo, error) {
 	}
 	user, err := m.PersonInfo(sessions.(int))
 	return user, err
+}
+
+func isTeacher(info model.UserInfo) (bool) {
+	return info.Type != "student"
 }

@@ -133,6 +133,22 @@ func menuHandler(m *model.Model) http.Handler {
 	})
 }
 
+func isFollowedHandler(m *model.Model) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" {
+			//CHANGE TO CHECK if follow the course
+			_, err := isLoggedIn(r, m)
+			if err != nil {
+				w.Write([]byte("0"))
+			} else {
+				w.Write([]byte("1"))
+			}
+		}
+		// redirect to something
+		// maybe we need an error page
+	})
+}
+
 func isTeacherHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {

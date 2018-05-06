@@ -98,7 +98,6 @@ func indexHandler(m *model.Model) http.Handler {
 			}
 		} else {
 			http.Redirect(w, r, "/sign_in", 302)
-			//fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
 		}
 	})
 }
@@ -115,8 +114,6 @@ func addhwHandler(m *model.Model) http.Handler {
 			}
 		} else {
 			http.Redirect(w, r, "/sign_in", 302)
-
-			//fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
 		}
 	})
 }
@@ -132,7 +129,6 @@ func menuHandler(m *model.Model) http.Handler {
 			}
 		} else {
 			http.Redirect(w, r, "/sign_in", 302)
-			//fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
 		}
 	})
 }
@@ -266,8 +262,6 @@ func loadHandler(m *model.Model) http.Handler {
 			fmt.Fprintf(w, renderHTML([]string{"/js/load.jsx"}))
 		} else {
 			http.Redirect(w, r, "/sign_in", 302)
-
-			//fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
 		}
 	})
 }
@@ -300,8 +294,6 @@ func editedProfileHandler(m *model.Model) http.Handler {
 			}
 		} else {
 			http.Redirect(w, r, "/sign_in", 302)
-
-			//fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
 		}
 	})
 }
@@ -324,8 +316,6 @@ func profileHandler(m *model.Model) http.Handler {
 			}
 		} else {
 			http.Redirect(w, r, "/sign_in", 302)
-
-			//fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
 		}
 	})
 }
@@ -337,8 +327,6 @@ func coursesHandler(m *model.Model) http.Handler {
 			fmt.Fprintf(w, renderHTML([]string{"/js/courses/course.jsx", "/js/courses/courses.jsx"}))
 		} else {
 			http.Redirect(w, r, "/sign_in", 302)
-
-			//fmt.Fprintf(w, renderHTML([]string{"/js/sign/sign_in.jsx"}))
 		}
 	})
 }

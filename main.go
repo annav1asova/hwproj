@@ -15,7 +15,7 @@ func processFlags() *daemon.Config {
 
 	flag.StringVar(&cfg.ListenSpec, "listen", "localhost:3001", "HTTP listen spec")
 	flag.StringVar(&cfg.Db.ConnectString, "db-connect", "host=localhost port=5432 user=postgres dbname=gowebapp sslmode=disable", "DB Connect String")
-	flag.StringVar(&assetsPath, "assets-path", "assets", "Path to assets dir")
+	flag.StringVar(&assetsPath, "assets-path", "client", "Path to client dir")
 
 	flag.Parse()
 	return cfg

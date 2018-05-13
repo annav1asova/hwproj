@@ -66,6 +66,11 @@ type pgDb struct {
 	sqlSelectCourses *sqlx.Stmt
 	sqlInsertCourse *sql.Stmt
 	sqlDeleteCourse *sql.Stmt
+	sqlSelectCoursesOfTeacher *sqlx.Stmt
+	sqlSelectActiveCourses *sqlx.Stmt
+	sqlSelectNonActiveCourses *sqlx.Stmt
+	sqlSelectActiveCoursesWithName *sqlx.Stmt
+	sqlSelectNonActiveCoursesWithName *sqlx.Stmt
 
 	sqlSelectTerms *sqlx.Stmt
 	sqlInsertTerm *sql.Stmt

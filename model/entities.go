@@ -73,6 +73,15 @@ type Course struct {
 	Name 		string
 	Groupname 	string
 	Teacherid 	int
+	Active 		bool
+}
+
+type CourseInfo struct {
+	Courseid 			int
+	Name 				string
+	Groupname 			string
+	TeacherFirstName 	string
+	TeacherLastName 	string
 }
 
 type Term struct {

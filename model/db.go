@@ -13,7 +13,18 @@ type db interface {
 	DeleteHometask(id int) (error)
 
 	SelectProblems() ([]*Problem, error)
-	InsertProblem(problem Problem) (error)
-	DeleteProblem(id int) (error)
-	SelectProblemsFromHometask(hometaskid int) ([]*Problem, error)
+	InsertProblemDb(problem Problem) (error)
+	DeleteProblemDb(id int) (error)
+	SelectProblemsFromHometaskDb(hometaskid int) ([]*Problem, error)
+
+	////
+
+	SelectCourses() ([]*Course, error)
+	InsertCourseDb(course Course) (error)
+	DeleteCourseDb(id int) (error)
+	SelectCoursesOfTeacherDb(teacherid int) ([]*Course, error)
+	SelectActiveCoursesDb() ([]*Course, error)
+	SelectNonActiveCoursesDb() ([]*Course, error)
+	SelectActiveCoursesWithNameDb() ([]*CourseInfo, error)
+	SelectNonActiveCoursesWithNameDb() ([]*CourseInfo, error)
 }

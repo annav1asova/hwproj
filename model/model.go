@@ -50,15 +50,52 @@ func (m *Model) Problems() ([]*Problem, error) {
 	return m.SelectProblems()
 }
 
-func (m *Model) InsertProblem1(problem Problem) (error) {
-	return m.InsertProblem(problem)
+func (m *Model) InsertProblem(problem Problem) (error) {
+	return m.InsertProblemDb(problem)
 }
 
-func (m *Model) DeleteProblem1(id int) (error) {
-	return m.DeleteProblem(id)
-}
-func (m *Model) SelectProblemsFromHometask1(hometaskid int) ([]*Problem, error) {
-	return m.SelectProblemsFromHometask(hometaskid)
+func (m *Model) DeleteProblem(id int) (error) {
+	return m.DeleteProblemDb(id)
 }
 
-////
+func (m *Model) SelectProblemsFromHometask(hometaskid int) ([]*Problem, error) {
+	return m.SelectProblemsFromHometaskDb(hometaskid)
+}
+
+// board
+//submissions
+//links
+//courses:
+
+func (m *Model) Courses() ([]*Course, error) {
+	return m.SelectCourses()
+}
+
+func (m *Model) InsertCourse(course Course) (error) {
+	return m.InsertCourseDb(course)
+}
+
+func (m *Model) DeleteCourse(id int) (error) {
+	return m.DeleteCourseDb(id)
+}
+
+func (m *Model) SelectCoursesOfTeacher(teacherid int) ([]*Course, error) {
+	return m.SelectCoursesOfTeacher(teacherid)
+}
+
+func (m *Model) SelectActiveCourses() ([]*Course, error) {
+	return m.SelectActiveCoursesDb()
+}
+
+func (m *Model) SelectNonActiveCourses() ([]*Course, error) {
+	return m.SelectNonActiveCoursesDb()
+}
+
+func (m *Model) SelectActiveCoursesWithName() ([]*CourseInfo, error) {
+	return m.SelectActiveCoursesWithNameDb()
+}
+
+func (m *Model) SelectNonActiveCoursesWithName() ([]*CourseInfo, error) {
+	return m.SelectNonActiveCoursesWithNameDb()
+}
+///

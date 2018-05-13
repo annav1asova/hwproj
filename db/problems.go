@@ -63,22 +63,21 @@ func (p *pgDb) SelectProblems() ([]*model.Problem, error) {
 	return problems, nil
 }
 
-func (p *pgDb) InsertProblem(problem model.Problem) (error) {
+func (p *pgDb) InsertProblemDb(problem model.Problem) (error) {
 	if _, err := p.sqlInsertProblem.Exec(problem.Hometaskid, problem.Statement, problem.Maxscore); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (p *pgDb) DeleteProblem(id int) (error) {
+func (p *pgDb) DeleteProblemDb(id int) (error) {
 	if _, err := p.sqlDeleteProblem.Exec(id); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (p *pgDb) SelectProblemsFromHometask(hometaskid int) ([]*model.Problem, error) {
-	//row := p.sqlSelectProblemsFromHometask.QueryRow(hometaskid)
+func (p *pgDb) SelectProblemsFromHometaskDb(hometaskid int) ([]*model.Problem, error) {
 	problems := make([]*model.Problem, 0)
 	err := p.sqlSelectProblemsFromHometask.Select(&problems, hometaskid)
 	switch err {
@@ -90,5 +89,4 @@ func (p *pgDb) SelectProblemsFromHometask(hometaskid int) ([]*model.Problem, err
 	default:
 		panic(err)
 	}
-	return problems, nil
 }

@@ -1,10 +1,18 @@
-import { createStore, combineReducers, Reducer, applyMiddleware, Action, Middleware } from 'redux';
-import {authReducer} from './auth/auth.reducer';
+import { createStore, combineReducers, applyMiddleware} from 'redux';
+import { combineEpics, createEpicMiddleware } from 'redux-observable';
+import {authReducer, authEpics$} from './auth/auth.reducer';
+import {dataReducer} from "./auth/data.reducer";
+
+
+export const rootEpics$ = combineEpics(
+    authEpics$
+);
 
 const reducers = combineReducers({
-    authentication: authReducer
+    authentication: authReducer,
+    data: dataReducer
 });
 
 export const storeFactory = () => {
-    return createStore(reducers);
+    return createStore(reducers, applyMiddleware(createEpicMiddleware(rootEpics$)));
 };

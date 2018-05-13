@@ -1,7 +1,13 @@
-import { Reducer } from 'redux';
+import { combineEpics } from 'redux-observable';
+import { startLoginProcessEpic, startRegisterProcessEpic} from "./auth.epic";
+
+export const authEpics$ = combineEpics(
+    startLoginProcessEpic,
+    startRegisterProcessEpic
+);
 
 const initState = {
-    authInfo: null,
+    authInfo: null
 };
 
 export const authReducer = (state = initState, action) => {
@@ -10,10 +16,10 @@ export const authReducer = (state = initState, action) => {
             return {
                 ...state,
                 authInfo: {
-                    isAuthenticated: true
+                    isAuthenticated: true,
+                    isTeacher: action.userType
                 }
             };
-        case 'START-LOGOUT-PROCESS':
         case 'USER-LOGGED-OUT':
             return {
                 ...state,

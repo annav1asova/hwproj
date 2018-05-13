@@ -90,6 +90,8 @@ class BigCourse extends React.Component{
             coursename_: "Awesome course",
             group_: "244",
             showeditcourse: false,
+            showfollowers: false,
+            followers: [],
             semesters: [
                 {
                     todo:3,
@@ -178,6 +180,17 @@ class BigCourse extends React.Component{
             cur.setState({isTeacher: (response.data === 1)});
         });
         this.changeSem();
+        /*if (this.state.isTeacher) {
+            axios.post('/followers', {
+                course: this.state.idcourse,
+                sem: this.state.cursem,
+                withCredentials: true
+            }).then(function (response) {
+                cur.setState({followers: response.data});
+            });
+        } */
+        //example
+        cur.setState({followers: ["Anna Vlasova", "Natalia Ponomareva"]});
         /*let response = await axios.get('courses/' + this.state.idcourse, {
             withCredentials: true
         });
@@ -205,6 +218,12 @@ class BigCourse extends React.Component{
     editTask() {
 
     }
+   addFollower() {
+
+    }
+    deleteFollower() {
+
+    }
     render(){
         const semesters = this.state.semesters.map((sem, index) => {
             return (<Tab eventKey={index} title={(index + 1) + ' semester'}/>);
@@ -213,11 +232,22 @@ class BigCourse extends React.Component{
         const homeworks = this.state.semesters[this.state.cursem].homeworks.map((hw, index) => {
             return (<Task hw={hw} id={index} isTeacher={this.state.isTeacher} onEditTask={this.editTask.bind(this)}/>);
         });
+        const followers = this.state.followers.map((user, index) => {
+            return (
+                <ListGroupItem key={index}>
+                    <div className="pull-right">
+                        <Button bsSize="small" onClick={this.addFollower.bind(this)}><Glyphicon glyph="ok"/></Button>
+                        <Button bsSize="small" onClick={this.deleteFollower.bind(this)}><Glyphicon glyph="remove"/></Button>
+                    </div>
+                    {user}
+                </ListGroupItem>);
+        });
         let cur = this;
         const deleteCoursePopover = (<Popover id="1">Delete course</Popover>);
         const editCoursePopover = (<Popover id="2">Edit course</Popover>);
         const deleteSemPopover = (<Popover id="3">Delete semester</Popover>);
         const addSemPopover = (<Popover id="4">Add semester</Popover>);
+        const followersPopover = (<Popover id="7">View list of all followers</Popover>);
         const followPopover = (<Popover id="5">Follow current semester</Popover>);
         const unfollowPopover = (<Popover id="6">Unfollow current semester</Popover>);
         return (
@@ -276,6 +306,9 @@ class BigCourse extends React.Component{
                     <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={addSemPopover}>
                         <Button onClick={this.addSem.bind(this)}><Glyphicon glyph="plus"/></Button>
                     </OverlayTrigger>
+                    <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={followersPopover}>
+                        <Button onClick={() => {cur.setState({showfollowers: true });}}><Glyphicon glyph="user"/></Button>
+                    </OverlayTrigger>
                     <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={deleteSemPopover}>
                         <Button onClick={this.deleteSem.bind(this)}><Glyphicon glyph="remove"/></Button>
                     </OverlayTrigger>
@@ -290,6 +323,19 @@ class BigCourse extends React.Component{
                         </OverlayTrigger>
                     }
                 </div>}
+                <Modal show={this.state.showfollowers} onHide={() => {cur.setState({showfollowers: false });}}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>List of followers:</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <ListGroup>
+                        {followers}
+                        </ListGroup>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={() => {cur.setState({showfollowers: false });}}>Close</Button>
+                    </Modal.Footer>
+                </Modal>
                 <Tabs id="semesters" defaultActiveKey={this.state.cursem}
                     onSelect={(e) => {cur.setState({cursem: e}); cur.changeSem();}}
                 >

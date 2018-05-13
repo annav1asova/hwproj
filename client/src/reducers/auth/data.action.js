@@ -1,1 +1,1 @@
-export const receivedData = (all, cur) => ({ type: 'RECEIVED_DATA', allC: all, curC: cur });
+export const receivedData = (allcur, allcom, cur) => ({ type: 'RECEIVED_DATA', allCur: allcur, allCom: allcom, curC: cur });

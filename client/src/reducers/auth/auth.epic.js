@@ -15,7 +15,7 @@ export const startLoginProcessEpic = action$ =>
     .map(response => response.isLogged
         ? Observable.concat(
             userLoggedIn(response.isTeacher),
-            receivedData(response.allCourses, response.curCourses)
+            receivedData(response.allCurCourses, response.allComCourses, response.curCourses)
         )
         : userLoggedOut());
 
@@ -31,6 +31,6 @@ export const startRegisterProcessEpic = action$ =>
         .map(response => response.isLogged
             ? Observable.concat(
                 userLoggedIn(response.isTeacher),
-                receivedData(response.allCourses, response.curCourses)
+                receivedData(response.allCurCourses, response.allComCourses, response.curCourses)
             )
             : userLoggedOut());

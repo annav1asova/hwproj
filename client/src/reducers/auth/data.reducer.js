@@ -1,6 +1,7 @@
 const initState = {
     curUserCourses: null,
-    allCourses: null
+    allCoursesCurrent: null,
+    allCoursesCompleted: null
 };
 
 export const dataReducer = (state = initState, action) => {
@@ -9,7 +10,8 @@ export const dataReducer = (state = initState, action) => {
             return {
                 ...state,
                 curUserCourses: action.curC,
-                allCourses: action.allC
+                allCoursesCurrent: action.allCur,
+                allCoursesCompleted: action.allCom
             };
         default:
             return state;

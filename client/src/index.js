@@ -18,6 +18,8 @@ class App extends Component{
                     <Router>
                         <Route exact path="/sign_in" component={SignIn} />
                         <Route exact path="/sign_up" component={SignUp} />
+                        <Route exact path="/courses" component={Courses} />
+                        <Route path="/courses/:idcourse/:idterm" component={Course} />
                     </Router>
                     <SignIn/>
                 </Provider>

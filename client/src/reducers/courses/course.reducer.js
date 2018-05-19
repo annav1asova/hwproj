@@ -1,5 +1,5 @@
-import {combineEpics} from "redux-observable/index";
-import {getCoursesEpic, addCourseEpic, changeSemEpic} from "./course.epic";
+import {combineEpics} from "redux-observable";
+import {getCoursesEpic, addCourseEpic} from "./course.epic";
 
 export const coursesEpics$ = combineEpics(
     getCoursesEpic,

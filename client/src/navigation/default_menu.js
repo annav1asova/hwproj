@@ -8,10 +8,10 @@ export class DefaultMenu extends React.Component {
                 <Navbar inverse>
                     <NavbarBrand><a href="/">HwProj</a></NavbarBrand>
                     <Nav pullRight>
-                        <NavItem href="/sign_in">
+                        <NavItem href="/sign_in_in">
                             Login
                         </NavItem>
-                        <NavItem eventKey={1} href="/sign_up">
+                        <NavItem href="/sign_up">
                             Register
                         </NavItem>
                     </Nav>

@@ -6,8 +6,7 @@ import {DefaultMenu} from "./default_menu";
 
 class MenuImpl extends React.Component {
     render() {
-        const data = this.props.isLogged ? (this.props.isTeacher ? <TeacherMenu/> : <StudentMenu/>): <DefaultMenu/>;
-        return ({data});
+        return (this.props.isLogged ? (this.props.isTeacher ? <TeacherMenu/> : <StudentMenu/>): <DefaultMenu/>);
     }
 }
 

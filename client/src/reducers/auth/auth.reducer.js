@@ -7,14 +7,12 @@ export const authEpics$ = combineEpics(
 );
 
 const initState = {
-    authInfo: {
-        isAuthenticated: false,
-        isTeacher: false,
-        courses: null,
-        firstName: null,
-        lastName: null,
-        email: null
-    }
+    isAuthenticated: false,
+    isTeacher: false,
+    courses: null,
+    firstName: null,
+    lastName: null,
+    email: null
 };
 
 export const authReducer = (state = initState, action) => {
@@ -22,26 +20,22 @@ export const authReducer = (state = initState, action) => {
         case 'USER-LOGGED-IN':
             return {
                 ...state,
-                authInfo: {
                     isAuthenticated: true,
                     isTeacher: action.userType,
                     courses: action.userCourses,
                     firstName: action.fn,
                     lastName: action.ln,
                     email: action.email
-                }
             };
         case 'USER-LOGGED-OUT':
             return {
                 ...state,
-                authInfo: {
                     isAuthenticated: false,
                     isTeacher: null,
                     courses: null,
                     firstName: null,
                     lastName: null,
                     email: null
-                }
             };
         default:
             return state;

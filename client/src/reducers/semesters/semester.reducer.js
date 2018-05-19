@@ -1,4 +1,4 @@
-import {combineEpics} from "redux-observable/index";
+import {combineEpics} from "redux-observable";
 import {changeSemEpic} from "./semester.epic";
 
 export const semesterEpics$ = combineEpics(
@@ -6,11 +6,9 @@ export const semesterEpics$ = combineEpics(
 );
 
 const initState = {
-    semester: {
-        isFollowed: false,
-        homeworks: null,
-        table: null
-    }
+    isFollowed: false,
+    homeworks: null,
+    table: null
 };
 
 export const semesterReducer = (state = initState, action) => {
@@ -18,11 +16,9 @@ export const semesterReducer = (state = initState, action) => {
         case 'RECEIVED-SEM':
             return {
                 ...state,
-                semester: {
-                    isFollowed: action.isFollowed,
-                    homeworks: action.homeworks,
-                    table: action.table
-                }
+                isFollowed: action.isFollowed,
+                homeworks: action.homeworks,
+                table: action.table
             };
         default:
             return state;

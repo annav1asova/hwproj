@@ -11,7 +11,7 @@ export const rootEpics$ = combineEpics(
 );
 
 const reducers = combineReducers({
-    authentication: authReducer,
+    authInfo: authReducer,
     courses: courseReducer,
     semester: semesterReducer
 });

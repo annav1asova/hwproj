@@ -9,7 +9,6 @@ gowebapp
 _obj
 _test
 assets/node_modules/
-assets/dist/
 
 # Architecture specific extensions/prefixes
 *.[568vq]

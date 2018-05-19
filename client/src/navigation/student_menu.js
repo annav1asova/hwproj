@@ -30,7 +30,7 @@ class StudentMenuImpl extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    courses: state.curUserCourses
+    courses: state.authInfo.courses
 });
 
 export const StudentMenu = connect(mapStateToProps)(StudentMenuImpl);

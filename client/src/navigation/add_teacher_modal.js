@@ -1,6 +1,7 @@
 import { Modal, Form, FormGroup, Col, FormControl, ControlLabel, Button} from 'react-bootstrap';
 import React from 'react';
 import { connect } from 'react-redux';
+import {teacherInvite} from "../reducers/auth/auth.action";
 
 class AddTeacherModalImpl extends React.Component {
     constructor(props) {
@@ -44,7 +45,7 @@ class AddTeacherModalImpl extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch)  => ({
-    onSubmitClicked: (em) => { dispatch(addTeacher(em)); }
+    onSubmitClicked: (em) => { dispatch(teacherInvite(em)); }
 });
 
 export const AddTeacherModal = connect(null, mapDispatchToProps)(AddTeacherModalImpl);

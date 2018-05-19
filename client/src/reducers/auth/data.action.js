@@ -1,1 +1,0 @@
-export const receivedData = (allcur, allcom, cur) => ({ type: 'RECEIVED_DATA', allCur: allcur, allCom: allcom, curC: cur });

@@ -1,9 +1,7 @@
 import {ofType} from 'redux-observable';
 import axios from 'axios';
 import {userLoggedIn, userLoggedOut} from './auth.action';
-import {receivedData} from "./data.action";
 import 'rxjs';
-import {Observable} from 'rxjs/Observable';
 
 export const startLoginProcessEpic = action$ =>
   action$.ofType('START-LOGIN-PROCESS')
@@ -13,10 +11,7 @@ export const startLoginProcessEpic = action$ =>
             withCredentials: true
         }))
     .map(response => response.isLogged
-        ? Observable.concat(
-            userLoggedIn(response.isTeacher),
-            receivedData(response.allCurCourses, response.allComCourses, response.curCourses)
-        )
+        ? userLoggedIn(response.isTeacher, response.userCourses, response.fn, response.ln, response.email)
         : userLoggedOut());
 
 export const startRegisterProcessEpic = action$ =>
@@ -29,8 +24,5 @@ export const startRegisterProcessEpic = action$ =>
             withCredentials: true
         }))
         .map(response => response.isLogged
-            ? Observable.concat(
-                userLoggedIn(response.isTeacher),
-                receivedData(response.allCurCourses, response.allComCourses, response.curCourses)
-            )
+            ? userLoggedIn(response.isTeacher, response.userCourses, response.fn, response.ln, response.email)
             : userLoggedOut());

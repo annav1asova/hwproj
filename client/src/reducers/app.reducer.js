@@ -1,16 +1,16 @@
 import { createStore, combineReducers, applyMiddleware} from 'redux';
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
 import {authReducer, authEpics$} from './auth/auth.reducer';
-import {dataReducer} from "./auth/data.reducer";
-
+import {courseReducer, coursesEpics$} from "./courses/course.reducer";
 
 export const rootEpics$ = combineEpics(
-    authEpics$
+    authEpics$,
+    coursesEpics$
 );
 
 const reducers = combineReducers({
     authentication: authReducer,
-    data: dataReducer
+    courses: courseReducer
 });
 
 export const storeFactory = () => {

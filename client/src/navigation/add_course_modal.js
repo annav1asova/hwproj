@@ -1,6 +1,7 @@
 import { Modal, Form, FormGroup, Col, FormControl, ControlLabel, Button} from 'react-bootstrap';
 import React from 'react';
 import { connect } from 'react-redux';
+import {addCourse} from "../reducers/courses/course.action";
 
 class AddCourseModalImpl extends React.Component {
     constructor(props) {

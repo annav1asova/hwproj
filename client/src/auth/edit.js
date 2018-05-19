@@ -2,14 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button, Col } from 'react-bootstrap';
 import {InputComponent} from "./input_component";
+import {startEditProcess} from "../reducers/auth/auth.action";
 
 class EditImpl extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            firstname: "",
-            lastname: "",
-            email: "",
+            firstname: this.props.fn,
+            lastname: this.props.ln,
+            email: this.props.email,
             password: "",
             confpassword: "",
             curpassword: "",
@@ -33,7 +34,7 @@ class EditImpl extends React.Component {
             <Col xs={6} xsOffset={3}>
             <form onSubmit={e => {this.props.onSubmitClicked(
                 this.state.firstname, this.state.lastname, this.state.email,
-                this.state.password. this.state.curpassword);}}>
+                this.state.curpassword. this.state.password);}}>
                 <InputComponent
                     value={this.state.firstname}
                     isValid={e => {cur.setState({firstname: e, fnValid: e.length >= 2}); cur.validateForm();}}
@@ -84,11 +85,13 @@ class EditImpl extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-
+    fn: state.authInfo.firstName,
+    ln: state.authInfo.lastName,
+    em: state.authInfo.email
 });
 
 const mapDispatchToProps = (dispatch)  => ({
-    onSubmitClicked: (fn, ln, em, pass, curpass) => { dispatch(startEditProcess(fn, ln, em, pass, curpass)); }
+    onSubmitClicked: (fn, ln, em, pass, curpass) => { dispatch(startEditProcess(fn, ln, em, curpass, pass)); }
 });
 
 export const Edit = connect(mapStateToProps, mapDispatchToProps)(EditImpl);

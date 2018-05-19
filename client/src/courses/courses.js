@@ -28,8 +28,8 @@ class CoursesImpl extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    current: state.allCoursesCurrent,
-    completed: state.allCoursesCompleted
+    current: state.courses.current,
+    completed: state.courses.completed
 });
 
 export const Courses = connect(mapStateToProps)(CoursesImpl);

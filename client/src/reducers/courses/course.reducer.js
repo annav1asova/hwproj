@@ -3,8 +3,7 @@ import {getCoursesEpic, addCourseEpic, changeSemEpic} from "./course.epic";
 
 export const coursesEpics$ = combineEpics(
     getCoursesEpic,
-    addCourseEpic,
-    changeSemEpic
+    addCourseEpic
 );
 
 const initState = {
@@ -15,11 +14,6 @@ const initState = {
     course: {
         numSemesters: null,
         name: null
-    },
-    semester: {
-        isFollowed: false,
-        homeworks: null,
-        table: null
     }
 };
 
@@ -31,15 +25,6 @@ export const courseReducer = (state = initState, action) => {
                 courses: {
                     current: action.current,
                     completed: action.completed
-                }
-            };
-        case 'RECEIVED-SEM':
-            return {
-                ...state,
-                semester: {
-                    isFollowed: action.isFollowed,
-                    homeworks: action.homeworks,
-                    table: action.table
                 }
             };
         default:

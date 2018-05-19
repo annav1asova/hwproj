@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Tabs, Tab, Grid, OverlayTrigger, Button, Popover, Glyphicon} from 'react-bootstrap';
 import {EditCourseModal} from "./edit_course_modal";
-import {changeSem} from "../reducers/courses/course.action";
+import {changeSem} from "../reducers/semesters/semester.action";
+import {TeacherSem} from "../semesters/teacher_semester";
 
 class TeacherCourseImpl extends React.Component {
     constructor(props) {
@@ -37,6 +38,7 @@ class TeacherCourseImpl extends React.Component {
                 >
                     {semesters}
                 </Tabs>
+                <TeacherSem courseid={this.props.courseid} cursem={this.state.cursem}/>
             </Grid>
         );
     }

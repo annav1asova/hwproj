@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Popover, Button, OverlayTrigger, Glyphicon, Grid} from 'react-bootstrap';
 import {EditFollowersModal} from "./edit_followers_modal";
 import {PersonTable, TeacherTask} from "../semesters/semester_components";
+import {deleteSem, addSem} from "../reducers/semesters/semester.action";
 
 class TeacherSemImpl extends React.Component {
     constructor(props) {
@@ -23,18 +24,18 @@ class TeacherSemImpl extends React.Component {
             <Grid>
                 <div className="pull-right">
                     <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={addSemPopover}>
-                        <Button onClick={this.props.addSem}><Glyphicon glyph="plus"/></Button>
+                        <Button onClick={e => {this.props.addSem(this.props.courseid);}}><Glyphicon glyph="plus"/></Button>
                     </OverlayTrigger>
                     <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={followersPopover}>
                         <Button onClick={() => {cur.setState({showfollowers: true });}}><Glyphicon glyph="user"/></Button>
                     </OverlayTrigger>
                     <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={deleteSemPopover}>
-                        <Button onClick={e => {this.props.deleteSem(cur.props.cursem);}}><Glyphicon glyph="remove"/></Button>
+                        <Button onClick={e => {this.props.deleteSem(cur.props.cursem, this.props.courseid);}}><Glyphicon glyph="remove"/></Button>
                     </OverlayTrigger>
                 </div>
                 {this.state.showfollowers ? <EditFollowersModal handleClose={e => {cur.setState({showfollowers: false});}}/> : null}
 
-                <PersonTable data={this.state.semesters[this.state.cursem]}/>
+                <PersonTable data={this.props.table}/>
                 <div className="text-center"><Button href="/addhw">Add homework</Button></div>
                 <h3>Tasks</h3>
                 {homeworks}
@@ -50,8 +51,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch)  => ({
     editTask: (event) => { },
-    addSem: (num, numcourse) => { dispatch(addTask(num, numcourse)); },
-    deleteSem: (cursem) => { dispatch(deleteSem(cursem)); }
+    addSem: (numcourse) => { dispatch(addSem(numcourse)); },
+    deleteSem: (cursem, numcourse) => { dispatch(deleteSem(cursem, numcourse)); }
 });
 
 export const TeacherSem = connect(mapStateToProps, mapDispatchToProps)(TeacherSemImpl);

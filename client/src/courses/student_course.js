@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 import {StudentSem} from "../semesters/student_semester";
-import {changeSem} from "../reducers/courses/course.action";
+import {changeSem} from "../reducers/semesters/semester.action";
 
 class StudentCourseImpl extends React.Component {
     constructor(props) {

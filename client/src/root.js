@@ -5,6 +5,7 @@ import {SignUp} from "./auth/sign_up";
 import {SignIn} from "./auth/sign_in";
 import {Courses} from "./courses/courses";
 import {Edit} from "./auth/edit";
+import {Course} from "./courses/course";
 
 class RootImpl extends React.Component {
     render() {
@@ -15,6 +16,7 @@ class RootImpl extends React.Component {
                             </Router>);
         const withAuth = (<Router>
                             <Route exact path="/courses" component={Courses} />
+                            <Route path="/courses/:idcourse/:idterm" component={Course} />
                             <Route exact path="/edit" component={Edit} />
                             <Route exact path="/" component={Courses} />
                         </Router>);

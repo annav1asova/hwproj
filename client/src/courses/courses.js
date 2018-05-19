@@ -1,9 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Tabs, Tab, ListGroupItem, ListGroup } from 'react-bootstrap';
+import {getCourses} from "../reducers/courses/course.action";
 
 class CoursesImpl extends React.Component {
+    constructor(props) {
+        super(props);
+        props.getData();
+    }
     render() {
+        if (this.props.current === null || this.props.completed === null)
+            return (<div>Loading</div>);
         const current = this.props.current.map((course, index) => {
             return (<ListGroupItem key={index} header={course.name}>{course.teacher}</ListGroupItem>);
         });
@@ -32,4 +39,8 @@ const mapStateToProps = (state) => ({
     completed: state.courses.completed
 });
 
-export const Courses = connect(mapStateToProps)(CoursesImpl);
+const mapDispatchToProps = (dispatch)  => ({
+    getData: () => { dispatch(getCourses()); }
+});
+
+export const Courses = connect(mapStateToProps, mapDispatchToProps())(CoursesImpl);

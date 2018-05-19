@@ -23,14 +23,16 @@ export class PersonTable extends React.Component{
         });
     }
     render() {
-        const hws = this.props.data.homeworks.map((homework, index) => {
+        const hws = this.props.homeworks.map((homework, index) => {
             return (<th colSpan="2" width="auto">{index+1}</th>);
         });
         var tasks = [];
-        this.props.data.homeworks.map((homework, index) => {
+        this.props.homeworks.map((homework) => {
             tasks = tasks.concat(this.getTaskList(homework));
         });
-        const people = this.props.data.table.map((person, index) => {
+        var todo = 0;
+        const people = this.props.table.map((person) => {
+            todo += person.todo;
             return (<PersonRow person={person}/>);
         });
         return (
@@ -43,7 +45,7 @@ export class PersonTable extends React.Component{
                 </tr>
                 <tr>
                     <th/>
-                    <th>{this.props.data.todo}</th>
+                    <th>{todo}</th>
                     {tasks}
                 </tr>
                 </thead>

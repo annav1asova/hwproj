@@ -1,0 +1,57 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { Popover, Button, OverlayTrigger, Glyphicon, Grid} from 'react-bootstrap';
+import {EditFollowersModal} from "./edit_followers_modal";
+import {PersonTable, TeacherTask} from "../semesters/semester_components";
+
+class TeacherSemImpl extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showfollowers: false
+        };
+    }
+    render(){
+        const homeworks = this.props.homeworks.map((hw, index) => {
+            return (<TeacherTask hw={hw} id={index} onEditTask={this.props.editTask}/>);
+        });
+        let cur = this;
+        const deleteSemPopover = (<Popover id="1">Delete semester</Popover>);
+        const addSemPopover = (<Popover id="2">Add semester</Popover>);
+        const followersPopover = (<Popover id="3">View list of all followers</Popover>);
+        return (
+            <Grid>
+                <div className="pull-right">
+                    <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={addSemPopover}>
+                        <Button onClick={this.props.addSem}><Glyphicon glyph="plus"/></Button>
+                    </OverlayTrigger>
+                    <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={followersPopover}>
+                        <Button onClick={() => {cur.setState({showfollowers: true });}}><Glyphicon glyph="user"/></Button>
+                    </OverlayTrigger>
+                    <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={deleteSemPopover}>
+                        <Button onClick={e => {this.props.deleteSem(cur.props.cursem);}}><Glyphicon glyph="remove"/></Button>
+                    </OverlayTrigger>
+                </div>
+                {this.state.showfollowers ? <EditFollowersModal handleClose={e => {cur.setState({showfollowers: false});}}/> : null}
+
+                <PersonTable data={this.state.semesters[this.state.cursem]}/>
+                <div className="text-center"><Button href="/addhw">Add homework</Button></div>
+                <h3>Tasks</h3>
+                {homeworks}
+            </Grid>
+        );
+    }
+}
+
+const mapStateToProps = (state) => ({
+    homeworks: state.semester.homeworks,
+    table: state.semester.table
+});
+
+const mapDispatchToProps = (dispatch)  => ({
+    editTask: (event) => { },
+    addSem: (num, numcourse) => { dispatch(addTask(num, numcourse)); },
+    deleteSem: (cursem) => { dispatch(deleteSem(cursem)); }
+});
+
+export const TeacherSem = connect(mapStateToProps, mapDispatchToProps)(TeacherSemImpl);

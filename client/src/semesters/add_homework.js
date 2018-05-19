@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {Link, Task} from "./homework_components";
+import {Link, Task} from "../courses/homework_components";
 import {Row, Col, FormControl, FormGroup, ControlLabel, Button} from 'react-bootstrap';
 //import {DayPicker} from '';
 

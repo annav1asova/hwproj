@@ -1,75 +1,55 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Tabs, Tab, ListGroupItem, ListGroup } from 'react-bootstrap';
+import { Tabs, Tab, Grid, OverlayTrigger, Button, Popover, Glyphicon} from 'react-bootstrap';
 import {EditCourseModal} from "./edit_course_modal";
-import {EditFollowersModal} from "./edit_followers_modal";
-import {PersonTable, TeacherTask} from "./course_components";
+import {changeSem} from "../reducers/courses/course.action";
 
 class TeacherCourseImpl extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            idcourse: this.props.match.params.idcourse,
-            cursem: this.props.match.params.idterm,
-            showeditcourse: false,
-            showfollowers: false
+            cursem: 0,
+            showeditcourse: false
         };
     }
     render(){
-        const semesters = this.props.course.semesters.map((sem, index) => {
+        const semesters = (new Array(this.props.numSemesters)).map((sem, index) => {
             return (<Tab eventKey={index} title={(index + 1) + ' semester'}/>);
         });
 
-        const homeworks = this.props.course.semesters[this.state.cursem].homeworks.map((hw, index) => {
-            return (<TeacherTask hw={hw} id={index} onEditTask={this.editTask.bind(this)}/>);
-        });
         let cur = this;
         const deleteCoursePopover = (<Popover id="1">Delete course</Popover>);
         const editCoursePopover = (<Popover id="2">Edit course</Popover>);
-        const deleteSemPopover = (<Popover id="3">Delete semester</Popover>);
-        const addSemPopover = (<Popover id="4">Add semester</Popover>);
-        const followersPopover = (<Popover id="5">View list of all followers</Popover>);
         return (
             <Grid>
                 <div className="pull-right">
                     <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={editCoursePopover}>
-                        <Button onClick={this.handleShowEditCourse}><Glyphicon glyph="pencil"/></Button>
+                        <Button onClick={e => {cur.setState({showeditcourse: true});}}><Glyphicon glyph="pencil"/></Button>
                     </OverlayTrigger>
                     <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={deleteCoursePopover}>
-                        <Button onClick={this.deleteCourse.bind(this)}><Glyphicon glyph="remove"/></Button>
+                        <Button onClick={e => {this.props.deleteCourse(this.props.courseid);}}><Glyphicon glyph="remove"/></Button>
                     </OverlayTrigger>
                 </div>
                 <h1>{this.state.coursename}</h1>
                 {this.state.showeditcourse ? <EditCourseModal handleClose={e => {cur.setState({showeditcourse: false});}}/> : null}
-                <div className="pull-right">
-                    <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={addSemPopover}>
-                        <Button onClick={this.addSem.bind(this)}><Glyphicon glyph="plus"/></Button>
-                    </OverlayTrigger>
-                    <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={followersPopover}>
-                        <Button onClick={() => {cur.setState({showfollowers: true });}}><Glyphicon glyph="user"/></Button>
-                    </OverlayTrigger>
-                    <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={deleteSemPopover}>
-                        <Button onClick={this.deleteSem.bind(this)}><Glyphicon glyph="remove"/></Button>
-                    </OverlayTrigger>
-                </div>
-                {this.state.showfollowers ? <EditFollowersModal handleClose={e => {cur.setState({showfollowers: false});}}/> : null}
                 <Tabs id="semesters" defaultActiveKey={this.state.cursem}
-                      onSelect={(e) => {cur.setState({cursem: e});}}
+                      onSelect={(e) => {cur.setState({cursem: e}); cur.props.changeSem(e, this.props.courseid);}}
                 >
                     {semesters}
                 </Tabs>
-
-                <PersonTable data={this.state.semesters[this.state.cursem]}/>
-                <div className="text-center"><Button href="/addhw">Add homework</Button></div>
-                <h3>Tasks</h3>
-                {homeworks}
             </Grid>
         );
     }
 }
 
 const mapStateToProps = (state) => ({
-    course:
+    numSemesters: state.course.numSemesters,
+    coursename: state.course.name
 });
 
-export const TeacherCourse = connect(mapStateToProps)(TecherCourseImpl);
+const mapDispatchToProps = (dispatch)  => ({
+    changeSem: (num, numcourse) => { dispatch(changeSem(num, numcourse)); },
+    deleteCourse: (numcourse) => { dispatch(deleteCourse(numcourse)); }
+});
+
+export const TeacherCourse = connect(mapStateToProps, mapDispatchToProps())(TeacherCourseImpl);

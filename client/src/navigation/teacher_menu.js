@@ -13,8 +13,9 @@ class TeacherMenuImpl extends React.Component {
         };
     }
     render() {
+        console.log(this.props.courses);
         const courses = this.props.courses.map((course, index) => {
-            return (<MenuItem key={index}  href={'courses/' + course.id}>{course.name}</MenuItem>);
+            return (<MenuItem key={index}  href={'courses/' + course.Courseid}>{course.Name}</MenuItem>);
         });
         let cur = this;
         return (

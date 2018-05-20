@@ -7,10 +7,6 @@ import (
 	"hwproj/model"
 	"hwproj/session"
 	"html/template"
-
-	"log"
-	"encoding/json"
-	"io/ioutil"
 )
 
 var globalSessions *session.Manager

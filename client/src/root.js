@@ -10,7 +10,6 @@ import {Menu} from "./navigation/menu";
 import { Grid } from 'react-bootstrap';
 
 const PrivateRoute = ({ component: Component, isAuth: Auth, redirect: toRedir, ...rest }) => {
-    console.log(Auth ? Component : "redirect to " + toRedir);
     return (<Route
         {...rest}
         render={props =>
@@ -33,8 +32,6 @@ class RootImpl extends React.Component {
         super(props);
     }
     render() {
-        console.log(this.props.state.authInfo);
-        console.log(this.props.isAuth);
         return (
             <div>
                 <Router>

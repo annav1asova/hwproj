@@ -9,7 +9,7 @@ class CoursesImpl extends React.Component {
         props.getData();
     }
     render() {
-        if (this.props.current === null || this.props.completed === null)
+        if (this.props.current == undefined || this.props.completed == undefined)
             return (<div>Loading</div>);
         const current = this.props.current.map((course, index) => {
             return (<ListGroupItem key={index} header={course.name}>{course.teacher}</ListGroupItem>);
@@ -43,4 +43,4 @@ const mapDispatchToProps = (dispatch)  => ({
     getData: () => { dispatch(getCourses()); }
 });
 
-export const Courses = connect(mapStateToProps, mapDispatchToProps())(CoursesImpl);
+export const Courses = connect(mapStateToProps, mapDispatchToProps)(CoursesImpl);

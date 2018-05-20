@@ -8,8 +8,8 @@ export const coursesEpics$ = combineEpics(
 
 const initState = {
     courses: {
-        current: null,
-        completed: null
+        current: [],
+        completed: []
     },
     course: {
         numSemesters: null,

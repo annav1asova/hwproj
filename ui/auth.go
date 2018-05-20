@@ -21,8 +21,6 @@ func signHandler(m *model.Model) http.Handler {
 		var index, err =  m.PersonIndex(model.EntryData{params.Email, params.Password})
 		if err == nil {
 			sess := globalSessions.SessionStart(w, r)
-			us, _ := isLoggedIn(r, m)
-			log.Print(us)
 			sess.Set("uid", index)
 			w.Write(responseAuth(m, sess))
 		} else if index == -1 {

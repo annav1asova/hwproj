@@ -2,12 +2,12 @@ package ui
 
 
 import (
-"net/http"
-"io/ioutil"
-"encoding/json"
-"log"
-"hwproj/session"
-"hwproj/model"
+	"net/http"
+	"io/ioutil"
+	"encoding/json"
+	"log"
+	"hwproj/session"
+	"hwproj/model"
 )
 
 func signHandler(m *model.Model) http.Handler {
@@ -21,8 +21,6 @@ func signHandler(m *model.Model) http.Handler {
 		var index, err =  m.PersonIndex(model.EntryData{params.Email, params.Password})
 		if err == nil {
 			sess := globalSessions.SessionStart(w, r)
-			us, _ := isLoggedIn(r, m)
-			log.Print(us)
 			sess.Set("uid", index)
 			w.Write(responseAuth(m, sess))
 		} else if index == -1 {
@@ -80,9 +78,7 @@ func responseAuth(m *model.Model, sess session.Session) ([]byte) {
 		jsonResponse, _ = json.Marshal(Response{false, false, nil, "", "", ""})
 	} else {
 		jsonResponse, _ = json.Marshal(Response{true, isTeacher(user),
-			getCourses(user, m), user.FirstName, user.Surname, user.Email})
-		log.Println(Response{true, isTeacher(user),
-			getCourses(user, m), user.FirstName, user.Surname, user.Email})
+			getCoursesOfUser(user, m), user.FirstName, user.Surname, user.Email})
 	}
 	log.Println(jsonResponse)
 	return jsonResponse

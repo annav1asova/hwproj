@@ -8,6 +8,9 @@ import (
 	"hwproj/session"
 	"html/template"
 
+	"log"
+	"encoding/json"
+	"io/ioutil"
 )
 
 var globalSessions *session.Manager
@@ -31,6 +34,8 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 	http.Handle("/dist/", http.FileServer(cfg.Assets))
 	http.Handle("/sign_in_server", signHandler(m))
 	http.Handle("/sign_up_server", signUpHandler(m))
+	http.Handle("/get_courses_server", getCourses(m))
+	http.Handle("/add_course_server", addCourse(m))
 
 
 	go server.Serve(listener)
@@ -47,7 +52,7 @@ func isTeacher(info model.UserInfo) (bool) {
 	return info.Type != "student"
 }
 
-func getCourses(user model.UserInfo, m *model.Model) (courses []*model.Course) {
+func getCoursesOfUser(user model.UserInfo, m *model.Model) (courses []*model.Course) {
 	if isTeacher(user) {
 		courses, _ = m.SelectActiveCoursesOfTeacher(user.Userid)
 	} else {
@@ -55,5 +60,3 @@ func getCourses(user model.UserInfo, m *model.Model) (courses []*model.Course) {
 	}
 	return
 }
-
-

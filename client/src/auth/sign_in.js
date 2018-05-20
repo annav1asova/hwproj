@@ -23,7 +23,7 @@ class SignInImpl extends React.Component {
     render() {
         return (
         <Col xs={6} xsOffset={3}>
-            <form onSubmit={e => { this.props.onLoginClicked(this.state.email, this.state.password); }}>
+            <form onSubmit={e => { e.preventDefault(); this.props.onLoginClicked(this.state.email, this.state.password); }}>
                 <FormGroup>
                     <ControlLabel>
                         Email:

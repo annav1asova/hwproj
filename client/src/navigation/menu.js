@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {StudentMenu} from "./student_menu";
 import {TeacherMenu} from "./teacher_menu";
 import {DefaultMenu} from "./default_menu";
+import {withRouter} from "react-router-dom";
 
 class MenuImpl extends React.Component {
     render() {
@@ -15,4 +16,4 @@ const mapStateToProps = (state) => ({
     isTeacher: state.authInfo.isTeacher
 });
 
-export const Menu = connect(mapStateToProps)(MenuImpl);
+export const Menu = withRouter(connect(mapStateToProps)(MenuImpl));

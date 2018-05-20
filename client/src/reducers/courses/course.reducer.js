@@ -20,6 +20,9 @@ const initState = {
 export const courseReducer = (state = initState, action) => {
     switch (action.type) {
         case 'RECEIVED-COURSES':
+            console.log("courses");
+            console.log(action.current);
+            console.log(action.completed);
             return {
                 ...state,
                 courses: {

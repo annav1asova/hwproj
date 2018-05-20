@@ -3,17 +3,18 @@ import axios from 'axios';
 import 'rxjs';
 import {receivedCourses} from "./course.action";
 
-export const getCoursesEpic = action$ =>
-    action$.ofType('GET-COURSES')
-        .map(action => axios.post('/get_courses_server', {
-            withCredentials: true
-        }))
-        .map(response => receivedCourses(response.current, response.completed));
+export const getCoursesEpic = (dispatch, action) =>{
+    axios.post('/get_courses_server', {
+        withCredentials: true
+    }).then(response => {
+        dispatch(receivedCourses(response.Current, response.Completed));
+    });
+};
 
-export const addCourseEpic = action$ =>
-    action$.ofType('ADD-COURSE')
-        .map(action => axios.post('/add_course_server', {
-            'course': action.course,
-            'group': action.group,
-            withCredentials: true
-        }));
+export const addCourseEpic = (dispatch, action) =>{
+    axios.post('/add_course_server', {
+        'course': action.course,
+        'group': action.group,
+        withCredentials: true
+    });
+};

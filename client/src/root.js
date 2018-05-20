@@ -8,6 +8,7 @@ import {Edit} from "./auth/edit";
 import {Course} from "./courses/course";
 import {Menu} from "./navigation/menu";
 import { Grid } from 'react-bootstrap';
+import {checkAuth} from "./reducers/auth/auth.action";
 
 const PrivateRoute = ({ component: Component, isAuth: Auth, redirect: toRedir, ...rest }) => {
     console.log(Auth ? Component : "redirect to " + toRedir);
@@ -35,6 +36,8 @@ class RootImpl extends React.Component {
     render() {
         console.log(this.props.state.authInfo);
         console.log(this.props.isAuth);
+        if (!this.props.isAuth)
+            this.props.checkAuth();
         return (
             <div>
                 <Router>
@@ -62,4 +65,8 @@ const mapStateToProps = (state) => ({
     state: state
 });
 
-export const Root = connect(mapStateToProps)(RootImpl);
+const mapDispatchToProps = (dispatch)  => ({
+    checkAuth: () => { dispatch(checkAuth()); }
+});
+
+export const Root = connect(mapStateToProps, mapDispatchToProps)(RootImpl);

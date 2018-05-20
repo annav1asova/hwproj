@@ -7,3 +7,4 @@ export const userLoggedIn = (isTeacher, userCourses, fn, ln, email) => ({ type: 
                                                                             userCourses: userCourses, fn: fn, ln: ln, email: email});
 export const userLoggedOut = () => ({ type: 'USER-LOGGED-OUT' });
 export const teacherInvite = (email) => ({ type: 'TEACHER_INVITE', email: email });
+export const checkAuth = () => ({ type: 'CHECK-AUTH' });

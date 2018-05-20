@@ -54,6 +54,19 @@ func signUpHandler(m *model.Model) http.Handler {
 	})
 }
 
+func checkAuth(m *model.Model) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var jsonResponse []byte
+		if user, err := isLoggedIn(r, m); err == nil {
+			jsonResponse, _ = json.Marshal(AuthResponse{true, isTeacher(user),
+				getCoursesOfUser(user, m), user.FirstName, user.Surname, user.Email})
+		} else {
+			jsonResponse, _ = json.Marshal(AuthResponse{false, false, nil, "", "", ""})
+		}
+		w.Write([]byte(jsonResponse))
+	})
+}
+
 func isLoggedIn(r *http.Request, m *model.Model) (model.UserInfo, error) {
 	sessions, err := globalSessions.GetUid(r)
 	if err != nil {
@@ -64,22 +77,23 @@ func isLoggedIn(r *http.Request, m *model.Model) (model.UserInfo, error) {
 }
 
 func responseAuth(m *model.Model, sess session.Session) ([]byte) {
-	type Response struct {
-		IsLogged bool
-		IsTeacher bool
-		UserCourses []*model.Course
-		Fn string
-		Ln string
-		Email string
-	}
 	user, err := m.PersonInfo(sess.Get("uid").(int))
 	var jsonResponse []byte
 	if err != nil {
-		jsonResponse, _ = json.Marshal(Response{false, false, nil, "", "", ""})
+		jsonResponse, _ = json.Marshal(AuthResponse{false, false, nil, "", "", ""})
 	} else {
-		jsonResponse, _ = json.Marshal(Response{true, isTeacher(user),
+		jsonResponse, _ = json.Marshal(AuthResponse{true, isTeacher(user),
 			getCoursesOfUser(user, m), user.FirstName, user.Surname, user.Email})
 	}
 	log.Println(jsonResponse)
 	return jsonResponse
+}
+
+type AuthResponse struct {
+	IsLogged bool
+	IsTeacher bool
+	UserCourses []*model.Course
+	Fn string
+	Ln string
+	Email string
 }

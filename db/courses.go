@@ -40,7 +40,7 @@ func (p *pgDb) prepareCoursesSqlStatements() (err error) {
 	}
 
 	if p.sqlInsertCourse, err = p.dbConn.Prepare(
-		"INSERT INTO courses(name, groupname, teacherid) VALUES($1,$2,$3);",
+		"INSERT INTO courses(name, groupname, teacherid, active) VALUES($1,$2,$3,$4);",
 	); err != nil {
 		return err
 	}
@@ -102,7 +102,7 @@ func (p *pgDb) SelectCourses() ([]*model.Course, error) {
 }
 
 func (p *pgDb) InsertCourseDb(course model.Course) (error) {
-	if _, err := p.sqlInsertCourse.Exec(course.Name, course.Groupname, course.Teacherid); err != nil {
+	if _, err := p.sqlInsertCourse.Exec(course.Name, course.Groupname, course.Teacherid, course.Active); err != nil {
 		return err
 	}
 	return nil

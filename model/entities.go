@@ -81,8 +81,8 @@ type CourseInfo struct {
 	Courseid 			int
 	Name 				string
 	Groupname 			string
-	TeacherFirstName 	string
-	TeacherLastName 	string
+	Firstname 			string
+	Surname 			string
 }
 
 type Term struct {

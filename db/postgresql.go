@@ -36,6 +36,7 @@ type pgDb struct {
 	sqlSelectPerson *sql.Stmt
 	sqlExistsPerson *sql.Stmt
 	sqlUpdatePerson *sql.Stmt
+	sqlInsertAdmin *sql.Stmt
 
 	sqlSelectHometasks *sqlx.Stmt
 	sqlInsertHometask *sql.Stmt

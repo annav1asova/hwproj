@@ -60,6 +60,12 @@ func (p *pgDb) prepareUsersSqlStatements() (err error) {
 		return err
 	}
 
+	if p.sqlInsertAdmin, err = p.dbConn.Prepare(
+		"INSERT INTO users(firstname, surname, email, password, type) VALUES('Admin','Admin', $1,$2, 'admin');",
+	); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -119,4 +125,12 @@ func (p *pgDb) UpdatePerson(person model.Person) (error) {
 		return err
 	}
 	return nil
+}
+
+func (p *pgDb) AddAdmin() {
+	adm := model.NewPerson(0, "", "", "admin@gmail.com", "admin")
+	print(adm.Password)
+	if _, err := p.sqlInsertAdmin.Exec(adm.Email, adm.Password); err != nil {
+		fmt.Println(err)
+	}
 }

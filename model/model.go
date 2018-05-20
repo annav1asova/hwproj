@@ -26,6 +26,10 @@ func (m *Model) PersonInfo(id int) (UserInfo, error) {
 	return m.SelectPerson(id)
 }
 
+func (m *Model) CreateAdmin() {
+	m.AddAdmin()
+}
+
 ////
 
 func (m *Model) Tasks() ([]*Hometask, error) {

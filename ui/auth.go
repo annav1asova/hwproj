@@ -67,12 +67,12 @@ func isLoggedIn(r *http.Request, m *model.Model) (model.UserInfo, error) {
 
 func responseAuth(m *model.Model, sess session.Session) ([]byte) {
 	type Response struct {
-		isLogged bool
-		isTeacher bool
-		userCourses []*model.Course
-		fn string
-		ln string
-		email string
+		IsLogged bool
+		IsTeacher bool
+		UserCourses []*model.Course
+		Fn string
+		Ln string
+		Email string
 	}
 	user, err := m.PersonInfo(sess.Get("uid").(int))
 	var jsonResponse []byte
@@ -84,5 +84,6 @@ func responseAuth(m *model.Model, sess session.Session) ([]byte) {
 		log.Println(Response{true, isTeacher(user),
 			getCourses(user, m), user.FirstName, user.Surname, user.Email})
 	}
+	log.Println(jsonResponse)
 	return jsonResponse
 }

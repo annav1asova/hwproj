@@ -79,7 +79,7 @@ func signHandler(m *model.Model) http.Handler {
 				ln string
 				email string
 			}
-			user, err := isLoggedIn(r, m)
+			user, err := m.PersonInfo(sess.Get("uid").(int))
 			var jsonResponse []byte
 			if err != nil {
 				jsonResponse, _ = json.Marshal(response{false, false, nil, "", "", ""})

@@ -11,9 +11,10 @@ export const startLoginProcessEpic = action$ =>
             'pass': action.password
         });
     })
-    .map(response => response.isLogged
+    .map(response => { console.log(JSON.stringify(response));
+        return response.isLogged
         ? userLoggedIn(response.isTeacher, response.userCourses, response.fn, response.ln, response.email)
-        : userLoggedOut());
+        : userLoggedOut();});
 
 export const startRegisterProcessEpic = action$ =>
     action$.ofType('START-LOGIN-PROCESS')

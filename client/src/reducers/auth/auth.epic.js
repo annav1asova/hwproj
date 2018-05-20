@@ -12,8 +12,6 @@ export const startLoginProcessEpic = (dispatch, action) =>{
             dispatch(userLoggedIn(response.data.IsTeacher, response.data.UserCourses, response.data.Fn,
                 response.data.Ln, response.data.Email));
         }
-        else
-            dispatch(userLoggedOut());
     });
 };
 
@@ -29,7 +27,16 @@ export const startRegisterProcessEpic = (dispatch, action) =>{
             dispatch(userLoggedIn(response.data.IsTeacher, response.data.UserCourses, response.data.Fn,
                 response.data.Ln, response.data.Email));
         }
-        else
-            dispatch(userLoggedOut());
+    });
+};
+
+export const checkAuthEpic = (dispatch, action) =>{
+    axios.post('/check_auth_server', {
+        withCredentials: true
+    }).then(response => {
+        if (response.data.IsLogged) {
+            dispatch(userLoggedIn(response.data.IsTeacher, response.data.UserCourses, response.data.Fn,
+                response.data.Ln, response.data.Email));
+        }
     });
 };

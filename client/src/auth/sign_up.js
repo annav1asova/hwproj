@@ -12,17 +12,19 @@ class SignUpImpl extends React.Component {
             lastname: "",
             email: "",
             password: "",
+            confpass: "",
             fnValid: false,
             lnValid: false,
             emValid: false,
             passValid: false,
+            confpassValid: false,
             formValid: false
         };
     }
 
     validateForm() {
         this.setState({formValid: this.state.fnValid &&
-            this.state.lnValid && this.state.emValid && this.state.passValid});
+            this.state.lnValid && this.state.emValid && this.state.passValid && this.state.confpassValid});
     }
 
     render() {
@@ -62,6 +64,14 @@ class SignUpImpl extends React.Component {
                         name={'Password:'}
                         isPass={true}
                         placeholder={"Enter password"}
+                    />
+                    <InputComponent
+                        value={this.state.confpassword}
+                        isValid={e => {cur.setState({confpassword: e, confpassValid: e === this.state.password}); cur.validateForm();
+                            return e === this.state.password;}}
+                        name={'Confirmation:'}
+                        isPass={true}
+                        placeholder={"Enter confirm of password"}
                     />
                     <Button type="submit" disabled={!this.state.formValid}>Submit</Button>
                 </form>

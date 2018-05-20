@@ -29,6 +29,7 @@ type EntryData struct {
 
 type UserInfo struct {
 	FirstName, Surname, Email, Type string
+	Userid int
 }
 
 type Hometask struct {
@@ -73,6 +74,15 @@ type Course struct {
 	Name 		string
 	Groupname 	string
 	Teacherid 	int
+	Active 		bool
+}
+
+type CourseInfo struct {
+	Courseid 			int
+	Name 				string
+	Groupname 			string
+	TeacherFirstName 	string
+	TeacherLastName 	string
 }
 
 type Term struct {
@@ -87,4 +97,9 @@ type Enrollment struct {
 	Termid int
 	Userid int
 	State string
+}
+
+type Connection struct {
+	Termid int
+	Userid int
 }

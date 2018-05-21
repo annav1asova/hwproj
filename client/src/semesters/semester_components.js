@@ -24,7 +24,7 @@ export class PersonTable extends React.Component{
     }
     render() {
         const hws = this.props.homeworks.map((homework, index) => {
-            return (<th colSpan="2" width="auto">{index+1}</th>);
+            return (<th colSpan={homework.Problems.length} width="auto">{index+1}</th>);
         });
         var tasks = [];
         this.props.homeworks.map((homework) => {

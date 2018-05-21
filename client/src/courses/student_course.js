@@ -13,9 +13,10 @@ class StudentCourseImpl extends React.Component {
         };
     }
     render(){
-        const semesters = (new Array(this.props.numSemesters)).map((sem, index) => {
-            return (<Tab eventKey={index} title={(index + 1) + ' semester'}/>);
-        });
+        var semesters = [];
+        for (var i = 0; i < this.props.numSemesters; i++) {
+            semesters[i] = (<Tab eventKey={i} title={(i + 1) + ' semester'}/>);
+        }
         let cur = this;
         return (
             <div>

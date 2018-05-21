@@ -5,6 +5,12 @@ import {PersonTable, Task} from "./semester_components";
 import {withRouter} from "react-router-dom";
 
 class StudentSemImpl extends React.Component {
+    follow(){
+
+    }
+    unfollow(){
+
+    }
     render(){
         const homeworks = this.props.homeworks.map((hw, index) => {
             return (<Task hw={hw} id={index}/>);
@@ -14,7 +20,7 @@ class StudentSemImpl extends React.Component {
         return (
             <div>
                 <div className="pull-right">
-                    {this.props.isFollowed ?
+                    {!this.props.isFollowed ?
                         <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={followPopover}>
                             <Button onClick={this.follow.bind(this)}><Glyphicon glyph="plus"/></Button>
                         </OverlayTrigger> :

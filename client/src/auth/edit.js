@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Button, Col } from 'react-bootstrap';
 import {InputComponent} from "./input_component";
 import {startEditProcess} from "../reducers/auth/auth.action";
+import {withRouter} from "react-router-dom";
 
 class EditImpl extends React.Component {
     constructor(props) {
@@ -94,4 +95,4 @@ const mapDispatchToProps = (dispatch)  => ({
     onSubmitClicked: (fn, ln, em, pass, curpass) => { dispatch(startEditProcess(fn, ln, em, curpass, pass)); }
 });
 
-export const Edit = connect(mapStateToProps, mapDispatchToProps)(EditImpl);
+export const Edit = withRouter(connect(mapStateToProps, mapDispatchToProps)(EditImpl));

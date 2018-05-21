@@ -12,6 +12,8 @@ export const startLoginProcessEpic = (dispatch, action) =>{
             dispatch(userLoggedIn(response.data.IsTeacher, response.data.UserCourses, response.data.Fn,
                 response.data.Ln, response.data.Email));
         }
+        else
+            dispatch(userLoggedOut());
     });
 };
 
@@ -27,6 +29,8 @@ export const startRegisterProcessEpic = (dispatch, action) =>{
             dispatch(userLoggedIn(response.data.IsTeacher, response.data.UserCourses, response.data.Fn,
                 response.data.Ln, response.data.Email));
         }
+        else
+            dispatch(userLoggedOut());
     });
 };
 
@@ -38,5 +42,7 @@ export const checkAuthEpic = (dispatch, action) =>{
             dispatch(userLoggedIn(response.data.IsTeacher, response.data.UserCourses, response.data.Fn,
                 response.data.Ln, response.data.Email));
         }
+        else
+            dispatch(userLoggedOut());
     });
 };

@@ -2,6 +2,7 @@ import { Modal, Form, FormGroup, Col, FormControl, ControlLabel, Button} from 'r
 import React from 'react';
 import { connect } from 'react-redux';
 import {addCourse} from "../reducers/courses/course.action";
+import {withRouter} from "react-router-dom";
 
 class AddCourseModalImpl extends React.Component {
     constructor(props) {
@@ -61,4 +62,4 @@ const mapDispatchToProps = (dispatch)  => ({
     onSubmitClicked: (course, gr) => { dispatch(addCourse(course, gr)); }
 });
 
-export const AddCourseModal = connect(null, mapDispatchToProps)(AddCourseModalImpl);
+export const AddCourseModal = withRouter(connect(null, mapDispatchToProps)(AddCourseModalImpl));

@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {AddCourseModal} from "./add_course_modal";
 import {AddTeacherModal} from "./add_teacher_modal";
+import {withRouter} from "react-router-dom";
 
 class TeacherMenuImpl extends React.Component {
     constructor(props) {
@@ -48,4 +49,4 @@ const mapStateToProps = (state) => ({
     courses: state.authInfo.courses
 });
 
-export const TeacherMenu = connect(mapStateToProps)(TeacherMenuImpl);
+export const TeacherMenu = withRouter(connect(mapStateToProps)(TeacherMenuImpl));

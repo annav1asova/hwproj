@@ -2,6 +2,7 @@ import { Modal, Form, FormGroup, Col, FormControl, ControlLabel, Button} from 'r
 import React from 'react';
 import { connect } from 'react-redux';
 import {teacherInvite} from "../reducers/auth/auth.action";
+import {withRouter} from "react-router-dom";
 
 class AddTeacherModalImpl extends React.Component {
     constructor(props) {
@@ -48,4 +49,4 @@ const mapDispatchToProps = (dispatch)  => ({
     onSubmitClicked: (em) => { dispatch(teacherInvite(em)); }
 });
 
-export const AddTeacherModal = connect(null, mapDispatchToProps)(AddTeacherModalImpl);
+export const AddTeacherModal = withRouter(connect(null, mapDispatchToProps)(AddTeacherModalImpl));

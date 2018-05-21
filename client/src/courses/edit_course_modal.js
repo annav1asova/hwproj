@@ -1,6 +1,7 @@
 import { Modal, Form, FormGroup, Col, FormControl, ControlLabel, Button} from 'react-bootstrap';
 import React from 'react';
 import { connect } from 'react-redux';
+import {withRouter} from "react-router-dom";
 
 class EditCourseModalImpl extends React.Component {
     constructor(props) {
@@ -60,4 +61,4 @@ const mapDispatchToProps = (dispatch)  => ({
     onSubmitClicked: (course, gr) => { dispatch(editCourse(course, gr)); }
 });
 
-export const EditCourseModal = connect(null, mapDispatchToProps)(EditCourseModalImpl);
+export const EditCourseModal = withRouter(connect(null, mapDispatchToProps)(EditCourseModalImpl));

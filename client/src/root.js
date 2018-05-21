@@ -6,7 +6,7 @@ import {SignIn} from "./auth/sign_in";
 import {Courses} from "./courses/courses";
 import {Edit} from "./auth/edit";
 import {Course} from "./courses/course";
-import {Menu} from "./navigation/menu";
+import {Menu, WaitMenu} from "./navigation/menu";
 import { Grid } from 'react-bootstrap';
 import {checkAuth} from "./reducers/auth/auth.action";
 
@@ -26,18 +26,20 @@ const PrivateRoute = ({ component: Component, isAuth: Auth, redirect: toRedir, .
             )
         }
     />
-);
-}
+    );
+};
 
 class RootImpl extends React.Component {
     constructor(props) {
         super(props);
     }
     render() {
-        console.log(this.props.state.authInfo);
+        console.log(this.props.state.courses);
         console.log(this.props.isAuth);
-        if (!this.props.isAuth)
+        if (this.props.isAuth == null) {
             this.props.checkAuth();
+            return <WaitMenu/>;
+        }
         return (
             <div>
                 <Router>

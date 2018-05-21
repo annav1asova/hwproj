@@ -1,6 +1,7 @@
 import { Nav, Navbar, NavbarBrand, NavDropdown, MenuItem} from 'react-bootstrap';
 import React from 'react';
 import { connect } from 'react-redux';
+import {withRouter} from "react-router-dom";
 
 class StudentMenuImpl extends React.Component {
     render() {
@@ -33,4 +34,4 @@ const mapStateToProps = (state) => ({
     courses: state.authInfo.courses
 });
 
-export const StudentMenu = connect(mapStateToProps)(StudentMenuImpl);
+export const StudentMenu = withRouter(connect(mapStateToProps)(StudentMenuImpl));

@@ -21,11 +21,12 @@ class TeacherCourseImpl extends React.Component {
         console.log(this.state.cursem);
         console.log(this.props.numSemesters);
         console.log(this.props.isLoadedSem);
-        const semesters = (new Array(this.props.numSemesters)).map((sem, index) => {
-            return (<Tab eventKey={index} title={(index + 1) + ' semester'}/>);
-        });
+        var semesters = [];
+        for (var i = 0; i < this.props.numSemesters; i++) {
+            semesters[i] = (<Tab eventKey={i} title={(i + 1) + ' semester'}/>);
+        }
 
-        console.log(semesters);
+        console.log(new Array(semesters));
 
         let cur = this;
         const deleteCoursePopover = (<Popover id="1">Delete course</Popover>);

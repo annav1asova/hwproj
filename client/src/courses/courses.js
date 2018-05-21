@@ -11,8 +11,6 @@ class CoursesImpl extends React.Component {
     }
 
     render() {
-        console.log(this.props.completed);
-        console.log(this.props.current);
         if (this.props.current === undefined || this.props.completed === undefined)
             return (<div>Loading</div>);
         const current = this.props.current.map((course, index) => {

@@ -2,7 +2,7 @@ import { createStore, combineReducers, applyMiddleware} from 'redux';
 import {authReducer} from './auth/auth.reducer';
 import {courseReducer} from "./courses/course.reducer";
 import {semesterReducer} from "./semesters/semester.reducer";
-import {startLoginProcessEpic, startRegisterProcessEpic, checkAuthEpic} from "./auth/auth.epic";
+import {startLoginProcessEpic, startRegisterProcessEpic, checkAuthEpic, startLogoutProcessEpic} from "./auth/auth.epic";
 import {getCoursesEpic, addCourseEpic} from "./courses/course.epic";
 import {changeSemEpic} from "./semesters/semester.epic";
 
@@ -26,6 +26,9 @@ export const fetchUserMiddleware = ({ getState, dispatch }) => next => action =>
             break;
         case 'CHECK-AUTH':
             checkAuthEpic(dispatch, action);
+            break;
+        case 'START-LOGOUT-PROCESS':
+            startLogoutProcessEpic(dispatch, action);
             break;
     }
     return next(action);

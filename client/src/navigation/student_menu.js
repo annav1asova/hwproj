@@ -6,7 +6,7 @@ import {withRouter} from "react-router-dom";
 class StudentMenuImpl extends React.Component {
     render() {
         const courses = this.props.courses.map((course, index) => {
-            return (<MenuItem key={index}  href={'courses/' + course.id}>{course.name}</MenuItem>);
+            return (<MenuItem key={index}  href={'courses/' + course.Courseid + '/0'}>{course.Name}</MenuItem>);
         });
         return (
             <div>
@@ -19,7 +19,7 @@ class StudentMenuImpl extends React.Component {
                             <MenuItem href="/courses">All courses</MenuItem>
                         </NavDropdown>
                         <NavDropdown title="Profile" id="basic-nav-dropdown">
-                            <MenuItem href="/profile">Edit profile</MenuItem>
+                            <MenuItem href="/edit">Edit profile</MenuItem>
                             <MenuItem divider />
                             <MenuItem href="/sign_out">Logout</MenuItem>
                         </NavDropdown>

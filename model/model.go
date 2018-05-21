@@ -159,7 +159,7 @@ func (m *Model) SelectStudentsFromTerm(id int) ([]*UserName, error) {
 	return m.SelectStudentsFromTermDb(id)
 }
 
-func (m *Model) ExistsConnectionDb(conn ConnectionTermUser) (bool) {
+func (m *Model) ExistsConnection(conn ConnectionTermUser) (bool) {
 	return m.ExistsConnectionDb(conn)
 }
 

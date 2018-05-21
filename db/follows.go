@@ -96,7 +96,7 @@ func (p *pgDb) DeleteConnectionDb(conn model.ConnectionTermUser) (error) {
 
 func (p *pgDb) ExistsConnectionDb(conn model.ConnectionTermUser) (bool) {
 	conns := make([]*model.ConnectionTermUser, 0)
-	err := p.sqlSelectTermsFromCourse.Select(&conns, conn.Termid, conn.Userid)
+	err := p.sqlExistsConnection.Select(&conns, conn.Termid, conn.Userid)
 	switch err {
 	case sql.ErrNoRows:
 		return false

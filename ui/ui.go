@@ -128,6 +128,7 @@ func changeSem(m *model.Model) http.Handler {
 			}
 		}
 
+		log.Println(TermResponse{isFollowed, homeworks, table})
 		jsonResponse, _ := json.Marshal(TermResponse{isFollowed, homeworks, table})
 		w.Write(jsonResponse)
 	})

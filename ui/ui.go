@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"encoding/json"
 	"log"
+	"strconv"
 )
 
 var globalSessions *session.Manager
@@ -30,7 +31,6 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 		WriteTimeout:   60 * time.Second,
 		MaxHeaderBytes: 1 << 16}
 	http.Handle("/", indexHandler(m))
-	//http.Handle("/sign_in", signHandler(m))
 	http.Handle("/dist/", http.FileServer(cfg.Assets))
 	http.Handle("/sign_in_server", signHandler(m))
 	http.Handle("/sign_up_server", signUpHandler(m))
@@ -69,11 +69,20 @@ func getCoursesOfUser(user model.UserInfo, m *model.Model) (courses []*model.Cou
 func changeSem(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var term struct {
-			Course    	int `json:"course"`
-			Sem	    	int `json:"sem"`
+			Course    	string `json:"course"`
+			Sem	    	string `json:"sem"`
 		}
 		body, _ := ioutil.ReadAll(r.Body)
 		json.Unmarshal(body, &term)
+
+		courseid, err := strconv.Atoi(term.Course)
+		if err != nil {
+			log.Println(err)
+		}
+		sem, err := strconv.Atoi(term.Sem)
+		if err != nil {
+			log.Println(err)
+		}
 
 		var isFollowed bool
 		var homeworks []model.HometaskWithProblems
@@ -89,7 +98,7 @@ func changeSem(m *model.Model) http.Handler {
 		if err != nil {
 			isFollowed = false
 		}
-		termid, err := m.SelectTermId(term.Course, term.Sem)
+		termid, err := m.SelectTermId(courseid, sem)
 		if err != nil {
 			log.Print(err) //ошибка - нет такого сема
 		} else {
@@ -125,19 +134,23 @@ func changeSem(m *model.Model) http.Handler {
 func loadCourse(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var course struct {
-			Course    	int `json:"course"`
+			Course    	string `json:"course"`
 		}
 		body, _ := ioutil.ReadAll(r.Body)
 		json.Unmarshal(body, &course)
+
+		courseid, err := strconv.Atoi(course.Course)
+		if err != nil {
+			log.Println(err)
+		}
 
 		type CourseResponse struct {
 			Name 				string
 			TermsNumber 		int
 		}
 
-		courseName, _ := m.SelectCourseName(course.Course)
-		termsNumber, _ := m.SelectTermsNumber(course.Course)
-
+		courseName, _ := m.SelectCourseName(courseid)
+		termsNumber, _ := m.SelectTermsNumber(courseid)
 		jsonResponse, _ := json.Marshal(CourseResponse{courseName, termsNumber})
 		w.Write(jsonResponse)
 	})

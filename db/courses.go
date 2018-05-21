@@ -97,13 +97,13 @@ func (p *pgDb) prepareCoursesSqlStatements() (err error) {
 	//	return err
 	//}
 
-	if p.sqlSelectCourseName, err = p.dbConn.Preparex(
+	if p.sqlSelectCourseName, err = p.dbConn.Prepare(
 		"SELECT name FROM courses WHERE courseid = $1",
 	); err != nil {
 		return err
 	}
 
-	if p.sqlSelectTermsNumber, err = p.dbConn.Preparex(
+	if p.sqlSelectTermsNumber, err = p.dbConn.Prepare(
 		"SELECT COUNT(*) FROM courses JOIN terms ON courses.courseid = terms.courseid " +
 			"WHERE courses.courseid = $1 GROUP BY courses.courseid",
 	); err != nil {
@@ -232,8 +232,9 @@ func (p *pgDb) SelectNonActiveCoursesWithNameDb() ([]*model.CourseInfo, error) {
 //}
 
 func (p *pgDb) SelectCourseNameDb(courseid int) (string, error) {
+	row := p.sqlSelectCourseName.QueryRow(courseid)
 	var courseName string
-	err := p.sqlSelectNonActiveCoursesWithName.Select(&courseName, courseid)
+	err := row.Scan(&courseName);
 	switch err {
 	case sql.ErrNoRows:
 		return "", errors.New("No courses found!")
@@ -244,14 +245,16 @@ func (p *pgDb) SelectCourseNameDb(courseid int) (string, error) {
 	}
 }
 
+
 func (p *pgDb) SelectTermsNumberDb(courseid int) (int, error) {
-	var courseNumber int
-	err := p.sqlSelectNonActiveCoursesWithName.Select(&courseNumber, courseid)
+	row := p.sqlSelectTermsNumber.QueryRow(courseid)
+	var number int
+	err := row.Scan(&number);
 	switch err {
 	case sql.ErrNoRows:
-		return 0, nil
+		return 0, errors.New("No courses found!")
 	case nil:
-		return courseNumber, nil
+		return number, nil
 	default:
 		panic(err)
 	}

@@ -136,7 +136,7 @@ func (m *Model) SelectTermsNumber(courseid int) (int, error) {
 }
 
 //terms
-func (m *Model) SelectTermId(courseid, termnumber int) (int, error) {
+func (m *Model) SelectTermId(courseid int, termnumber int) (int, error) {
 	return m.SelectTermIdDb(courseid, termnumber)
 
 }

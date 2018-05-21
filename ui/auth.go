@@ -68,6 +68,12 @@ func checkAuth(m *model.Model) http.Handler {
 	})
 }
 
+func logoutHandler(m *model.Model) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		globalSessions.SessionDestroy(w, r)
+	})
+}
+
 func isLoggedIn(r *http.Request, m *model.Model) (model.UserInfo, error) {
 	sessions, err := globalSessions.GetUid(r)
 	if err != nil {

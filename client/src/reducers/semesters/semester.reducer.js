@@ -6,7 +6,7 @@ export const semesterEpics$ = combineEpics(
 );
 
 const initState = {
-    isFollowed: false,
+    isFollowed: null,
     homeworks: null,
     table: null
 };

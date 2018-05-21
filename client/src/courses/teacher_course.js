@@ -5,12 +5,13 @@ import {EditCourseModal} from "./edit_course_modal";
 import {changeSem} from "../reducers/semesters/semester.action";
 import {TeacherSem} from "../semesters/teacher_semester";
 import {withRouter} from "react-router-dom";
+import {deleteCourse} from "../reducers/courses/course.action";
 
 class TeacherCourseImpl extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            cursem: 0,
+            cursem: this.props.semid,
             showeditcourse: false
         };
     }
@@ -39,15 +40,18 @@ class TeacherCourseImpl extends React.Component {
                 >
                     {semesters}
                 </Tabs>
-                <TeacherSem courseid={this.props.courseid} cursem={this.state.cursem}/>
+                {(this.state.cursem >= 0 && this.state.cursem < this.props.numSemesters && this.props.isLoadedSem) ?
+                    <TeacherSem courseid={this.props.courseid} cursem={this.state.cursem}/>
+                    : null}
             </Grid>
         );
     }
 }
 
 const mapStateToProps = (state) => ({
-    numSemesters: state.course.numSemesters,
-    coursename: state.course.name
+    numSemesters: state.courses.course.numSemesters,
+    coursename: state.courses.course.name,
+    isLoadedSem: state.semester.isFollowed != null
 });
 
 const mapDispatchToProps = (dispatch)  => ({

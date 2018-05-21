@@ -9,6 +9,13 @@ import {Course} from "./courses/course";
 import {Menu, WaitMenu} from "./navigation/menu";
 import { Grid } from 'react-bootstrap';
 import {checkAuth} from "./reducers/auth/auth.action";
+import {startLogoutProcess} from "./reducers/auth/auth.action";
+
+const SignOutRoute = ({ isAuth: Auth, logout: onLogout, ...rest }) => {
+    if (Auth)
+        onLogout();
+    return (<Route {...rest} render={props => (<Redirect to={{pathname: "/sign_in_in"}}/>)}/>);
+};
 
 const PrivateRoute = ({ component: Component, isAuth: Auth, redirect: toRedir, ...rest }) => {
     console.log(Auth ? Component : "redirect to " + toRedir);
@@ -34,8 +41,6 @@ class RootImpl extends React.Component {
         super(props);
     }
     render() {
-        console.log(this.props.state.courses);
-        console.log(this.props.isAuth);
         if (this.props.isAuth == null) {
             this.props.checkAuth();
             return <WaitMenu/>;
@@ -48,10 +53,11 @@ class RootImpl extends React.Component {
                         <Grid>
                             <Switch>
                                 <PrivateRoute isAuth={this.props.isAuth} redirect="/sign_in_in" exact path="/courses" component={Courses} />
-                                <PrivateRoute isAuth={this.props.isAuth} redirect="/sign_in_in" path="/courses/:idcourse/:idterm" component={Course} />
+                                <PrivateRoute isAuth={this.props.isAuth} redirect="/sign_in_in" path="/courses/:idcourse?/:idterm?" component={Course} />
                                 <PrivateRoute isAuth={this.props.isAuth} redirect="/sign_in_in" exact path="/edit" component={Edit} />
                                 <PrivateRoute isAuth={!this.props.isAuth} redirect="/" exact path="/sign_in_in" component={SignIn}/>
                                 <PrivateRoute isAuth={!this.props.isAuth} redirect="/" exact path="/sign_up" component={SignUp}/>
+                                <SignOutRoute isAuth={this.props.isAuth} logout={this.props.logout} exact path="/sign_out"/>
                                 <Route component={Courses}/>
                             </Switch>
                         </Grid>
@@ -68,7 +74,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch)  => ({
-    checkAuth: () => { dispatch(checkAuth()); }
+    checkAuth: () => { dispatch(checkAuth()); },
+    logout: () => { dispatch(startLogoutProcess()); }
 });
 
 export const Root = connect(mapStateToProps, mapDispatchToProps)(RootImpl);

@@ -5,6 +5,7 @@ export const startEditProcess = (fn, ln, em, pass, newpass) => ({ type: 'START-E
     lastname: ln, email: em, password: pass, newpassword: newpass});
 export const userLoggedIn = (isTeacher, userCourses, fn, ln, email) => ({ type: 'USER-LOGGED-IN', userType: isTeacher,
                                                                             userCourses: userCourses, fn: fn, ln: ln, email: email});
+export const startLogoutProcess = () => ({ type: 'START-LOGOUT-PROCESS' });
 export const userLoggedOut = () => ({ type: 'USER-LOGGED-OUT' });
 export const teacherInvite = (email) => ({ type: 'TEACHER_INVITE', email: email });
 export const checkAuth = () => ({ type: 'CHECK-AUTH' });

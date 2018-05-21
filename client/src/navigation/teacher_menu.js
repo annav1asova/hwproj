@@ -14,9 +14,8 @@ class TeacherMenuImpl extends React.Component {
         };
     }
     render() {
-        console.log(this.props.courses);
         const courses = this.props.courses.map((course, index) => {
-            return (<MenuItem key={index}  href={'courses/' + course.Courseid}>{course.Name}</MenuItem>);
+            return (<MenuItem key={index}  href={'/courses/' + course.Courseid + '/0'}>{course.Name}</MenuItem>);
         });
         let cur = this;
         return (
@@ -31,7 +30,7 @@ class TeacherMenuImpl extends React.Component {
                             <MenuItem href="/courses">All courses</MenuItem>
                         </NavDropdown>
                         <NavDropdown title="Profile" id="basic-nav-dropdown">
-                            <MenuItem href="/profile">Edit profile</MenuItem>
+                            <MenuItem href="/edit">Edit profile</MenuItem>
                             <MenuItem onClick={e => {cur.setState({showadduser: true});}}>Invite another teacher</MenuItem>
                             <MenuItem divider />
                             <MenuItem href="/sign_out">Logout</MenuItem>

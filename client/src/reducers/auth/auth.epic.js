@@ -34,6 +34,14 @@ export const startRegisterProcessEpic = (dispatch, action) =>{
     });
 };
 
+export const startLogoutProcessEpic = (dispatch, action) =>{
+    axios.post('/sign_out_server', {
+        withCredentials: true
+    }).then(response => {
+            dispatch(userLoggedOut());
+    });
+};
+
 export const checkAuthEpic = (dispatch, action) =>{
     axios.post('/check_auth_server', {
         withCredentials: true

@@ -98,7 +98,7 @@ func changeSem(m *model.Model) http.Handler {
 		if err != nil {
 			isFollowed = false
 		}
-		termid, err := m.SelectTermId(courseid, sem)
+		termid, err := m.SelectTermId(courseid, sem+1)
 		if err != nil {
 			log.Print(err) //ошибка - нет такого сема
 		} else {

@@ -5,19 +5,18 @@ import (
 	"database/sql"
 	"fmt"
 	"errors"
-	_"log"
+	"log"
 )
 
 func (p *pgDb) createTableBoard() error {
 	create_sql := `
-
 		CREATE TABLE IF NOT EXISTS board (
 			boardcellid SERIAL UNIQUE,
-			userid INTEGER REFERENCES users(userid),
-			problemid INTEGER REFERENCES problems(problemid),
-			score INTEGER DEFAULT 0, --меньше maxscore должно быть по идее
+			userid INTEGER REFERENCES users(userid) ON DELETE CASCADE,
+			problemid INTEGER REFERENCES problems(problemid) ON DELETE CASCADE, 
+			score INTEGER DEFAULT 0, 
 			UNIQUE (userid, problemid)
-	  	);
+		);
 
     `
 	if rows, err := p.dbConn.Query(create_sql); err != nil {
@@ -50,6 +49,16 @@ func (p *pgDb) prepareBoardSqlStatements() (err error) {
 
 	if p.sqlGetScore, err = p.dbConn.Preparex(
 		"SELECT score FROM board WHERE userid = $1 AND problemid = $2",
+	); err != nil {
+		return err
+	}
+
+	if p.sqlGetScoresOfUserInTerm, err = p.dbConn.Preparex(
+		"SELECT score FROM board JOIN problems ON board.problemid = problems.problemid " +
+			"JOIN hometasks ON hometasks.hometaskid = problems.hometaskid " +
+				"JOIN taskconnection ON taskconnection.hometaskid = hometasks.hometaskid " +
+					"WHERE board.userid = $1 AND taskconnection.termid = $2" +
+						"ORDER BY taskconnection.num, problems.num;",
 	); err != nil {
 		return err
 	}
@@ -88,6 +97,20 @@ func (p *pgDb) GetScore(userid int, problemid int) (int, error) {
 		return -1, errors.New("There isn't any problems with given id for this user!")
 	case nil:
 		return cell.Score, nil
+	default:
+		panic(err)
+	}
+}
+
+func (p *pgDb) GetScoresOfUserInTermDb(userid int, termid int) ([]int, error) {
+	scores := make([]int, 0)
+	err := p.sqlGetScoresOfUserInTerm.Select(&scores, userid, termid)
+	switch err {
+	case sql.ErrNoRows:
+		return nil, errors.New("There is no scores followed by this student!")
+	case nil:
+		log.Print(scores)
+		return scores, nil
 	default:
 		panic(err)
 	}

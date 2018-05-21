@@ -12,9 +12,10 @@ func (p *pgDb) createTableTerms() error {
 
 		CREATE TABLE IF NOT EXISTS terms (
 			termid SERIAL UNIQUE, 
-			courseid INTEGER REFERENCES courses(courseid),
+			courseid INTEGER REFERENCES courses(courseid) ON DELETE CASCADE,
 			termname TEXT,
-			num INTEGER
+			num INTEGER,
+			UNIQUE (courseid, num)
 		);
 	
     `
@@ -48,6 +49,12 @@ func (p *pgDb) prepareTermsSqlStatements() (err error) {
 
 	if p.sqlSelectTermsFromCourse, err = p.dbConn.Preparex(
 		"SELECT termid, courseid, termname, num FROM terms WHERE courseid=$1",
+	); err != nil {
+		return err
+	}
+
+	if p.sqlSelectTermId, err = p.dbConn.Preparex(
+		"SELECT termid FROM terms WHERE courseid=$1 AND num=$2",
 	); err != nil {
 		return err
 	}
@@ -86,6 +93,20 @@ func (p *pgDb) SelectTermsFromCourse(courseid int) ([]*model.Term, error) {
 		return nil, errors.New("There is no terms in this course!")
 	case nil:
 		return terms, nil
+	default:
+		panic(err)
+	}
+}
+
+func (p *pgDb) SelectTermIdDb(courseid int, num int) (int, error) {
+	var termid int
+	err := p.sqlSelectTermsFromCourse.Select(&termid, courseid, num)
+	switch err {
+	case sql.ErrNoRows:
+		fmt.Println("There is no terms in this course with this number!")
+		return -1, errors.New("There is no terms in this course with this number!")
+	case nil:
+		return termid, nil
 	default:
 		panic(err)
 	}

@@ -7,8 +7,10 @@ import (
 	"hwproj/model"
 	"hwproj/session"
 	"html/template"
+
 	"io/ioutil"
 	"encoding/json"
+	"log"
 )
 
 var globalSessions *session.Manager
@@ -71,18 +73,49 @@ func changeSem(m *model.Model) http.Handler {
 		body, _ := ioutil.ReadAll(r.Body)
 		json.Unmarshal(body, &term)
 
-		//var isFollowed bool
-		//user, err := isLoggedIn(r, m)
-		//if err != nil {
-		//	isFollowed = false
-		//}
-		//
-		//if termid, err := m.SelectTerm(term.Course, term.Sem); err != nil {
-		//	//ошибка
-		//} else {
-		//	isFollowed =  m.ExistsConnectionDb(model.Connection{termid, user.Userid})
-		//}
+		var isFollowed bool
+		var homeworks []model.HometaskWithProblems
+		var table []model.RowOfTable
 
+		type TermResponse struct {
+			IsFollowed bool
+			Homeworks []model.HometaskWithProblems
+			Table []model.RowOfTable
+		}
 
+		user, err := isLoggedIn(r, m)
+		if err != nil {
+			isFollowed = false
+		}
+		termid, err := m.SelectTermId(term.Course, term.Sem)
+		if err != nil {
+			log.Print(err) //ошибка - нет такого сема
+		} else {
+			isFollowed =  m.ExistsConnectionDb(model.ConnectionTermUser{termid, user.Userid})
+		}
+
+		if tasks, err := m.SelectTasksInTerm(termid); err != nil {
+			homeworks = nil
+		} else {
+			homeworks = make([]model.HometaskWithProblems, len(tasks))
+			for i := 0; i < len(tasks); i++ {
+				problems, _ := m.SelectProblemsFromHometask(tasks[i].Hometaskid)
+				links, _ := m.SelectLinksFromHometask(tasks[i].Hometaskid)
+				homeworks[i] = model.HometaskWithProblems{tasks[i], problems, links}
+			}
+		}
+
+		if users, err := m.SelectStudentsFromTerm(termid); err != nil {
+			table = nil
+		} else {
+			table = make([]model.RowOfTable, len(users))
+			for i:= 0; i < len(users); i++ {
+				scores, _ := m.GetScoresOfUserInTerm(users[i].Userid, termid)
+				table[i] = model.RowOfTable{users[i], scores}
+			}
+		}
+
+		jsonResponse, _ := json.Marshal(TermResponse{isFollowed, homeworks, table})
+		w.Write(jsonResponse)
 	})
 }

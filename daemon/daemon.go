@@ -40,6 +40,8 @@ func Run(cfg *Config) error {
 	//a, err := m.SelectProblemsFromHometask1(1)
 	//print(a)
 
+	m.GetScoresOfUserInTerm(10, 1)
+
 
 	if _, err := m.PersonIndex(model.EntryData{"admin@gmail.com", "admin"}); err != nil {
 		m.CreateAdmin()

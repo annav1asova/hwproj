@@ -50,21 +50,42 @@ func (m *Model) Problems() ([]*Problem, error) {
 	return m.SelectProblems()
 }
 
-func (m *Model) InsertProblem1(problem Problem) (error) {
-	return m.InsertProblem(problem)
+func (m *Model) InsertProblem(problem Problem) (error) {
+	return m.InsertProblemDb(problem)
 }
 
-func (m *Model) DeleteProblem1(id int) (error) {
-	return m.DeleteProblem(id)
+func (m *Model) DeleteProblem(id int) (error) {
+	return m.DeleteProblemDb(id)
 }
-func (m *Model) SelectProblemsFromHometask1(hometaskid int) ([]*Problem, error) {
-	return m.SelectProblemsFromHometask(hometaskid)
+func (m *Model) SelectProblemsFromHometask(hometaskid int) ([]*ProblemInfo, error) {
+	return m.SelectProblemsFromHometaskDb(hometaskid)
 }
 
 // board
+
+func (m *Model) GetScoresOfUserInTerm(userid int, termid int) ([]int, error) {
+	return m.GetScoresOfUserInTermDb(userid, termid)
+}
 //submissions
+
 //links
-//courses:
+
+func (m *Model) Links() ([]*Link, error) {
+	return m.SelectLinks()
+}
+
+func (m *Model) InsertLink(link Link) (error) {
+	return m.InsertLinkDb(link)
+}
+
+func (m *Model) DeleteLink(id int) (error) {
+	return m.DeleteLinkDb(id)
+}
+func (m *Model) SelectLinksFromHometask(hometaskid int) ([]*LinkInfo, error) {
+	return m.SelectLinksFromHometaskDb(hometaskid)
+}
+
+//courses
 
 func (m *Model) Courses() ([]*Course, error) {
 	return m.SelectCourses()
@@ -101,16 +122,45 @@ func (m *Model) SelectActiveCoursesWithName() ([]*CourseInfo, error) {
 func (m *Model) SelectNonActiveCoursesWithName() ([]*CourseInfo, error) {
 	return m.SelectNonActiveCoursesWithNameDb()
 }
+
+//terms
+func (m *Model) SelectTermId(courseid, termnumber int) (int, error) {
+	return m.SelectTermIdDb(courseid, termnumber)
+
+}
+
 ///
 
-func (m *Model) InsertConnection(conn Connection) (error) {
+func (m *Model) InsertConnection(conn ConnectionTermUser) (error) {
 	return m.InsertConnectionDb(conn)
 }
 
-func (m *Model) DeleteConnection(conn Connection) (error) {
+func (m *Model) DeleteConnection(conn ConnectionTermUser) (error) {
 	return m.DeleteConnectionDb(conn)
 }
 
 func (m *Model) SelectCoursesOfStudent(id int) ([]*Course, error) {
 	return m.SelectCoursesOfStudentDb(id)
+}
+
+func (m *Model) SelectStudentsFromTerm(id int) ([]*UserName, error) {
+	return m.SelectStudentsFromTermDb(id)
+}
+
+func (m *Model) ExistsConnectionDb(conn ConnectionTermUser) (bool) {
+	return m.ExistsConnectionDb(conn)
+}
+
+///
+
+func (m *Model) InsertTaskConnection(conn ConnectionTermUser) (error) {
+	return m.InsertConnectionDb(conn)
+}
+
+func (m *Model) DeleteTaskConnection(conn ConnectionTermTask) (error) {
+	return m.DeleteTaskConnectionDb(conn)
+}
+
+func (m *Model) SelectTasksInTerm(id int) ([]*Hometask, error) {
+	return m.SelectTasksInTerm(id)
 }

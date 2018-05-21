@@ -51,6 +51,7 @@ type pgDb struct {
 	sqlInsertCell *sql.Stmt
 	sqlDeleteCell *sql.Stmt
 	sqlGetScore *sqlx.Stmt
+	sqlGetScoresOfUserInTerm *sqlx.Stmt
 
 	sqlSelectSubmissions *sqlx.Stmt
 	sqlInsertSubmission *sql.Stmt
@@ -77,6 +78,7 @@ type pgDb struct {
 	sqlInsertTerm *sql.Stmt
 	sqlDeleteTerm *sql.Stmt
 	sqlSelectTermsFromCourse *sqlx.Stmt
+	sqlSelectTermId *sqlx.Stmt
 
 	sqlSelectEnrollment *sqlx.Stmt
 	sqlInsertEnrollment *sql.Stmt
@@ -86,6 +88,12 @@ type pgDb struct {
 	sqlInsertConnection *sql.Stmt
 	sqlDeleteConnection *sql.Stmt
 	sqlSelectCoursesOfStudent *sqlx.Stmt
+	sqlSelectStudentsFromTerm *sqlx.Stmt
+	sqlExistsConnection *sqlx.Stmt
+
+	sqlInsertTaskConnection *sql.Stmt
+	sqlDeleteTaskConnection *sql.Stmt
+	sqlSelectTasksInTerm *sqlx.Stmt
 }
 
 func (p *pgDb) createTablesIfNotExist() error {
@@ -117,6 +125,9 @@ func (p *pgDb) createTablesIfNotExist() error {
 		return err
 	}
 	if err := p.createTableFollows(); err != nil {
+		return err
+	}
+	if err := p.createTableTaskConnection(); err != nil {
 		return err
 	}
 	return nil
@@ -151,6 +162,9 @@ func (p *pgDb) createSqlStatements() error {
 		return err
 	}
 	if err := p.prepareFollowsSqlStatements(); err != nil {
+		return err
+	}
+	if err := p.prepareTaskConnectionSqlStatements(); err != nil {
 		return err
 	}
 	return nil

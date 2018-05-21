@@ -13,9 +13,14 @@ type db interface {
 	DeleteHometask(int) (error)
 
 	SelectProblems() ([]*Problem, error)
-	InsertProblem(Problem) (error)
-	DeleteProblem(int) (error)
-	SelectProblemsFromHometask(hometaskid int) ([]*Problem, error)
+	InsertProblemDb(Problem) (error)
+	DeleteProblemDb(int) (error)
+	SelectProblemsFromHometaskDb(hometaskid int) ([]*ProblemInfo, error)
+
+	SelectLinks() ([]*Link, error)
+	InsertLinkDb(Link) (error)
+	DeleteLinkDb(int) (error)
+	SelectLinksFromHometaskDb(int) ([]*LinkInfo, error)
 
 	SelectCourses() ([]*Course, error)
 	InsertCourseDb(Course) (error)
@@ -27,7 +32,17 @@ type db interface {
 	SelectActiveCoursesWithNameDb() ([]*CourseInfo, error)
 	SelectNonActiveCoursesWithNameDb() ([]*CourseInfo, error)
 
-	InsertConnectionDb(Connection) (error)
-	DeleteConnectionDb(Connection) (error)
+	GetScoresOfUserInTermDb(int, int) ([]int, error)
+
+	SelectTermIdDb(int,int) (int, error)
+
+	InsertConnectionDb(ConnectionTermUser) (error)
+	DeleteConnectionDb(ConnectionTermUser) (error)
 	SelectCoursesOfStudentDb(int) ([]*Course, error)
+	SelectStudentsFromTermDb(int) ([]*UserName, error)
+	ExistsConnectionDb(ConnectionTermUser) (bool)
+
+	InsertTaskConnectionDb(ConnectionTermTask) (error)
+	DeleteTaskConnectionDb(ConnectionTermTask) (error)
+	SelectTasksInTermDb(int) ([]*Hometask, error)
 }

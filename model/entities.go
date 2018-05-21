@@ -5,7 +5,6 @@ import (
 	"log"
 	"time"
 	"os"
-	_"encoding/xml"
 )
 
 
@@ -32,6 +31,11 @@ type UserInfo struct {
 	Userid int
 }
 
+type UserName struct {
+	FirstName, Surname string
+	Userid int
+}
+
 type Hometask struct {
 	Hometaskid 	int
 	Taskname 	string
@@ -44,6 +48,7 @@ type Problem struct {
 	Hometaskid 	int
 	Statement 	string
 	Maxscore	int
+	Num 		int
 }
 
 type Link struct {
@@ -51,6 +56,7 @@ type Link struct {
 	Hometaskid 	int
 	Url	 		string
 	Linkname	string
+	Num 		int
 }
 
 type Cell struct {
@@ -99,7 +105,36 @@ type Enrollment struct {
 	State string
 }
 
-type Connection struct {
+type ConnectionTermUser struct {
 	Termid int
 	Userid int
+}
+
+type ConnectionTermTask struct {
+	Termid int
+	Hometaskid int
+	Num int
+}
+
+type HometaskWithProblems struct {
+	Hometask *Hometask
+	Problems []*ProblemInfo
+	Links []*LinkInfo
+}
+
+type ProblemInfo struct {
+	Problemid 	int
+	Statement 	string
+	Maxscore	int
+}
+
+type LinkInfo struct {
+	Linkid 		int
+	Url	 		string
+	Linkname	string
+}
+
+type RowOfTable struct {
+	User *UserName
+	Scores []int
 }

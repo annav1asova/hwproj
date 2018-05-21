@@ -123,6 +123,18 @@ func (m *Model) SelectNonActiveCoursesWithName() ([]*CourseInfo, error) {
 	return m.SelectNonActiveCoursesWithNameDb()
 }
 
+//func (m *Model) SelectCourse(courseid int) (*CourseSm, error) {
+//	return m.SelectCourseDb(courseid)
+//}
+
+func (m *Model) SelectCourseName(courseid int) (string, error) {
+	return m.SelectCourseNameDb(courseid)
+}
+
+func (m *Model) SelectTermsNumber(courseid int) (int, error) {
+	return m.SelectTermsNumberDb(courseid)
+}
+
 //terms
 func (m *Model) SelectTermId(courseid, termnumber int) (int, error) {
 	return m.SelectTermIdDb(courseid, termnumber)

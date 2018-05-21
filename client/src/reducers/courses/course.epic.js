@@ -20,6 +20,8 @@ export const addCourseEpic = (dispatch, action) =>{
 };
 
 export const startLoadCourseEpic = (dispatch, action) =>{
+    console.log("for anna vlasova 2");
+    console.log(action.course);
     axios.post('/load_course_server', {
         'course': action.course,
         withCredentials: true

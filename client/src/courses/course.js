@@ -13,6 +13,9 @@ class CourseImpl extends React.Component {
             idcourse: this.props.match.params.idcourse,
             idsem: this.props.match.params.idterm
         };
+        console.log("for anna vlasova");
+        console.log(this.state.idcourse);
+        console.log(this.state.idsem);
         this.props.load(this.state.idcourse);
         this.props.loadSem(this.state.idcourse, this.state.idsem);
     }

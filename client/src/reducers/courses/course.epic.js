@@ -24,6 +24,7 @@ export const startLoadCourseEpic = (dispatch, action) =>{
         'course': action.course,
         withCredentials: true
     }).then(response => {
-        dispatch(loadedCourse(response.data.Numsems, response.data.Name));
+        console.log(response.data);
+        dispatch(loadedCourse(response.data.TermsNumber, response.data.Name));
     });
 };

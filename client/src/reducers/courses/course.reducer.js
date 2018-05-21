@@ -28,6 +28,8 @@ export const courseReducer = (state = initState, action) => {
                 }
             };
         case 'LOADED-COURSE':
+            console.log(action.name);
+            console.log(action.numsem);
             return {
                 ...state,
                 course: {

@@ -16,12 +16,16 @@ class TeacherCourseImpl extends React.Component {
         };
     }
     render(){
+        console.log(this.props.state);
+        console.log("LogInfo");
         console.log(this.state.cursem);
-        console.log(this.state.numSemesters);
+        console.log(this.props.numSemesters);
         console.log(this.props.isLoadedSem);
         const semesters = (new Array(this.props.numSemesters)).map((sem, index) => {
             return (<Tab eventKey={index} title={(index + 1) + ' semester'}/>);
         });
+
+        console.log(semesters);
 
         let cur = this;
         const deleteCoursePopover = (<Popover id="1">Delete course</Popover>);
@@ -54,7 +58,8 @@ class TeacherCourseImpl extends React.Component {
 const mapStateToProps = (state) => ({
     numSemesters: state.courses.course.numSemesters,
     coursename: state.courses.course.name,
-    isLoadedSem: state.semester.isFollowed != null
+    isLoadedSem: state.semester.isFollowed != null,
+    state: state
 });
 
 const mapDispatchToProps = (dispatch)  => ({

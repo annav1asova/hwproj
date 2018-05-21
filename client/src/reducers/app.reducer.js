@@ -21,7 +21,7 @@ export const fetchUserMiddleware = ({ getState, dispatch }) => next => action =>
         case 'ADD-COURSE':
             addCourseEpic(dispatch, action);
             break;
-        case 'CHANGE-SEM':
+        case 'START-CHANGING-SEM':
             changeSemEpic(dispatch, action);
             break;
         case 'CHECK-AUTH':

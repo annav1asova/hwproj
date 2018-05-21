@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Popover, OverlayTrigger, Button, Glyphicon} from 'react-bootstrap';
 import {PersonTable, Task} from "./semester_components";
+import {withRouter} from "react-router-dom";
 
 class StudentSemImpl extends React.Component {
     render(){
@@ -36,4 +37,4 @@ const mapStateToProps = (state) => ({
     table: state.semester.table
 });
 
-export const StudentSem = connect(mapStateToProps)(StudentSemImpl);
+export const StudentSem = withRouter(connect(mapStateToProps)(StudentSemImpl));

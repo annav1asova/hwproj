@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button, FormGroup, ControlLabel, FormControl, Col } from 'react-bootstrap';
 import { startLoginProcess } from '../reducers/auth/auth.action';
+import {withRouter} from "react-router-dom";
 
 class SignInImpl extends React.Component {
     constructor(props) {
@@ -57,4 +58,4 @@ const mapDispatchToProps = (dispatch)  => ({
     onLoginClicked: (em, pass) => { dispatch(startLoginProcess(em, pass)); }
 });
 
-export const SignIn = connect(null, mapDispatchToProps)(SignInImpl);
+export const SignIn = withRouter(connect(null, mapDispatchToProps)(SignInImpl));

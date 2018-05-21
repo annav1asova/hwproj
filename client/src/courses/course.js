@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {StudentCourse} from "./student_course";
 import {TeacherCourse} from "./teacher_course";
+import {withRouter} from "react-router-dom";
 
 class CourseImpl extends React.Component {
     constructor(props) {
@@ -22,4 +23,4 @@ const mapStateToProps = (state) => ({
     isTeacher: state.authInfo.isTeacher
 });
 
-export const Course = connect(mapStateToProps)(CourseImpl);
+export const Course = withRouter(connect(mapStateToProps)(CourseImpl));

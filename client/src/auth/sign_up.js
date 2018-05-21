@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Button, Col } from 'react-bootstrap';
 import {startRegisterProcess} from "../reducers/auth/auth.action";
 import {InputComponent} from "./input_component";
+import {withRouter} from "react-router-dom";
 
 class SignUpImpl extends React.Component {
     constructor(props) {
@@ -84,4 +85,4 @@ const mapDispatchToProps = (dispatch)  => ({
     onSubmitClicked: (fn, ln, em, pass) => { dispatch(startRegisterProcess(fn, ln, em, pass)); }
 });
 
-export const SignUp = connect(null, mapDispatchToProps)(SignUpImpl);
+export const SignUp = withRouter(connect(null, mapDispatchToProps)(SignUpImpl));

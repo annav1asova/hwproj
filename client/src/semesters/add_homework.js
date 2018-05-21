@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {Link, Task} from "../courses/homework_components";
 import {Row, Col, FormControl, FormGroup, ControlLabel, Button} from 'react-bootstrap';
+import {withRouter} from "react-router-dom";
 //import {DayPicker} from '';
 
 class AddHWImpl extends React.Component {
@@ -130,4 +131,4 @@ const mapDispatchToProps = (dispatch)  => ({
     onSubmitClicked: (links, tasks, type, day) => { dispatch(addHomework(links, tasks, type, day)); }
 });
 
-export const AddHomework = connect(mapStateToProps, mapDispatchToProps)(AddHWImpl);
+export const AddHomework = withRouter(connect(mapStateToProps, mapDispatchToProps)(AddHWImpl));

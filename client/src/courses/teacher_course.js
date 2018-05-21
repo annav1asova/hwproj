@@ -4,6 +4,7 @@ import { Tabs, Tab, Grid, OverlayTrigger, Button, Popover, Glyphicon} from 'reac
 import {EditCourseModal} from "./edit_course_modal";
 import {changeSem} from "../reducers/semesters/semester.action";
 import {TeacherSem} from "../semesters/teacher_semester";
+import {withRouter} from "react-router-dom";
 
 class TeacherCourseImpl extends React.Component {
     constructor(props) {
@@ -54,4 +55,4 @@ const mapDispatchToProps = (dispatch)  => ({
     deleteCourse: (numcourse) => { dispatch(deleteCourse(numcourse)); }
 });
 
-export const TeacherCourse = connect(mapStateToProps, mapDispatchToProps())(TeacherCourseImpl);
+export const TeacherCourse = withRouter(connect(mapStateToProps, mapDispatchToProps)(TeacherCourseImpl));

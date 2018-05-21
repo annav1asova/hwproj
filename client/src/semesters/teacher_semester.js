@@ -4,6 +4,7 @@ import { Popover, Button, OverlayTrigger, Glyphicon, Grid} from 'react-bootstrap
 import {EditFollowersModal} from "./edit_followers_modal";
 import {PersonTable, TeacherTask} from "../semesters/semester_components";
 import {deleteSem, addSem} from "../reducers/semesters/semester.action";
+import {withRouter} from "react-router-dom";
 
 class TeacherSemImpl extends React.Component {
     constructor(props) {
@@ -55,4 +56,4 @@ const mapDispatchToProps = (dispatch)  => ({
     deleteSem: (cursem, numcourse) => { dispatch(deleteSem(cursem, numcourse)); }
 });
 
-export const TeacherSem = connect(mapStateToProps, mapDispatchToProps)(TeacherSemImpl);
+export const TeacherSem = withRouter(connect(mapStateToProps, mapDispatchToProps)(TeacherSemImpl));

@@ -1,10 +1,10 @@
 const initState = {
-    isAuthenticated: false,
-    isTeacher: false,
+    isAuthenticated: null,
+    isTeacher: null,
     courses: null,
     firstName: null,
     lastName: null,
-    email: "some"
+    email: null
 };
 
 export const authReducer = (state = initState, action) => {

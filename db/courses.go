@@ -90,6 +90,25 @@ func (p *pgDb) prepareCoursesSqlStatements() (err error) {
 	); err != nil {
 		return err
 	}
+
+	//if p.sqlSelectCourse, err = p.dbConn.Preparex(
+	//	"SELECT courses.name, COUNT(*) FROM courses JOIN terms ON courses.courseid = terms.courseid WHERE courses.courseid = 5 GROUP BY courses.name) UNION ALL (SELECT courses.name, 0 FROM courses LEFT JOIN terms ON courses.courseid = terms.courseid WHERE (courses.courseid = 5 AND terms.courseid IS NULL)GROUP BY courses.name)",
+	//); err != nil {
+	//	return err
+	//}
+
+	if p.sqlSelectCourseName, err = p.dbConn.Preparex(
+		"SELECT name FROM courses WHERE courseid = $1",
+	); err != nil {
+		return err
+	}
+
+	if p.sqlSelectTermsNumber, err = p.dbConn.Preparex(
+		"SELECT COUNT(*) FROM courses JOIN terms ON courses.courseid = terms.courseid " +
+			"WHERE courses.courseid = $1 GROUP BY courses.courseid",
+	); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -194,6 +213,45 @@ func (p *pgDb) SelectNonActiveCoursesWithNameDb() ([]*model.CourseInfo, error) {
 		return nil, errors.New("No courses found!")
 	case nil:
 		return courses, nil
+	default:
+		panic(err)
+	}
+}
+
+//func (p *pgDb) SelectCourseDb(courseid int) (*model.CourseSm, error) {
+//	var course *model.CourseSm
+//	err := p.sqlSelectNonActiveCoursesWithName.Select(&course, courseid)
+//	switch err {
+//	case sql.ErrNoRows:
+//		return nil, errors.New("No courses found!")
+//	case nil:
+//		return course, nil
+//	default:
+//		panic(err)
+//	}
+//}
+
+func (p *pgDb) SelectCourseNameDb(courseid int) (string, error) {
+	var courseName string
+	err := p.sqlSelectNonActiveCoursesWithName.Select(&courseName, courseid)
+	switch err {
+	case sql.ErrNoRows:
+		return "", errors.New("No courses found!")
+	case nil:
+		return courseName, nil
+	default:
+		panic(err)
+	}
+}
+
+func (p *pgDb) SelectTermsNumberDb(courseid int) (int, error) {
+	var courseNumber int
+	err := p.sqlSelectNonActiveCoursesWithName.Select(&courseNumber, courseid)
+	switch err {
+	case sql.ErrNoRows:
+		return 0, nil
+	case nil:
+		return courseNumber, nil
 	default:
 		panic(err)
 	}

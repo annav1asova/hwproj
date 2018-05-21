@@ -89,6 +89,7 @@ type CourseInfo struct {
 	Groupname 			string
 	Firstname 			string
 	Surname 			string
+	TermsNumber 		int
 }
 
 type Term struct {

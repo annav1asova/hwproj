@@ -15,7 +15,26 @@ func (p *pgDb) createTableFollows() error {
 		);
 	
     `
+    create_trigger := `
+
+		CREATE OR REPLACE FUNCTION add_to_board_row() RETURNS trigger AS $$
+		BEGIN	
+			INSERT INTO board(userid, problemid, score)
+				(SELECT NEW.userid, problems.problemid, 0 FROM taskconnection 
+				JOIN problems ON taskconnection.hometaskid = problems.hometaskid
+				WHERE taskconnection.termid = NEW.termid);
+			RETURN NEW;
+			END;
+		$$language plpgsql;
+
+		DROP TRIGGER IF EXISTS add_to_board_row ON follows;
+		CREATE TRIGGER add_to_board_row AFTER INSERT ON follows
+    		FOR EACH ROW EXECUTE PROCEDURE add_to_board_row();  
+	
+    `
 	if rows, err := p.dbConn.Query(create_sql); err != nil {
+		return err
+	} else if _, err := p.dbConn.Query(create_trigger); err != nil {
 		return err
 	} else {
 		rows.Close()

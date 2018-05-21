@@ -34,10 +34,13 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 	http.Handle("/dist/", http.FileServer(cfg.Assets))
 	http.Handle("/sign_in_server", signHandler(m))
 	http.Handle("/sign_up_server", signUpHandler(m))
+	http.Handle("/sign_out_server", logoutHandler(m))
 	http.Handle("/get_courses_server", getCourses(m))
 	http.Handle("/add_course_server", addCourse(m))
 	http.Handle("/change_sem_server", changeSem(m))
 	http.Handle("/check_auth_server", checkAuth(m))
+	http.Handle("/load_course_server", loadCourse(m))
+
 
 
 	go server.Serve(listener)
@@ -62,7 +65,6 @@ func getCoursesOfUser(user model.UserInfo, m *model.Model) (courses []*model.Cou
 	}
 	return
 }
-
 
 func changeSem(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -116,6 +118,27 @@ func changeSem(m *model.Model) http.Handler {
 		}
 
 		jsonResponse, _ := json.Marshal(TermResponse{isFollowed, homeworks, table})
+		w.Write(jsonResponse)
+	})
+}
+
+func loadCourse(m *model.Model) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var course struct {
+			Course    	int `json:"course"`
+		}
+		body, _ := ioutil.ReadAll(r.Body)
+		json.Unmarshal(body, &course)
+
+		type CourseResponse struct {
+			Name 				string
+			TermsNumber 		int
+		}
+
+		courseName, _ := m.SelectCourseName(course.Course)
+		termsNumber, _ := m.SelectTermsNumber(course.Course)
+
+		jsonResponse, _ := json.Marshal(CourseResponse{courseName, termsNumber})
 		w.Write(jsonResponse)
 	})
 }

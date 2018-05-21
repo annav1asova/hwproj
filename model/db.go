@@ -31,6 +31,9 @@ type db interface {
 	SelectNonActiveCoursesDb() ([]*Course, error)
 	SelectActiveCoursesWithNameDb() ([]*CourseInfo, error)
 	SelectNonActiveCoursesWithNameDb() ([]*CourseInfo, error)
+	//SelectCourseDb(int) (*CourseSm, error)
+	SelectCourseNameDb(courseid int) (string, error)
+	SelectTermsNumberDb(courseid int) (int, error)
 
 	GetScoresOfUserInTermDb(int, int) ([]int, error)
 

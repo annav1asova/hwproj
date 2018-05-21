@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button, Glyphicon } from 'react-bootstrap';
 
 class PersonRow extends React.Component{
     render() {

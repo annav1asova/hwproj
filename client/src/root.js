@@ -42,6 +42,7 @@ class RootImpl extends React.Component {
         super(props);
     }
     render() {
+        console.log(this.props.state);
         if (this.props.isAuth == null) {
             this.props.checkAuth();
             return <WaitMenu/>;

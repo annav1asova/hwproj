@@ -42,6 +42,10 @@ func Run(cfg *Config) error {
 
 	m.GetScoresOfUserInTerm(10, 1)
 
+	//courseName, _ := m.SelectCourseName(1)
+	//termsNumber, _ := m.SelectTermsNumber(1)
+	//log.Println(courseName, termsNumber)
+
 
 	if _, err := m.PersonIndex(model.EntryData{"admin@gmail.com", "admin"}); err != nil {
 		m.CreateAdmin()

@@ -27,8 +27,8 @@ class EditFollowersModalImpl extends React.Component {
                 </ListGroupItem>);
         });
         return (
-            <Modal>
-                <Modal.Header closeButton>
+            <Modal.Dialog>
+                <Modal.Header>
                     <Modal.Title>List of followers:</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -39,7 +39,7 @@ class EditFollowersModalImpl extends React.Component {
                 <Modal.Footer>
                     <Button onClick={this.props.handleClose}>Close</Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal.Dialog>
         );
     }
 }

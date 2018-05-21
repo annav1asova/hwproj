@@ -60,14 +60,14 @@ export class PersonTable extends React.Component{
 export class TeacherTask extends React.Component{
     render() {
         const problems = this.props.hw.Problems.map((problem, index) => {
-            return (<p>{index + ") " + problem.Statement}</p>);
+            return (<p>{(index + 1) + ") " + problem.Statement}</p>);
         });
         return (
             <div>
                 <div className="pull-right">
                     <Button onClick={this.props.onEditTask}><Glyphicon glyph="pencil"/></Button>
                 </div>
-                <h3>Homework {this.props.id} {this.props.hw.Hometask.Taskname}</h3>
+                <h3>Homework {this.props.id + 1} {this.props.hw.Hometask.Taskname}</h3>
                 {problems}
             </div>
         );

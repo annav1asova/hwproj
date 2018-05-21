@@ -15,8 +15,8 @@ class AddCourseModalImpl extends React.Component {
     render() {
         let cur = this;
         return (
-            <Modal>
-                <Modal.Header closeButton>
+            <Modal.Dialog>
+                <Modal.Header>
                     <Modal.Title>Add course:</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -50,10 +50,11 @@ class AddCourseModalImpl extends React.Component {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={e => {this.props.onSubmitClicked(this.state.coursename, this.state.group);}}>Submit</Button>
+                    <Button onClick={e => {this.props.onSubmitClicked(this.state.coursename, this.state.group);
+                        this.props.handleClose();}}>Submit</Button>
                     <Button onClick={this.props.handleClose}>Close</Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal.Dialog>
         );
     }
 }

@@ -14,6 +14,8 @@ class TeacherSemImpl extends React.Component {
         };
     }
     render(){
+        console.log(this.props.homeworks);
+        console.log(this.props.table);
         const homeworks = this.props.homeworks.map((hw, index) => {
             return (<TeacherTask hw={hw} id={index} onEditTask={this.props.editTask}/>);
         });
@@ -36,9 +38,12 @@ class TeacherSemImpl extends React.Component {
                 </div>
                 {this.state.showfollowers ? <EditFollowersModal handleClose={e => {cur.setState({showfollowers: false});}}/> : null}
 
-                <PersonTable data={this.props.table}/>
-                <div className="text-center"><Button href="/addhw">Add homework</Button></div>
-                <h3>Tasks</h3>
+                <PersonTable homeworks={this.props.homeworks} table={this.props.table}/>
+                <div className="text-center">
+                    <Button href={"/courses/"+this.props.courseid+"/"+this.props.cursem+"/addhw"}>
+                    Add homework</Button>
+                </div>
+                <h3>Hometasks</h3>
                 {homeworks}
             </Grid>
         );

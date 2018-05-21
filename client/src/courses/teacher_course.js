@@ -16,6 +16,9 @@ class TeacherCourseImpl extends React.Component {
         };
     }
     render(){
+        console.log(this.state.cursem);
+        console.log(this.state.numSemesters);
+        console.log(this.props.isLoadedSem);
         const semesters = (new Array(this.props.numSemesters)).map((sem, index) => {
             return (<Tab eventKey={index} title={(index + 1) + ' semester'}/>);
         });

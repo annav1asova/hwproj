@@ -3,12 +3,15 @@ import { connect } from 'react-redux';
 import {Link, Task} from "../courses/homework_components";
 import {Row, Col, FormControl, FormGroup, ControlLabel, Button} from 'react-bootstrap';
 import {withRouter} from "react-router-dom";
-//import {DayPicker} from '';
+//import DatePicker from 'react-bootstrap-date-picker';
+import {addHometask} from "../reducers/semesters/semester.action";
 
 class AddHWImpl extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            idcourse: this.props.match.params.idcourse,
+            idsem: this.props.match.params.idterm,
             links: [{name:'',link:''}],
             tasks: [''],
             type: "hw",
@@ -22,7 +25,6 @@ class AddHWImpl extends React.Component {
         this.onDeleteLink = this.onDeleteLink.bind(this);
         this.onDeleteTask = this.onDeleteTask.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
-        this.sendData = this.sendData.bind(this);
         this.handleDayChange = this.handleDayChange.bind(this);
     }
     addLink() {
@@ -59,8 +61,8 @@ class AddHWImpl extends React.Component {
     handleChangeSelect(e) {
         this.setState({type: e.target.value});
     }
-    handleDayChange(day) {
-        this.setState({ selectedDay: day });
+    handleDayChange(value, formattedvalue) {
+        this.setState({ selectedDay: value });
     }
     render() {
         var cur = this;
@@ -97,7 +99,7 @@ class AddHWImpl extends React.Component {
                         <div className="text-center">
                             {this.state.selectedDay && <p>Day: {this.state.selectedDay.toLocaleDateString()}</p>}
                             {!this.state.selectedDay && <p>Choose a day</p>}
-                            <DayPicker.Input onDayChange={this.handleDayChange} />
+                            <DatePicker onChange={this.handleDayChange} />
                         </div>
                     </Col>
                 </Row>
@@ -115,7 +117,8 @@ class AddHWImpl extends React.Component {
                 </Row>
                 <Row>
                     <div className="text-center"><Button onClick={e => {
-                        this.props.onSubmitClicked(this.state.links, this.state.tasks, this.state.type, this.state.selectedDay);}
+                        this.props.onSubmitClicked(this.state.idcourse, this.state.idsem,
+                            this.state.links, this.state.tasks, this.state.type, this.state.selectedDay);}
                     }>Submit</Button></div>
                 </Row>
             </div>
@@ -124,11 +127,8 @@ class AddHWImpl extends React.Component {
 
 }
 
-const mapStateToProps = (state) => ({
-});
-
 const mapDispatchToProps = (dispatch)  => ({
-    onSubmitClicked: (links, tasks, type, day) => { dispatch(addHomework(links, tasks, type, day)); }
+    onSubmitClicked: (course, term, links, tasks, type, day) => { dispatch(addHometask(course, term, links, tasks, type, day)); }
 });
 
-export const AddHomework = withRouter(connect(mapStateToProps, mapDispatchToProps)(AddHWImpl));
+export const AddHomework = withRouter(connect(null, mapDispatchToProps)(AddHWImpl));

@@ -22,8 +22,6 @@ class TeacherCourseImpl extends React.Component {
             semesters[i] = (<Tab eventKey={i} title={(i + 1) + ' semester'}/>);
         }
 
-        console.log(new Array(semesters));
-
         let cur = this;
         const deleteCoursePopover = (<Popover id="1">Delete course</Popover>);
         const editCoursePopover = (<Popover id="2">Edit course</Popover>);
@@ -31,16 +29,16 @@ class TeacherCourseImpl extends React.Component {
             <Grid>
                 <div className="pull-right">
                     <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={editCoursePopover}>
-                        <Button onClick={e => {cur.setState({showeditcourse: true});}}><Glyphicon glyph="pencil"/></Button>
+                        <Button onClick={e => {e.preventDefault();cur.setState({showeditcourse: true});}}><Glyphicon glyph="pencil"/></Button>
                     </OverlayTrigger>
                     <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={deleteCoursePopover}>
-                        <Button onClick={e => {this.props.deleteCourse(this.props.courseid);}}><Glyphicon glyph="remove"/></Button>
+                        <Button onClick={e => {e.preventDefault();this.props.deleteCourse(this.props.courseid);}}><Glyphicon glyph="remove"/></Button>
                     </OverlayTrigger>
                 </div>
-                <h1>{this.state.coursename}</h1>
-                {this.state.showeditcourse ? <EditCourseModal handleClose={e => {cur.setState({showeditcourse: false});}}/> : null}
+                <h1>{this.props.coursename}</h1>
+                {this.state.showeditcourse ? <EditCourseModal handleClose={e => {e.preventDefault();cur.setState({showeditcourse: false});}}/> : null}
                 <Tabs id="semesters" defaultActiveKey={this.state.cursem}
-                      onSelect={(e) => {console.log(e); cur.setState({cursem: e}); cur.props.changeSem(e, this.props.courseid);}}
+                      onSelect={(e) => {cur.setState({cursem: e}); cur.props.changeSem(e, this.props.courseid);}}
                 >
                     {semesters}
                 </Tabs>

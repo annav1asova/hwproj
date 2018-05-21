@@ -53,7 +53,7 @@ func (p *pgDb) prepareTermsSqlStatements() (err error) {
 		return err
 	}
 
-	if p.sqlSelectTermId, err = p.dbConn.Preparex(
+	if p.sqlSelectTermId, err = p.dbConn.Prepare(
 		"SELECT termid FROM terms WHERE courseid=$1 AND num=$2",
 	); err != nil {
 		return err
@@ -99,11 +99,11 @@ func (p *pgDb) SelectTermsFromCourse(courseid int) ([]*model.Term, error) {
 }
 
 func (p *pgDb) SelectTermIdDb(courseid int, num int) (int, error) {
+	row := p.sqlSelectTermId.QueryRow(courseid, num)
 	var termid int
-	err := p.sqlSelectTermId.Select(&termid, courseid, num)
+	err := row.Scan(&termid);
 	switch err {
 	case sql.ErrNoRows:
-		fmt.Println("There is no terms in this course with this number!")
 		return -1, errors.New("There is no terms in this course with this number!")
 	case nil:
 		return termid, nil

@@ -9,6 +9,7 @@ export const changeSemEpic = (dispatch, action) =>{
         sem: action.number,
         withCredentials: true
     }).then(response => {
-            dispatch(receivedSem(response.isFollowed, response.homeworks, response.table));
+            console.log(response.data);
+            return dispatch(receivedSem(response.data.IsFollowed, response.data.Homeworks, response.data.Table));
     });
 };

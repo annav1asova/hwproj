@@ -24,7 +24,7 @@ class StudentSemImpl extends React.Component {
                     }
                 </div>
                 <PersonTable table={this.props.table} homeworks={this.props.homeworks}/>
-                <h3>Tasks</h3>
+                <h3>Hometasks</h3>
                 {homeworks}
             </div>
         );

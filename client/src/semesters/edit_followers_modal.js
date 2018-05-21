@@ -1,4 +1,4 @@
-import { Modal, Form, FormGroup, Col, FormControl, ControlLabel, Button} from 'react-bootstrap';
+import { Modal, Button, ListGroup, ListGroupItem, Glyphicon} from 'react-bootstrap';
 import React from 'react';
 import { connect } from 'react-redux';
 import {withRouter} from "react-router-dom";
@@ -6,6 +6,14 @@ import {withRouter} from "react-router-dom";
 class EditFollowersModalImpl extends React.Component {
     constructor(props) {
         super(props);
+    }
+    addFollower(e)
+    {
+        console.log(e);
+    }
+    deleteFollower(e)
+    {
+        console.log(e);
     }
     render() {
         const followers = this.state.followers.map((user, index) => {
@@ -37,7 +45,6 @@ class EditFollowersModalImpl extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch)  => ({
-    onSubmitClicked: (course, gr) => { dispatch(editCourse(course, gr)); }
 });
 
 export const EditFollowersModal = withRouter(connect(null, mapDispatchToProps)(EditFollowersModalImpl));

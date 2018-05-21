@@ -38,35 +38,40 @@ class EditImpl extends React.Component {
                 this.state.curpassword. this.state.password);}}>
                 <InputComponent
                     value={this.state.firstname}
-                    isValid={e => {cur.setState({firstname: e, fnValid: e.length >= 2}); cur.validateForm();}}
+                    isValid={e => {cur.setState({firstname: e, fnValid: e.length >= 2}); cur.validateForm();
+                        return e.length >= 2;}}
                     name={'First name:'}
                     isPass={false}
                     placeholder={"Enter first name"}
                 />
                 <InputComponent
                     value={this.state.lastname}
-                    isValid={e => {cur.setState({lastname: e, lnValid: e.length >= 2}); cur.validateForm();}}
+                    isValid={e => {cur.setState({lastname: e, lnValid: e.length >= 2}); cur.validateForm();
+                        return e.length >= 2;}}
                     name={'Last name:'}
                     isPass={false}
                     placeholder={"Enter last name"}
                 />
                 <InputComponent
                     value={this.state.email}
-                    isValid={e => {cur.setState({email: e, emValid: e.length >= 2}); cur.validateForm();}}
+                    isValid={e => {cur.setState({email: e, emValid: e.length >= 2}); cur.validateForm();
+                        return e.length >= 2;}}
                     name={'Email:'}
                     isPass={false}
                     placeholder={"Enter email"}
                 />
                 <InputComponent
                     value={this.state.password}
-                    isValid={e => {cur.setState({password: e, passValid: e.length >= 2}); cur.validateForm();}}
+                    isValid={e => {cur.setState({password: e, passValid: e.length >= 2}); cur.validateForm();
+                        return e.length >= 2;}}
                     name={'Password:'}
                     isPass={true}
                     placeholder={"Enter password"}
                 />
                 <InputComponent
                     value={this.state.confpassword}
-                    isValid={e => {cur.setState({confpassword: e, confpassValid: e.length >= 2}); cur.validateForm();}}
+                    isValid={e => {cur.setState({confpassword: e, confpassValid: e === cur.state.password}); cur.validateForm();
+                        return e === cur.state.password;}}
                     name={'Confirmation:'}
                     isPass={true}
                     placeholder={"Enter confirmation of the password"}

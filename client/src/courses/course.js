@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {StudentCourse} from "./student_course";
 import {TeacherCourse} from "./teacher_course";
 import {withRouter} from "react-router-dom";
-import {loadedCourse} from "../reducers/courses/course.action";
+import {startLoadCourse} from "../reducers/courses/course.action";
 import {changeSem} from "../reducers/semesters/semester.action";
 
 class CourseImpl extends React.Component {
@@ -27,7 +27,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch)  => ({
-    load: (courseid) => { dispatch(loadedCourse(courseid)); },
+    load: (courseid) => { dispatch(startLoadCourse(courseid)); },
     loadSem: (courseid, semid) => { dispatch(changeSem(courseid, semid)); }
 });
 

@@ -7,6 +7,7 @@ import {Courses} from "./courses/courses";
 import {Edit} from "./auth/edit";
 import {Course} from "./courses/course";
 import {Menu, WaitMenu} from "./navigation/menu";
+import {AddHomework} from "./semesters/add_homework";
 import { Grid } from 'react-bootstrap';
 import {checkAuth} from "./reducers/auth/auth.action";
 import {startLogoutProcess} from "./reducers/auth/auth.action";
@@ -53,7 +54,11 @@ class RootImpl extends React.Component {
                         <Grid>
                             <Switch>
                                 <PrivateRoute isAuth={this.props.isAuth} redirect="/sign_in_in" exact path="/courses" component={Courses} />
-                                <PrivateRoute isAuth={this.props.isAuth} redirect="/sign_in_in" path="/courses/:idcourse?/:idterm?" component={Course} />
+                                <PrivateRoute isAuth={this.props.isAuth} redirect="/sign_in_in"
+                                              exact path="/courses/:idcourse/:idterm/addhw"
+                                              component={AddHomework} />
+                                <PrivateRoute isAuth={this.props.isAuth} redirect="/sign_in_in" path="/courses/:idcourse/:idterm"
+                                              component={Course} />
                                 <PrivateRoute isAuth={this.props.isAuth} redirect="/sign_in_in" exact path="/edit" component={Edit} />
                                 <PrivateRoute isAuth={!this.props.isAuth} redirect="/" exact path="/sign_in_in" component={SignIn}/>
                                 <PrivateRoute isAuth={!this.props.isAuth} redirect="/" exact path="/sign_up" component={SignUp}/>

@@ -2,6 +2,7 @@ import { Modal, Form, FormGroup, Col, FormControl, ControlLabel, Button} from 'r
 import React from 'react';
 import { connect } from 'react-redux';
 import {withRouter} from "react-router-dom";
+import {editCourse} from "../reducers/courses/course.action";
 
 class EditCourseModalImpl extends React.Component {
     constructor(props) {

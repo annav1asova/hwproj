@@ -26,7 +26,10 @@ class TeacherMenuImpl extends React.Component {
                         <NavDropdown title="Courses" id="basic-nav-dropdown">
                             {courses}
                             <MenuItem divider />
-                            <MenuItem onClick={e => {cur.setState({showaddcourse: true});}}>Add course</MenuItem>
+                            <MenuItem onClick={e => {
+                                console.log("show add course clicked!");
+                                cur.setState({showaddcourse: true});
+                            }}>Add course</MenuItem>
                             <MenuItem href="/courses">All courses</MenuItem>
                         </NavDropdown>
                         <NavDropdown title="Profile" id="basic-nav-dropdown">

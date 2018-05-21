@@ -1,15 +1,15 @@
 import React from 'react';
-import { Table } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 
 class PersonRow extends React.Component{
     render() {
-        const tasks = this.props.person.tasks.map((task, index) => {
-            return (<td>{task}</td>);
+        const tasks = this.props.person.Scores.map((task, index) => {
+            return (<td bgcolor="#D3EDF6" valign="center" align="center">{task}</td>);
         });
         return (
             <tr>
-                <td>{this.props.person.name}</td>
-                <td>{this.props.person.todo}</td>
+                <td>{this.props.person.User.FirstName + " " + this.props.person.User.Surname}</td>
+                <td>0</td>
                 {tasks}
             </tr>
         );
@@ -18,8 +18,8 @@ class PersonRow extends React.Component{
 
 export class PersonTable extends React.Component{
     getTaskList(hw) {
-        return hw.map((task, index) => {
-            return (<th>{index + 1}</th>);
+        return hw.Problems.map((task, index) => {
+            return (<th>{index + 1} ({task.Maxscore})</th>);
         });
     }
     render() {
@@ -32,7 +32,7 @@ export class PersonTable extends React.Component{
         });
         var todo = 0;
         const people = this.props.table.map((person) => {
-            todo += person.todo;
+            //todo += person.todo;
             return (<PersonRow person={person}/>);
         });
         return (
@@ -59,16 +59,16 @@ export class PersonTable extends React.Component{
 
 export class TeacherTask extends React.Component{
     render() {
-        const tasks = this.props.hw.map((task, index) => {
-            return (<p>{index + ") " + task.name}</p>);
+        const problems = this.props.hw.Problems.map((problem, index) => {
+            return (<p>{index + ") " + problem.Statement}</p>);
         });
         return (
             <div>
                 <div className="pull-right">
                     <Button onClick={this.props.onEditTask}><Glyphicon glyph="pencil"/></Button>
                 </div>
-                <h3>Homework {this.props.id}</h3>
-                {tasks}
+                <h3>Homework {this.props.id} {this.props.hw.Hometask.Taskname}</h3>
+                {problems}
             </div>
         );
     }
@@ -76,13 +76,13 @@ export class TeacherTask extends React.Component{
 
 export class Task extends React.Component{
     render() {
-        const tasks = this.props.hw.map((task, index) => {
-            return (<p>{index + ") " + task.name}</p>);
+        const problems = this.props.hw.Problems.map((problem, index) => {
+            return (<p>{index + ") " + problem.Statement}</p>);
         });
         return (
             <div>
-                <h3>Homework {this.props.id}</h3>
-                {tasks}
+                <h3>Homework {this.props.id} {this.props.hw.Hometask.Taskname}</h3>
+                {problems}
             </div>
         );
     }

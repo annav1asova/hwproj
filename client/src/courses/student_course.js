@@ -41,7 +41,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch)  => ({
-    changeSem: (num, numcourse) => { dispatch(changeSem(num, numcourse)); }
+    changeSem: (num, numcourse) => { dispatch(changeSem(numcourse, num)); }
 });
 
 export const StudentCourse = withRouter(connect(mapStateToProps, mapDispatchToProps)(StudentCourseImpl));

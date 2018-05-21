@@ -17,10 +17,6 @@ class TeacherCourseImpl extends React.Component {
     }
     render(){
         console.log(this.props.state);
-        console.log("LogInfo");
-        console.log(this.state.cursem);
-        console.log(this.props.numSemesters);
-        console.log(this.props.isLoadedSem);
         var semesters = [];
         for (var i = 0; i < this.props.numSemesters; i++) {
             semesters[i] = (<Tab eventKey={i} title={(i + 1) + ' semester'}/>);
@@ -44,7 +40,7 @@ class TeacherCourseImpl extends React.Component {
                 <h1>{this.state.coursename}</h1>
                 {this.state.showeditcourse ? <EditCourseModal handleClose={e => {cur.setState({showeditcourse: false});}}/> : null}
                 <Tabs id="semesters" defaultActiveKey={this.state.cursem}
-                      onSelect={(e) => {cur.setState({cursem: e}); cur.props.changeSem(e, this.props.courseid);}}
+                      onSelect={(e) => {console.log(e); cur.setState({cursem: e}); cur.props.changeSem(e, this.props.courseid);}}
                 >
                     {semesters}
                 </Tabs>
@@ -64,7 +60,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch)  => ({
-    changeSem: (num, numcourse) => { dispatch(changeSem(num, numcourse)); },
+    changeSem: (num, numcourse) => { dispatch(changeSem(numcourse, num)); },
     deleteCourse: (numcourse) => { dispatch(deleteCourse(numcourse)); }
 });
 

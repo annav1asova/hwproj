@@ -13,7 +13,9 @@ const initState = {
 
 export const semesterReducer = (state = initState, action) => {
     switch (action.type) {
-        case 'RECEIVED-SEM':
+        case 'CHANGED-SEM':
+            console.log("received");
+            console.log(action.isFollowed);
             return {
                 ...state,
                 isFollowed: action.isFollowed,

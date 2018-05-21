@@ -12,9 +12,11 @@ func (p *pgDb) createTableLinks() error {
 
 		CREATE TABLE IF NOT EXISTS links (
 			linkid SERIAL UNIQUE, 
-			hometaskid INTEGER REFERENCES hometasks(hometaskid),
+			hometaskid INTEGER REFERENCES hometasks(hometaskid) ON DELETE CASCADE,
 			url TEXT,
-			linkname TEXT 
+			linkname TEXT,
+			num INTEGER,
+			UNIQUE (hometaskid, num) 
 		);
 	
     `
@@ -29,13 +31,13 @@ func (p *pgDb) createTableLinks() error {
 func (p *pgDb) prepareLinksSqlStatements() (err error) {
 
 	if p.sqlSelectLinks, err = p.dbConn.Preparex(
-		"SELECT linkid, hometaskid, url, linkname FROM links",
+		"SELECT linkid, hometaskid, url, linkname, num FROM links",
 	); err != nil {
 		return err
 	}
 
 	if p.sqlInsertLink, err = p.dbConn.Prepare(
-		"INSERT INTO links(hometaskid, url, linkname) VALUES($1, $2, $3);",
+		"INSERT INTO links(hometaskid, url, linkname, num) VALUES($1, $2, $3, $4);",
 	); err != nil {
 		return err
 	}
@@ -47,7 +49,7 @@ func (p *pgDb) prepareLinksSqlStatements() (err error) {
 	}
 
 	if p.sqlSelectLinksFromHometask, err = p.dbConn.Preparex(
-		"SELECT linkid, hometaskid, url, linkname FROM links WHERE hometaskid=$1",
+		"SELECT linkid, url, linkname FROM links WHERE hometaskid=$1 ORDER BY num",
 	); err != nil {
 		return err
 	}
@@ -63,22 +65,22 @@ func (p *pgDb) SelectLinks() ([]*model.Link, error) {
 	return links, nil
 }
 
-func (p *pgDb) InsertLink(link model.Link) (error) {
-	if _, err := p.sqlInsertLink.Exec(link.Hometaskid, link.Url, link.Linkname); err != nil {
+func (p *pgDb) InsertLinkDb(link model.Link) (error) {
+	if _, err := p.sqlInsertLink.Exec(link.Hometaskid, link.Url, link.Linkname, link.Num); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (p *pgDb) DeleteLink(id int) (error) {
+func (p *pgDb) DeleteLinkDb(id int) (error) {
 	if _, err := p.sqlDeleteLink.Exec(id); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (p *pgDb) SelectLinksFromHometask(hometaskid int) ([]*model.Link, error) {
-	links := make([]*model.Link, 0)
+func (p *pgDb) SelectLinksFromHometaskDb(hometaskid int) ([]*model.LinkInfo, error) {
+	links := make([]*model.LinkInfo, 0)
 	err := p.sqlSelectLinksFromHometask.Select(&links, hometaskid)
 	switch err {
 	case sql.ErrNoRows:

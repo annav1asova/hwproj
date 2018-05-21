@@ -12,9 +12,11 @@ func (p *pgDb) createTableProblems() error {
 
 		CREATE TABLE IF NOT EXISTS problems (
 			problemid SERIAL UNIQUE, 
-			hometaskid INTEGER REFERENCES hometasks(hometaskid),
+			hometaskid INTEGER REFERENCES hometasks(hometaskid) ON DELETE CASCADE,
 			statement TEXT,
-			maxscore INTEGER 
+			maxscore INTEGER,
+			num INTEGER,
+			UNIQUE (hometaskid, num)
 		);
 	
     `
@@ -47,7 +49,7 @@ func (p *pgDb) prepareProblemsSqlStatements() (err error) {
 	}
 
 	if p.sqlSelectProblemsFromHometask, err = p.dbConn.Preparex(
-		"SELECT problemid, hometaskid, statement, maxscore FROM problems WHERE hometaskid=$1",
+		"SELECT problemid, statement, maxscore FROM problems WHERE hometaskid=$1 ORDER BY num",
 	); err != nil {
 		return err
 	}
@@ -63,23 +65,22 @@ func (p *pgDb) SelectProblems() ([]*model.Problem, error) {
 	return problems, nil
 }
 
-func (p *pgDb) InsertProblem(problem model.Problem) (error) {
+func (p *pgDb) InsertProblemDb(problem model.Problem) (error) {
 	if _, err := p.sqlInsertProblem.Exec(problem.Hometaskid, problem.Statement, problem.Maxscore); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (p *pgDb) DeleteProblem(id int) (error) {
+func (p *pgDb) DeleteProblemDb(id int) (error) {
 	if _, err := p.sqlDeleteProblem.Exec(id); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (p *pgDb) SelectProblemsFromHometask(hometaskid int) ([]*model.Problem, error) {
-	//row := p.sqlSelectProblemsFromHometask.QueryRow(hometaskid)
-	problems := make([]*model.Problem, 0)
+func (p *pgDb) SelectProblemsFromHometaskDb(hometaskid int) ([]*model.ProblemInfo, error) {
+	problems := make([]*model.ProblemInfo, 0)
 	err := p.sqlSelectProblemsFromHometask.Select(&problems, hometaskid)
 	switch err {
 	case sql.ErrNoRows:

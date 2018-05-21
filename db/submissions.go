@@ -12,7 +12,7 @@ func (p *pgDb) createTableSubmissions() error {
 
 	  	CREATE TABLE IF NOT EXISTS submissions (
 			submissionid SERIAL UNIQUE,
-			boardcellid INTEGER REFERENCES board(boardcellid),
+			boardcellid INTEGER REFERENCES board(boardcellid) ON DELETE CASCADE,
 			pullrequest TEXT, 
 			file BYTEA,
 			timesended TIMESTAMP,

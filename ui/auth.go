@@ -60,6 +60,7 @@ func checkAuth(m *model.Model) http.Handler {
 		if user, err := isLoggedIn(r, m); err == nil {
 			jsonResponse, _ = json.Marshal(AuthResponse{true, isTeacher(user),
 				getCoursesOfUser(user, m), user.FirstName, user.Surname, user.Email})
+			log.Println(getCoursesOfUser(user, m))
 		} else {
 			jsonResponse, _ = json.Marshal(AuthResponse{false, false, nil, "", "", ""})
 		}
@@ -84,6 +85,8 @@ func responseAuth(m *model.Model, sess session.Session) ([]byte) {
 	} else {
 		jsonResponse, _ = json.Marshal(AuthResponse{true, isTeacher(user),
 			getCoursesOfUser(user, m), user.FirstName, user.Surname, user.Email})
+		log.Println(getCoursesOfUser(user, m))
+
 	}
 	log.Println(jsonResponse)
 	return jsonResponse

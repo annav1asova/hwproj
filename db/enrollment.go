@@ -12,8 +12,8 @@ func (p *pgDb) createTableEnrollment() error {
 
        CREATE TABLE IF NOT EXISTS enrollment ( -- заявки
 	   		enrollmentid SERIAL UNIQUE,
-			termid INTEGER REFERENCES terms(termid),
-			userid INTEGER REFERENCES users(userid), 
+			termid INTEGER REFERENCES terms(termid) ON DELETE CASCADE,
+			userid INTEGER REFERENCES users(userid) ON DELETE CASCADE, 
 			state TEXT DEFAULT 'waiting',
 			CHECK (state in ('approved', 'rejected', 'waiting')), 
 			UNIQUE (userid, termid)

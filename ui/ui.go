@@ -116,6 +116,8 @@ func changeSem(m *model.Model) http.Handler {
 			}
 		}
 
+
+
 		if users, err := m.SelectStudentsFromTerm(termid); err != nil {
 			table = nil
 		} else {

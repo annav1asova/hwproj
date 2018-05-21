@@ -100,7 +100,7 @@ func (p *pgDb) SelectTermsFromCourse(courseid int) ([]*model.Term, error) {
 
 func (p *pgDb) SelectTermIdDb(courseid int, num int) (int, error) {
 	var termid int
-	err := p.sqlSelectTermsFromCourse.Select(&termid, courseid, num)
+	err := p.sqlSelectTermId.Select(&termid, courseid, num)
 	switch err {
 	case sql.ErrNoRows:
 		fmt.Println("There is no terms in this course with this number!")

@@ -174,5 +174,5 @@ func (m *Model) DeleteTaskConnection(conn ConnectionTermTask) (error) {
 }
 
 func (m *Model) SelectTasksInTerm(id int) ([]*Hometask, error) {
-	return m.SelectTasksInTerm(id)
+	return m.SelectTasksInTermDb(id)
 }

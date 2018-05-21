@@ -53,11 +53,11 @@ class RootImpl extends React.Component {
                         <Grid>
                             <Switch>
                                 <PrivateRoute isAuth={this.props.isAuth} redirect="/sign_in_in" exact path="/courses" component={Courses} />
-                                <PrivateRoute isAuth={this.props.isAuth} redirect="/sign_in_in" path="/courses/:idcourse/:idterm" component={Course} />
+                                <PrivateRoute isAuth={this.props.isAuth} redirect="/sign_in_in" path="/courses/:idcourse?/:idterm?" component={Course} />
                                 <PrivateRoute isAuth={this.props.isAuth} redirect="/sign_in_in" exact path="/edit" component={Edit} />
                                 <PrivateRoute isAuth={!this.props.isAuth} redirect="/" exact path="/sign_in_in" component={SignIn}/>
                                 <PrivateRoute isAuth={!this.props.isAuth} redirect="/" exact path="/sign_up" component={SignUp}/>
-                                <SignOutRoute isAuth={this.props.isAuth} logout={this.props.logout} />
+                                <SignOutRoute isAuth={this.props.isAuth} logout={this.props.logout} exact path="/sign_out"/>
                                 <Route component={Courses}/>
                             </Switch>
                         </Grid>

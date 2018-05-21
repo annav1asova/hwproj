@@ -1,7 +1,7 @@
 import {ofType} from 'redux-observable';
 import axios from 'axios';
 import 'rxjs';
-import {receivedCourses} from "./course.action";
+import {receivedCourses, loadedCourse} from "./course.action";
 
 export const getCoursesEpic = (dispatch, action) =>{
     axios.post('/get_courses_server', {
@@ -16,5 +16,14 @@ export const addCourseEpic = (dispatch, action) =>{
         'course': action.course,
         'group': action.group,
         withCredentials: true
+    });
+};
+
+export const startLoadCourseEpic = (dispatch, action) =>{
+    axios.post('/load_course_server', {
+        'course': action.course,
+        withCredentials: true
+    }).then(response => {
+        dispatch(loadedCourse(response.data.Numsems, response.data.Name));
     });
 };

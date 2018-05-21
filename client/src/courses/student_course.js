@@ -9,7 +9,7 @@ class StudentCourseImpl extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            cursem: 0,
+            cursem: this.props.semid,
         };
     }
     render(){
@@ -25,15 +25,19 @@ class StudentCourseImpl extends React.Component {
                 >
                     {semesters}
                 </Tabs>
-                <StudentSem/>
+                {this.state.cursem >= 0 && this.state.cursem < this.props.numSemesters &&  this.props.isLoadedSem ?
+                    <StudentSem/>
+                    : null
+                }
             </div>
         );
     }
 }
 
 const mapStateToProps = (state) => ({
-    numSemesters: state.course.numSemesters,
-    coursename: state.course.name
+    numSemesters: state.courses.course.numSemesters,
+    coursename: state.courses.course.name,
+    isLoadedSem: state.semester.isFollowed != null
 });
 
 const mapDispatchToProps = (dispatch)  => ({

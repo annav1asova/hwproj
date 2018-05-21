@@ -12,22 +12,27 @@ const initState = {
         completed: []
     },
     course: {
-        numSemesters: null,
-        name: null
+        numSemesters: 0,
+        name: ""
     }
 };
 
 export const courseReducer = (state = initState, action) => {
     switch (action.type) {
         case 'RECEIVED-COURSES':
-            console.log("courses");
-            console.log(action.current);
-            console.log(action.completed);
             return {
                 ...state,
                 courses: {
                     current: action.current,
                     completed: action.completed
+                }
+            };
+        case 'LOADED-COURSE':
+            return {
+                ...state,
+                course: {
+                    numSemesters: action.numsem,
+                    name: action.name
                 }
             };
         default:

@@ -1,4 +1,4 @@
-import { Modal, Form, FormGroup, Col, FormControl, ControlLabel, Button} from 'react-bootstrap';
+import { Modal, Form, FormGroup, Col, FormControl, ControlLabel, Button, Checkbox} from 'react-bootstrap';
 import React from 'react';
 import { connect } from 'react-redux';
 import {addCourse} from "../reducers/courses/course.action";
@@ -47,6 +47,11 @@ class AddCourseModalImpl extends React.Component {
                                     onChange={(e) => {cur.setState({group: e.target.value});}}/>
                             </Col>
                         </FormGroup>
+                        <div className="text-center">
+                        <FormGroup>
+                            <Checkbox inline>Private</Checkbox>
+                        </FormGroup>
+                        </div>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Tabs, Tab, Grid, OverlayTrigger, Button, Popover, Glyphicon} from 'react-bootstrap';
+import { Tabs, Tab, Grid, OverlayTrigger, Button, Popover, Glyphicon, Checkbox} from 'react-bootstrap';
 import {EditCourseModal} from "./edit_course_modal";
 import {changeSem} from "../reducers/semesters/semester.action";
 import {TeacherSem} from "../semesters/teacher_semester";

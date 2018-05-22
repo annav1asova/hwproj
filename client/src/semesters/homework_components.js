@@ -1,5 +1,6 @@
 import React from 'react';
-import { Panel, Col, Button, Form, FormGroup, FormControl, ControlLabel, Glyphicon } from 'react-bootstrap';
+import { Panel, Col, Button, Form, FormGroup, FormControl, ControlLabel, Glyphicon
+    } from 'react-bootstrap';
 
 export class Task extends React.Component {
     render() {
@@ -21,9 +22,21 @@ export class Task extends React.Component {
                                 <FormControl
                                     name="task"
                                     componentClass="textarea"
-                                    value={this.props.data}
-                                    placeholder="Enter name"
+                                    value={this.props.data.task}
+                                    placeholder="Enter task"
                                     onChange={this.props.onChangeTask}/>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup>
+                            <Col sm={2}>
+                                <ControlLabel>Maxscore</ControlLabel>
+                            </Col>
+                            <Col sm={2}>
+                                <FormControl
+                                    name="maxscore"
+                                    type="number"
+                                    value={this.props.data.maxscore}
+                                    onChange={this.props.onChangeMaxscore}/>
                             </Col>
                         </FormGroup>
                     </Form>

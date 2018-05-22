@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {Link, Task} from "../courses/homework_components";
+import {Link, Task} from "./homework_components";
 import {Row, Col, FormControl, FormGroup, ControlLabel, Button} from 'react-bootstrap';
 import {withRouter} from "react-router-dom";
-//import DatePicker from 'react-bootstrap-date-picker';
+//import {DatePicker} from 'react-bootstrap-date-picker';
 import {addHometask} from "../reducers/semesters/semester.action";
 
 class AddHWImpl extends React.Component {
@@ -13,9 +13,9 @@ class AddHWImpl extends React.Component {
             idcourse: this.props.match.params.idcourse,
             idsem: this.props.match.params.idterm,
             links: [{name:'',link:''}],
-            tasks: [''],
+            tasks: [{task:'', maxscore:0}],
             type: "hw",
-            selectedDay: undefined
+            selectedDay: ''
         };
         this.addLink = this.addLink.bind(this);
         this.addTask = this.addTask.bind(this);
@@ -31,7 +31,7 @@ class AddHWImpl extends React.Component {
         this.setState({links: this.state.links.concat({name:'', link:''})});
     }
     addTask() {
-        this.setState({tasks: this.state.tasks.concat('')});
+        this.setState({tasks: this.state.tasks.concat({task:'', maxscore:0})});
     }
     onChangeName(i, event) {
         var newlinks = this.state.links;
@@ -45,7 +45,12 @@ class AddHWImpl extends React.Component {
     }
     onChangeTask(i, event) {
         var newtasks = this.state.tasks;
-        newtasks[i] = event.target.value;
+        newtasks[i].task = event.target.value;
+        this.setState({tasks: newtasks});
+    }
+    onChangeMaxscore(i, event) {
+        var newtasks = this.state.tasks;
+        newtasks[i].maxscore = event.target.value;
         this.setState({tasks: newtasks});
     }
     onDeleteLink(i, event) {
@@ -61,7 +66,7 @@ class AddHWImpl extends React.Component {
     handleChangeSelect(e) {
         this.setState({type: e.target.value});
     }
-    handleDayChange(value, formattedvalue) {
+    handleDayChange(value, formattedvalue ) {
         this.setState({ selectedDay: value });
     }
     render() {
@@ -78,8 +83,9 @@ class AddHWImpl extends React.Component {
         const tasks = this.state.tasks.map(function(item, index) {
             return (
                 <div key={index}>
-                    <Task data={item} id={index + 1} onChangeTask={(e) => {cur.onChangeTask(index, e)}}
-                          onDeleteTask={(e) => {cur.onDeleteTask(index, e)}}/>
+                    <Task data={item} id={index + 1} onChangeTask={(e) => {cur.onChangeTask(index, e);}}
+                          onChangeMaxscore={(e) => {cur.onChangeMaxscore(index, e);}}
+                          onDeleteTask={(e) => {cur.onDeleteTask(index, e);}}/>
                 </div>
             );
         });
@@ -95,11 +101,6 @@ class AddHWImpl extends React.Component {
                                     <option value="test">Test</option>
                                 </FormControl>
                             </FormGroup>
-                        </div>
-                        <div className="text-center">
-                            {this.state.selectedDay && <p>Day: {this.state.selectedDay.toLocaleDateString()}</p>}
-                            {!this.state.selectedDay && <p>Choose a day</p>}
-                            <DatePicker onChange={this.handleDayChange} />
                         </div>
                     </Col>
                 </Row>
@@ -118,7 +119,8 @@ class AddHWImpl extends React.Component {
                 <Row>
                     <div className="text-center"><Button onClick={e => {
                         this.props.onSubmitClicked(this.state.idcourse, this.state.idsem,
-                            this.state.links, this.state.tasks, this.state.type, this.state.selectedDay);}
+                            this.state.links, this.state.tasks, this.state.type, this.state.selectedDay);
+                        window.location = '/';}
                     }>Submit</Button></div>
                 </Row>
             </div>

@@ -4,6 +4,7 @@ import { Table, Button, Glyphicon } from 'react-bootstrap';
 class PersonRow extends React.Component{
     render() {
         const tasks = this.props.person.Scores.map((task, index) => {
+            //var maxscore = this.props.hw[]
             return (<td bgcolor="#D3EDF6" valign="center" align="center">{task}</td>);
         });
         return (
@@ -33,7 +34,7 @@ export class PersonTable extends React.Component{
         var todo = 0;
         const people = this.props.table.map((person) => {
             //todo += person.todo;
-            return (<PersonRow person={person}/>);
+            return (<PersonRow person={person} hw={this.props.homeworks}/>);
         });
         return (
             <Table bordered>
